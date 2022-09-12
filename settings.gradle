@@ -1,0 +1,4 @@
+include ':scanlibrary'
+include ':app'
+rootProject.name = "UltraCamera"
+include ':unityplugin'
