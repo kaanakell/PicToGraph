@@ -1,9 +1,9 @@
-<<<<<<< HEAD
+
 include ':scanlibrary'
 include ':app'
 rootProject.name = "UltraCamera"
 include ':unityplugin'
-=======
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -20,4 +20,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "CameraEAE"
 include ':app'
->>>>>>> d693aa7234afdd688b7401776af932c1fdceda8f
+
