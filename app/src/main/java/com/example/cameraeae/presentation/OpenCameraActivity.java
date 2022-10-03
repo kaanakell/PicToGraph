@@ -1,4 +1,4 @@
-package com.example.cameraeae;
+package com.example.cameraeae.presentation;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cameraeae.R;
+import com.example.cameraeae.presentation.CameraActivity;
 
 public class OpenCameraActivity extends AppCompatActivity {
 

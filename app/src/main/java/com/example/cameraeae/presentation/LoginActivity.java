@@ -1,4 +1,4 @@
-package com.example.cameraeae;
+package com.example.cameraeae.presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cameraeae.CameraActivity;
+import com.example.cameraeae.R;
 import com.google.android.material.button.MaterialButton;
 
 public class LoginActivity extends AppCompatActivity {

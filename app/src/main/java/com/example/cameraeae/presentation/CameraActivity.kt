@@ -1,11 +1,10 @@
-package com.example.cameraeae
+package com.example.cameraeae.presentation
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.util.Base64
+import android.os.Environment
 import android.util.Log
 import android.view.ScaleGestureDetector
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
@@ -17,11 +16,9 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
+import com.example.cameraeae.Constants
+import com.example.cameraeae.R
 import com.example.cameraeae.databinding.ActivityCameraBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,129 +31,96 @@ class CameraActivity : AppCompatActivity(){
     private lateinit var binding: ActivityCameraBinding
 
     private var imageCapture: ImageCapture? = null
-    private lateinit var  outputDirectory: File
     private lateinit var  cameraExecutor: ExecutorService
+    private var flashMode = ImageCapture.FLASH_MODE_OFF
     private var camera: Camera? = null
-    private val apiInterface: ApiInterface? = null
+    private var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        outputDirectory = getOutputDirectory()
-        cameraExecutor = Executors.newSingleThreadExecutor()
-
-        if(allPermissionGranted()){
-            Toast.makeText(this,
-                "We have permission",
-                Toast.LENGTH_SHORT).show()
-            startCamera()
-        }else{
-            ActivityCompat.requestPermissions(
-                this, Constants.REQUIRED_PERMISSIONS,
-                Constants.REQUEST_CODE_PERMISSION
-            )
+        binding.imageCaptureButton.setOnClickListener {
+            capturePhoto()
         }
 
-        binding.imageCaptureButton.setOnClickListener{
-            takePhoto()
-
-        }
-
-
-    }
-
-    private fun uploadImage(){
-
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
-
-    private fun getOutputDirectory(): File{
-        val mediaDir = externalMediaDirs.firstOrNull()?.let { mFile ->
-            File(mFile, resources.getString(R.string.app_name)).apply {
-                mkdirs()
+        binding.flashSwitch.setOnClickListener {
+            if (flashMode == ImageCapture.FLASH_MODE_OFF) {
+                flashMode = ImageCapture.FLASH_MODE_ON
+                binding.flashSwitch.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.flash_on))
+            } else {
+                flashMode = ImageCapture.FLASH_MODE_OFF
+                binding.flashSwitch.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.flash_off))
             }
         }
-        return if (mediaDir != null && mediaDir.exists())
-            mediaDir else filesDir
+
+        if (flashMode == ImageCapture.FLASH_MODE_OFF) {
+            binding.flashSwitch.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.flash_off))
+        } else {
+            binding.flashSwitch.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.flash_on))
+        }
+        initializeCamera()
     }
 
-    private fun takePhoto(){
-        val imageCapture = imageCapture ?: return
-        val photoFile = File(
-            outputDirectory,
-            SimpleDateFormat(Constants.FILE_NAME_FORMAT,
-                Locale.getDefault())
-                .format(System
-                    .currentTimeMillis())+".jpg")
 
-        val outputOption = ImageCapture
-            .OutputFileOptions
-            .Builder(photoFile)
-            .build()
+    private fun capturePhoto() {
+        val imageCapture = imageCapture ?: return
+        imageCapture.flashMode = flashMode
+
+        val photoFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), SimpleDateFormat("yyyyMMddHHmmSS", Locale.US).format(System.currentTimeMillis()) + ".jpeg")
+
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
         imageCapture.takePicture(
-            outputOption, ContextCompat.getMainExecutor(this),
-            object :ImageCapture.OnImageSavedCallback{
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-
-                    val savedUri = Uri.fromFile(photoFile)
-                    val msg = "Photo Saved"
-
-                    Toast.makeText(this@CameraActivity,
-                        "$msg $savedUri",
+            outputOptions, ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onError(exc: ImageCaptureException) {
+                    try {
+                        val savedUri = Uri.fromFile(photoFile)
+                        savedUri.path?.let { safePath ->
+                            val file = File(safePath)
+                            file.delete()
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                    Toast.makeText(
+                        this@CameraActivity,
+                        "Something went wrong!",
                         Toast.LENGTH_LONG
                     ).show()
                 }
 
-                override fun onError(exception: ImageCaptureException) {
-                    Log.e(Constants.TAG, "onError: ${exception.message}", 
-                        exception)
+                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    val savedUri = Uri.fromFile(photoFile)
+                    savedUri.path?.let { safePath ->
+                        PreviewActivity.path = safePath
+                        startActivity(Intent(this@CameraActivity, PreviewActivity::class.java))
+                    }
                 }
-
             }
         )
-
     }
 
-    private fun startCamera(){
-        val cameraProviderFuture = ProcessCameraProvider
-            .getInstance(this)
-
+    private fun initializeCamera(){
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder()
                 .build()
-                .also { mPreview ->
-
-                    mPreview.setSurfaceProvider(
-                        binding.viewFinder.surfaceProvider
-                    )
-
+                .also {
+                    it.setSurfaceProvider(binding.previewView.surfaceProvider)
                 }
-
             imageCapture = ImageCapture.Builder()
+                .setFlashMode(flashMode)
                 .build()
-
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
                 cameraProvider.unbindAll()
-                camera = cameraProvider.bindToLifecycle(
-                    this, cameraSelector,
-                    preview, imageCapture
-                )
-                pinchToZoomCameraX()
-                binding.zoomSeekBar.max = 100
-                binding.zoomSeekBar.progress = 0
-            }catch (e:Exception){
-                Log.d(Constants.TAG, "startCamera Fail:", e)
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+            } catch(e: Exception) {
+                e.printStackTrace()
             }
         }, ContextCompat.getMainExecutor(this))
     }
@@ -169,7 +133,7 @@ class CameraActivity : AppCompatActivity(){
         if (requestCode == Constants.REQUEST_CODE_PERMISSION){
             if(allPermissionGranted()){
                 //our code
-                startCamera()
+                initializeCamera()
             }else{
                 Toast.makeText(this,
                     "Permissions not granted by the user.",
@@ -225,7 +189,7 @@ class CameraActivity : AppCompatActivity(){
 
         val scaleGestureDetector = ScaleGestureDetector(baseContext, listener)
 
-        binding.viewFinder.setOnTouchListener { view, event ->
+        binding.previewView.setOnTouchListener { view, event ->
             view.performClick()
             scaleGestureDetector.onTouchEvent(event)
             return@setOnTouchListener true
