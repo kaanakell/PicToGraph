@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.adapters.SeekBarBindingAdapter.setOnSeekBarChangeListener
 import androidx.lifecycle.LiveData
@@ -49,6 +50,17 @@ class CameraActivity : AppCompatActivity(){
             capturePhoto()
         }
 
+        if(allPermissionGranted()){
+            Toast.makeText(this,
+            "We Have Permission",
+            Toast.LENGTH_SHORT).show()
+        }else{
+            ActivityCompat.requestPermissions(
+                this, Constants.REQUIRED_PERMISSIONS,
+                Constants.REQUEST_CODE_PERMISSION
+            )
+        }
+
         /*binding.flashSwitch.setOnClickListener {
             if (flashMode == ImageCapture.FLASH_MODE_OFF) {
                 flashMode = ImageCapture.FLASH_MODE_ON
@@ -60,6 +72,31 @@ class CameraActivity : AppCompatActivity(){
         }*/
         initializeCamera()
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == Constants.REQUEST_CODE_PERMISSION){
+            if(allPermissionGranted()){
+                //our code
+                initializeCamera()
+            }else{
+                Toast.makeText(this,
+                    "Permissions not granted by the user.",
+                    Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+    }
+
+    private fun allPermissionGranted() =
+        Constants.REQUIRED_PERMISSIONS.all{
+            ContextCompat.checkSelfPermission(
+                baseContext, it
+            ) == PackageManager.PERMISSION_GRANTED
+        }
 
 
     private fun capturePhoto() {
@@ -130,23 +167,7 @@ class CameraActivity : AppCompatActivity(){
         }, ContextCompat.getMainExecutor(this))
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == Constants.REQUEST_CODE_PERMISSION){
-            if(allPermissionGranted()){
-                //our code
-                initializeCamera()
-            }else{
-                Toast.makeText(this,
-                    "Permissions not granted by the user.",
-                    Toast.LENGTH_SHORT).show()
-                finish()
-            }
-        }
-    }
+
 
     private fun enableDisableFlash(cameraControl: CameraControl){
         val enableTorchLF: ListenableFuture<Void> = cameraControl.enableTorch(true)
@@ -240,13 +261,6 @@ class CameraActivity : AppCompatActivity(){
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
     }
-
-    private fun allPermissionGranted() =
-        Constants.REQUIRED_PERMISSIONS.all{
-            ContextCompat.checkSelfPermission(
-                baseContext, it
-            ) == PackageManager.PERMISSION_GRANTED
-        }
 
 
     override fun onDestroy() {
