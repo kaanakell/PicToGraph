@@ -8,10 +8,10 @@ plugins {
 
 android {
     compileSdk 33
-    namespace 'com.example.cameraeae'
+    namespace 'com.eae.busbarar'
 
     defaultConfig {
-        applicationId "com.example.cameraeae"
+        applicationId "com.eae.busbarar"
         minSdk 21
         targetSdk 33
         versionCode 1
