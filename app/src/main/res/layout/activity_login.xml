@@ -62,7 +62,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:backgroundTint="#14D8CD"
+        android:backgroundTint="#600303"
         android:text="LOGIN" />
 
     <TextView

@@ -9,6 +9,7 @@ import com.eae.busbarar.databinding.ActivitySensorBinding
 class SensorActivity : AppCompatActivity(), ISensor{
 
     private lateinit var binding: ActivitySensorBinding
+    private var counter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,7 +20,6 @@ class SensorActivity : AppCompatActivity(), ISensor{
         binding.recyclerView.adapter = adapter
         adapter.list = List ?: listOf()
     }
-
 
 
     companion object {

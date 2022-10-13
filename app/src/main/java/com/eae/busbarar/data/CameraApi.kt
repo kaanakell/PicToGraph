@@ -33,7 +33,7 @@ interface CameraApi {
         @Body fileNameRequest: FileNameRequest,
     ) : FileNameResponse
 
-    @POST("getsensortemp")
+    @POST("getsensortempv2")
     suspend fun uploadSensorId(
         @Header("Accept") header1: String = "application/json",
         @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",

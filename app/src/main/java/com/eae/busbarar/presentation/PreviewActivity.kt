@@ -7,6 +7,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.bumptech.glide.Glide
 import com.eae.busbarar.databinding.ActivityPreviewBinding
 import com.eae.busbarar.data.model.TextRecognitionRequest
@@ -27,6 +30,15 @@ class PreviewActivity : AppCompatActivity() {
 
         initView()
         observeLiveData()
+        hideSystemBars()
+    }
+
+    private fun hideSystemBars(){
+        val windowInsetsController =
+            ViewCompat.getWindowInsetsController(window.decorView) ?: return
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
     private fun observeLiveData(){

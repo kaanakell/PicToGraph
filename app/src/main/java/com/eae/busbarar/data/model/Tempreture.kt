@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 data class Temperature(
     val datetime : String?,
     val pred: String?,
-    val values: Int?
+    val value: Int?
 ) : Parcelable

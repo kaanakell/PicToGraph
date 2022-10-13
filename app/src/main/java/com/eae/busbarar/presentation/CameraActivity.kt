@@ -5,10 +5,8 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import android.view.View
 import android.widget.ImageView
 import android.widget.SeekBar
@@ -18,8 +16,9 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.databinding.adapters.SeekBarBindingAdapter.setOnSeekBarChangeListener
-import androidx.lifecycle.LiveData
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.eae.busbarar.Constants
 import com.eae.busbarar.R
 import com.eae.busbarar.databinding.ActivityCameraBinding
@@ -31,7 +30,6 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.TimeUnit
 
 
-
 class CameraActivity : AppCompatActivity(){
 
     private lateinit var binding: ActivityCameraBinding
@@ -39,6 +37,7 @@ class CameraActivity : AppCompatActivity(){
     private lateinit var  cameraExecutor: ExecutorService
     private var flashMode = ImageCapture.FLASH_MODE_OFF
     private var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+    private var counter = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +70,25 @@ class CameraActivity : AppCompatActivity(){
             }
         }*/
         initializeCamera()
+        closeCamera()
+        hideSystemBars()
+    }
+
+    override fun onBackPressed() {
+        // your code.
+        counter++
+        if (counter == 1){
+            val intent = Intent(this, OpenCameraActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun hideSystemBars(){
+        val windowInsetsController =
+            ViewCompat.getWindowInsetsController(window.decorView) ?: return
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
     override fun onRequestPermissionsResult(
@@ -97,6 +115,12 @@ class CameraActivity : AppCompatActivity(){
                 baseContext, it
             ) == PackageManager.PERMISSION_GRANTED
         }
+
+    private fun closeCamera(){
+        binding.closeCamera.setOnClickListener{
+            startActivity(Intent(this@CameraActivity, OpenCameraActivity::class.java))
+        }
+    }
 
 
     private fun capturePhoto() {
@@ -263,9 +287,9 @@ class CameraActivity : AppCompatActivity(){
     }
 
 
-    override fun onDestroy() {
+    /*override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
-    }
+    }*/
 
 }
