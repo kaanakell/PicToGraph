@@ -274,7 +274,7 @@ class CameraActivity : AppCompatActivity(){
     }
 
     private fun sliderZoom(cameraControl: CameraControl){
-        var zoomSlider = findViewById<SeekBar>(R.id.zoom_seek_bar)
+        val zoomSlider = findViewById<SeekBar>(R.id.zoom_seek_bar)
         zoomSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 cameraControl.setLinearZoom(progress / 100.toFloat())

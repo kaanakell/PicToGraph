@@ -50,6 +50,8 @@ class PreviewActivity : AppCompatActivity() {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
             }
             binding.layoutLoading.visibility = View.GONE
+            Toast.makeText(this, "Please wait for Sensor Respond.", Toast.LENGTH_LONG).show()
+            binding.respondBar.visibility = View.VISIBLE
         }
 
         viewModel.fileNameResponse.observe(this){response ->

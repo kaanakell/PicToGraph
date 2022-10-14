@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.eae.busbarar.databinding.ActivitySensorInfoBinding
 import com.eae.busbarar.data.model.TextRecognitionRequest
 import android.R
+import android.content.Intent
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,6 +27,7 @@ class SensorInfoActivity : AppCompatActivity() {
         binding = ActivitySensorInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.sensorNameText.text = sensorId
+
 
         ArrayAdapter.createFromResource(
             this,
@@ -70,7 +72,8 @@ class SensorInfoActivity : AppCompatActivity() {
                     .title("Sensor Temperature")
                     .markerRadius(5.0)
                     .markerSymbol(AAChartSymbolType.Circle)
-                    .backgroundColor(AAColor.LightGray)
+                    .backgroundColor(AAColor.DarkGray)
+                    .axesTextColor(AAColor.Black)
                     .legendEnabled(true)
                     .yAxisTitle("Values")
                     .yAxisMax(100)
@@ -105,17 +108,17 @@ class SensorInfoActivity : AppCompatActivity() {
                 val aaOptions = aaChartModel.aa_toAAOptions()
 
                 aaOptions.xAxis?.apply {
-                    gridLineColor(AAColor.DarkGray)
+                    gridLineColor(AAColor.Black)
                         .gridLineWidth(1)
-                        .minorGridLineColor(AAColor.LightGray)
+                        .minorGridLineColor(AAColor.Black)
                         .minorGridLineWidth(0.5)
                         .minorTickInterval("auto")
                 }
 
                 aaOptions.yAxis?.apply {
-                    gridLineColor(AAColor.DarkGray)
+                    gridLineColor(AAColor.Black)
                         .gridLineWidth(1)
-                        .minorGridLineColor(AAColor.LightGray)
+                        .minorGridLineColor(AAColor.Black)
                         .minorGridLineWidth(0.5)
                         .minorTickInterval("auto")
                 }
@@ -135,10 +138,14 @@ class SensorInfoActivity : AppCompatActivity() {
             }
         }
 
+        returnToCamera()
+
     }
 
-    fun setLineChartData(){
-
+    private fun returnToCamera(){
+        binding.backToCamera.setOnClickListener {
+            startActivity(Intent(this, CameraActivity::class.java))
+        }
     }
 
     companion object {
