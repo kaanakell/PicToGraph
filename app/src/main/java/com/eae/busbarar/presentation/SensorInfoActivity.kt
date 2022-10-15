@@ -86,7 +86,6 @@ class SensorInfoActivity : AppCompatActivity() {
                             AASeriesElement()
                                 .name(sensorId)
                                 .data(values.toArray())
-                                //.data(arrayOf(71, 79, 81, 79, 76))
                                 .color(AAColor.Red)
                                 .allowPointSelect(true)
                                 .dashStyle(AAChartLineDashStyleType.Solid)
@@ -145,6 +144,7 @@ class SensorInfoActivity : AppCompatActivity() {
     private fun returnToCamera(){
         binding.backToCamera.setOnClickListener {
             startActivity(Intent(this, CameraActivity::class.java))
+            finish()
         }
     }
 

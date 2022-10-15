@@ -58,6 +58,7 @@ class PreviewActivity : AppCompatActivity() {
             response?.let {
                 SensorActivity.List = listOf(it.DetectedSensor ?: "")
                 startActivity(Intent(this, SensorActivity::class.java))
+                finish()
             } ?: run{
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
             }

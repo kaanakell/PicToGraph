@@ -2,11 +2,8 @@ package com.eae.busbarar.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.eae.busbarar.R
 import com.eae.busbarar.databinding.ActivitySensorBinding
 
 
@@ -21,17 +18,16 @@ class SensorActivity : AppCompatActivity(), ISensor{
         val adapter = SensorAdapter(this)
         binding.recyclerView.adapter = adapter
         adapter.list = List ?: listOf()
-
     }
 
-    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        Toast.makeText(this,"There is no back action",Toast.LENGTH_LONG).show();
-        return
+        startActivity(Intent(this, CameraActivity::class.java))
+        finish()
     }
 
-    fun backToCamera(v: View){
+    override fun onBackCamera() {
         startActivity(Intent(this, CameraActivity::class.java))
+        finish()
     }
 
 
