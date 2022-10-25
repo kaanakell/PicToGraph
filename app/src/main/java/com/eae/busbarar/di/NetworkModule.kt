@@ -21,7 +21,7 @@ object NetworkModule {
     @Singleton
     fun provideCameraApi(okHttpClient: OkHttpClient): CameraApi {
         return Retrofit.Builder()
-            .baseUrl(com.eae.busbarar.Constants.BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

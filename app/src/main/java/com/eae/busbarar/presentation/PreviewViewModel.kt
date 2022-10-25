@@ -41,7 +41,7 @@ class PreviewViewModel @Inject constructor(
         }
     }
 
-    fun uploadSensorId(request: TextRecognitionRequest){
+    fun uploadSensorId(request: TextRecognitionRequest) {
         viewModelScope.launch {
             _sensorResponse.postValue(repository.uploadSensorId(request))
         }

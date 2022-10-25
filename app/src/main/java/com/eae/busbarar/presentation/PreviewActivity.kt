@@ -12,7 +12,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.bumptech.glide.Glide
 import com.eae.busbarar.databinding.ActivityPreviewBinding
-import com.eae.busbarar.data.model.TextRecognitionRequest
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -20,7 +19,6 @@ import java.io.File
 class PreviewActivity : AppCompatActivity() {
 
     private val viewModel: PreviewViewModel by viewModels()
-
     private lateinit var binding: ActivityPreviewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,12 +26,12 @@ class PreviewActivity : AppCompatActivity() {
         binding = ActivityPreviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initView()
-        observeLiveData()
-        hideSystemBars()
+        initializeView()
+        observeLiveDataResponse()
+        hideSystemNavigationBars()
     }
 
-    private fun hideSystemBars(){
+    private fun hideSystemNavigationBars() {
         val windowInsetsController =
             ViewCompat.getWindowInsetsController(window.decorView) ?: return
         windowInsetsController.systemBarsBehavior =
@@ -41,7 +39,7 @@ class PreviewActivity : AppCompatActivity() {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
-    private fun observeLiveData(){
+    private fun observeLiveDataResponse() {
         viewModel.response.observe(this) { response ->
             response?.let {
                 Toast.makeText(this, "Uploaded successfully.", Toast.LENGTH_LONG).show()
@@ -59,12 +57,12 @@ class PreviewActivity : AppCompatActivity() {
                 SensorActivity.List = listOf(it.DetectedSensor ?: "")
                 startActivity(Intent(this, SensorActivity::class.java))
                 finish()
-            } ?: run{
+            } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
             }
         }
 
-        viewModel.sensorResponse.observe(this){ response ->
+        viewModel.sensorResponse.observe(this) { response ->
             response?.let {
 
             } ?: run {
@@ -73,7 +71,7 @@ class PreviewActivity : AppCompatActivity() {
         }
     }
 
-    private fun initView(){
+    private fun initializeView() {
         Glide.with(this).load(path).into(binding.imageView)
 
         binding.buttonBack.setOnClickListener {

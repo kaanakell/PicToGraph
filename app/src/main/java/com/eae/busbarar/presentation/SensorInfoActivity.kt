@@ -20,42 +20,33 @@ class SensorInfoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySensorInfoBinding
     private val viewModel: PreviewViewModel by viewModels()
-    private var temperature: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySensorInfoBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         binding.sensorNameText.text = sensorId
+        setContentView(binding.root)
 
+        sendDataForLineChart()
+        returnToCameraActivity()
+        lineChartForDataObservation()
+    }
 
-        ArrayAdapter.createFromResource(
-            this,
-            com.eae.busbarar.R.array.temperature,
-            R.layout.simple_spinner_item
-        ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            binding.spinner.adapter = adapter
-        }//.array.temperature
-        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                binding.temperatureValue.text = resources.getStringArray(com.eae.busbarar.R.array.temperature)[p2]
-
-                temperature = resources.getStringArray(com.eae.busbarar.R.array.temperature)[p2].toInt()
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
+    private fun returnToCameraActivity() {
+        binding.backToCamera.setOnClickListener {
+            startActivity(Intent(this, CameraActivity::class.java))
+            finish()
         }
+    }
 
-        binding.sendData.setOnClickListener(){
-            viewModel.uploadSensorId(TextRecognitionRequest(sensorId, 5))
+    private fun sendDataForLineChart() {
+        binding.sendData.setOnClickListener {
+            viewModel.uploadSensorId(TextRecognitionRequest(sensorId, 10))
         }
+    }
 
-        viewModel.sensorResponse.observe(this){ response ->
+    private fun lineChartForDataObservation() {
+        viewModel.sensorResponse.observe(this) { response ->
             response?.let {safeResponse ->
                 val values = arrayListOf<Int>()
                 val dates = arrayListOf<String>()
@@ -63,7 +54,6 @@ class SensorInfoActivity : AppCompatActivity() {
                     item.datetime
                     item.pred
                     item.value
-
                     item.value?.let{values.add(it)}
                     item.datetime?.let{dates.add(it)}
                 }
@@ -76,11 +66,8 @@ class SensorInfoActivity : AppCompatActivity() {
                     .axesTextColor(AAColor.Black)
                     .legendEnabled(true)
                     .yAxisTitle("Values")
-                    .yAxisMax(100)
-                    .yAxisMin(60)
                     .stacking(AAChartStackingType.Normal)
                     .dataLabelsEnabled(true)
-                    //.xAxisLabelsEnabled(true)
                     .series(
                         arrayOf(
                             AASeriesElement()
@@ -89,19 +76,12 @@ class SensorInfoActivity : AppCompatActivity() {
                                 .color(AAColor.Red)
                                 .allowPointSelect(true)
                                 .dashStyle(AAChartLineDashStyleType.Solid)
-
                         )
                     )
                     .categories(
                         arrayOf(
                             *dates.toTypedArray()
                         )
-
-                        /*"Mon, 12 Sep 2022 00:00:00 GMT",
-                        "Sun, 11 Sep 2022 23:45:00 GMT",
-                        "Sun, 11 Sep 2022 23:30:00 GMT",
-                        "Sun, 11 Sep 2022 23:15:00 GMT",
-                        "Sun, 11 Sep 2022 23:00:00 GMT"*/
                     )
 
                 val aaOptions = aaChartModel.aa_toAAOptions()
@@ -129,22 +109,10 @@ class SensorInfoActivity : AppCompatActivity() {
                         .align(AAChartAlignType.Right)
                 }
 
-
                 binding.chartView.aa_drawChartWithChartModel(aaChartModel)
-                //Grafik Chart Setle
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
             }
-        }
-
-        returnToCamera()
-
-    }
-
-    private fun returnToCamera(){
-        binding.backToCamera.setOnClickListener {
-            startActivity(Intent(this, CameraActivity::class.java))
-            finish()
         }
     }
 

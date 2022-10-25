@@ -1,9 +1,7 @@
 package com.eae.busbarar.presentation
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.eae.busbarar.databinding.ListItemSensorBinding
 
@@ -16,8 +14,8 @@ class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.V
             notifyDataSetChanged()
         }
 
-    inner class ViewHolder(private val binding: ListItemSensorBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(position: Int){
+    inner class ViewHolder(private val binding: ListItemSensorBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(position: Int) {
             binding.textView.text = list[position]
             binding.root.setOnClickListener {
                 listener.onItemClick(list[position])
@@ -25,11 +23,8 @@ class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.V
             binding.backToCamera.setOnClickListener {
                 listener.onBackCamera()
             }
-
-
         }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ListItemSensorBinding.inflate(LayoutInflater.from(parent.context),parent,false))

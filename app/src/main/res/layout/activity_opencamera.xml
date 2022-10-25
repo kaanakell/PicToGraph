@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,13 +10,12 @@
         android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="EAE - AR SYSTEMS"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="35dp"
         android:layout_margin="50dp"
         android:gravity="center"
-        />
+        android:text="EAE - AR SYSTEMS"
+        android:textColor="@color/white"
+        android:textSize="35dp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/openCamera"
@@ -33,18 +31,17 @@
         android:text="OPEN CAMERA" />
 
     <TextView
+        android:id="@+id/sociallinks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/sociallinks"
         android:layout_above="@+id/socialicons"
-        android:text="Social Links"
         android:layout_centerHorizontal="true"
-        />
+        android:text="Social Links" />
 
     <LinearLayout
+        android:id="@id/socialicons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@id/socialicons"
         android:layout_alignParentBottom="true"
         android:gravity="center">
 
@@ -52,22 +49,20 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="20dp"
-            android:src="@drawable/fb"
-            />
+            android:src="@drawable/fb" />
+
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="20dp"
-            android:src="@drawable/twitter"
-            />
+            android:src="@drawable/twitter" />
+
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="20dp"
-            android:src="@drawable/linkedin"
-            />
+            android:src="@drawable/linkedin" />
 
     </LinearLayout>
-
 
 </RelativeLayout>

@@ -2,7 +2,6 @@ package com.eae.busbarar.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.eae.busbarar.databinding.ActivitySensorBinding
 
@@ -15,6 +14,7 @@ class SensorActivity : AppCompatActivity(), ISensor{
         super.onCreate(savedInstanceState)
         binding = ActivitySensorBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         val adapter = SensorAdapter(this)
         binding.recyclerView.adapter = adapter
         adapter.list = List ?: listOf()

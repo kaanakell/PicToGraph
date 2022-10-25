@@ -8,7 +8,6 @@ import android.os.Environment
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
-import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -22,23 +21,19 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.eae.busbarar.Constants
 import com.eae.busbarar.R
 import com.eae.busbarar.databinding.ActivityCameraBinding
-import com.google.common.util.concurrent.ListenableFuture
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.TimeUnit
 
 
-class CameraActivity : AppCompatActivity(){
+class CameraActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCameraBinding
     private var imageCapture: ImageCapture? = null
-    private lateinit var  cameraExecutor: ExecutorService
     private var flashMode = ImageCapture.FLASH_MODE_OFF
     private var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var counter = 0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,36 +41,27 @@ class CameraActivity : AppCompatActivity(){
         setContentView(binding.root)
 
         binding.imageCaptureButton.setOnClickListener {
-            capturePhoto()
+            photoCapture()
         }
 
-        if(allPermissionGranted()){
+        if(allPermissionsGrantedByUser()) {
             Toast.makeText(this,
             "We Have Permission",
             Toast.LENGTH_SHORT).show()
-        }else{
+        } else {
             ActivityCompat.requestPermissions(
                 this, Constants.REQUIRED_PERMISSIONS,
                 Constants.REQUEST_CODE_PERMISSION
             )
         }
 
-        /*binding.flashSwitch.setOnClickListener {
-            if (flashMode == ImageCapture.FLASH_MODE_OFF) {
-                flashMode = ImageCapture.FLASH_MODE_ON
-                binding.flashSwitch.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.flash_on))
-            } else {
-                flashMode = ImageCapture.FLASH_MODE_OFF
-                binding.flashSwitch.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.flash_off))
-            }
-        }*/
         initializeCamera()
-        closeCamera()
-        hideSystemBars()
+        cameraCloseButton()
+        hideSystemNavigationBars()
+
     }
 
     override fun onBackPressed() {
-        // your code.
         counter++
         if (counter == 1){
             val intent = Intent(this, OpenCameraActivity::class.java)
@@ -83,7 +69,7 @@ class CameraActivity : AppCompatActivity(){
         }
     }
 
-    private fun hideSystemBars(){
+    private fun hideSystemNavigationBars() {
         val windowInsetsController =
             ViewCompat.getWindowInsetsController(window.decorView) ?: return
         windowInsetsController.systemBarsBehavior =
@@ -97,8 +83,7 @@ class CameraActivity : AppCompatActivity(){
         grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == Constants.REQUEST_CODE_PERMISSION){
-            if(allPermissionGranted()){
-                //our code
+            if(allPermissionsGrantedByUser()){
                 initializeCamera()
             }else{
                 Toast.makeText(this,
@@ -109,29 +94,28 @@ class CameraActivity : AppCompatActivity(){
         }
     }
 
-    private fun allPermissionGranted() =
+    private fun allPermissionsGrantedByUser() =
         Constants.REQUIRED_PERMISSIONS.all{
             ContextCompat.checkSelfPermission(
                 baseContext, it
             ) == PackageManager.PERMISSION_GRANTED
         }
 
-    private fun closeCamera(){
+    private fun cameraCloseButton() {
         binding.closeCamera.setOnClickListener{
             startActivity(Intent(this@CameraActivity, OpenCameraActivity::class.java))
         }
     }
 
 
-    private fun capturePhoto() {
-        val imageCapture = imageCapture ?: return
-        imageCapture.flashMode = flashMode
+    private fun photoCapture() {
+        imageCapture ?: return
 
         val photoFile = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), SimpleDateFormat("yyyyMMddHHmmSS", Locale.US).format(System.currentTimeMillis()) + ".jpeg")
 
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
-        imageCapture.takePicture(
+        imageCapture!!.takePicture(
             outputOptions, ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
@@ -162,7 +146,7 @@ class CameraActivity : AppCompatActivity(){
         )
     }
 
-    private fun initializeCamera(){
+    private fun initializeCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
@@ -174,17 +158,14 @@ class CameraActivity : AppCompatActivity(){
             imageCapture = ImageCapture.Builder()
                 .setFlashMode(flashMode)
                 .build()
-
             try {
                 cameraProvider.unbindAll()
                 val camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
                 val cameraControl = camera.cameraControl
                 val cameraInfo = camera.cameraInfo
-                tapToFocus(cameraControl)
-                pinchToZoom(cameraControl, cameraInfo)
-                sliderZoom(cameraControl)
-                //enableDisableFlash(cameraControl)
-
+                tapToFocusFeature(cameraControl)
+                pinchToZoomFeature(cameraControl, cameraInfo)
+                sliderBarZoomFeature(cameraControl)
             } catch(e: Exception) {
                 e.printStackTrace()
             }
@@ -192,42 +173,18 @@ class CameraActivity : AppCompatActivity(){
     }
 
 
-
-    private fun enableDisableFlash(cameraControl: CameraControl){
-        val enableTorchLF: ListenableFuture<Void> = cameraControl.enableTorch(true)
-        val disableTorchLF: ListenableFuture<Void> = cameraControl.enableTorch(false)
-        val imageView = findViewById(R.id.image_view) as ImageView
-        enableTorchLF.addListener({
-            try {
-                imageView.setOnClickListener{
-                    enableTorchLF.get()
-                }
-                imageView.setOnClickListener{
-                    disableTorchLF.get()
-                }
-
-            }catch (e: Exception){
-                e.printStackTrace()
-            }
-        }, cameraExecutor)
-    }
-
-    private fun tapToFocus(cameraControl: CameraControl){
+    private fun tapToFocusFeature(cameraControl: CameraControl) {
         binding.previewView.setOnTouchListener(View.OnTouchListener setOnTouchListener@{ view: View, motionEvent: MotionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> return@setOnTouchListener true
                 MotionEvent.ACTION_UP -> {
-                    // Get the MeteringPointFactory from PreviewView
+
                     val factory = binding.previewView.getMeteringPointFactory()
 
-                    // Create a MeteringPoint from the tap coordinates
                     val point = factory.createPoint(motionEvent.x, motionEvent.y)
 
-                    // Create a MeteringAction from the MeteringPoint, you can configure it to specify the metering mode
                     val action = FocusMeteringAction.Builder(point).build()
 
-                    // Trigger the focus and metering. The method returns a ListenableFuture since the operation
-                    // is asynchronous. You can use it get notified when the focus is successful or if it fails.
                     cameraControl.startFocusAndMetering(action)
 
                     return@setOnTouchListener true
@@ -237,25 +194,21 @@ class CameraActivity : AppCompatActivity(){
         })
     }
 
-    private fun pinchToZoom(cameraControl: CameraControl, cameraInfo: CameraInfo){
-
-        // Listen to pinch gestures
+    private fun pinchToZoomFeature(cameraControl: CameraControl, cameraInfo: CameraInfo) {
         val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+
             override fun onScale(detector: ScaleGestureDetector): Boolean {
-                // Get the camera's current zoom ratio
+
                 val currentZoomRatio = cameraInfo.zoomState.value?.zoomRatio ?: 0F
 
-                // Get the pinch gesture's scaling factor
                 val delta = detector.scaleFactor
 
-                // Update the camera's zoom ratio. This is an asynchronous operation that returns
-                // a ListenableFuture, allowing you to listen to when the operation completes.
                 cameraControl.setZoomRatio(currentZoomRatio * delta)
 
-                // Return true, as the event was handled
                 return true
             }
         }
+
         val scaleGestureDetector = ScaleGestureDetector(baseContext, listener)
 
         // Attach the pinch gesture listener to the viewfinder
@@ -273,7 +226,7 @@ class CameraActivity : AppCompatActivity(){
         }
     }
 
-    private fun sliderZoom(cameraControl: CameraControl){
+    private fun sliderBarZoomFeature(cameraControl: CameraControl) {
         val zoomSlider = findViewById<SeekBar>(R.id.zoom_seek_bar)
         zoomSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -286,10 +239,5 @@ class CameraActivity : AppCompatActivity(){
         })
     }
 
-
-    /*override fun onDestroy() {
-        super.onDestroy()
-        cameraExecutor.shutdown()
-    }*/
 
 }
