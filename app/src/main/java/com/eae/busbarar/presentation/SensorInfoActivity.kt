@@ -48,7 +48,7 @@ class SensorInfoActivity : AppCompatActivity() {
     private fun lineChartForDataObservation() {
         viewModel.sensorResponse.observe(this) { response ->
             response?.let {safeResponse ->
-                val values = arrayListOf<Int>()
+                val values = arrayListOf<Float>()
                 val dates = arrayListOf<String>()
                 for (item in safeResponse.temps?: listOf()){
                     item.datetime
