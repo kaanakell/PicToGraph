@@ -172,14 +172,13 @@ class CameraActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-
     private fun tapToFocusFeature(cameraControl: CameraControl) {
-        binding.previewView.setOnTouchListener(View.OnTouchListener setOnTouchListener@{ view: View, motionEvent: MotionEvent ->
+        binding.previewView.setOnTouchListener(View.OnTouchListener setOnTouchListener@{ _: View, motionEvent: MotionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> return@setOnTouchListener true
                 MotionEvent.ACTION_UP -> {
 
-                    val factory = binding.previewView.getMeteringPointFactory()
+                    val factory = binding.previewView.meteringPointFactory
 
                     val point = factory.createPoint(motionEvent.x, motionEvent.y)
 
@@ -215,7 +214,7 @@ class CameraActivity : AppCompatActivity() {
         binding.previewView.setOnTouchListener { _, event ->
             scaleGestureDetector.onTouchEvent(event)
             if (event.action == MotionEvent.ACTION_DOWN) {
-                val factory = binding.previewView.getMeteringPointFactory()
+                val factory = binding.previewView.meteringPointFactory
                 val point = factory.createPoint(event.x, event.y)
                 val action = FocusMeteringAction.Builder(point, FocusMeteringAction.FLAG_AF)
                     .setAutoCancelDuration(5, TimeUnit.SECONDS)
@@ -238,6 +237,5 @@ class CameraActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
     }
-
 
 }
