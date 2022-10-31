@@ -36,7 +36,8 @@
         </activity>
         <activity
             android:name=".presentation.CameraActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="fullSensor">
         </activity>
         <activity
             android:name=".presentation.OpenCameraActivity"
@@ -44,11 +45,9 @@
         </activity>
         <activity
             android:name=".presentation.PreviewActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="fullSensor"/>
 
-        <activity
-            android:name=".presentation.GalleryActivity"
-            android:exported="true" />
 
         <activity
             android:name=".presentation.SensorActivity"

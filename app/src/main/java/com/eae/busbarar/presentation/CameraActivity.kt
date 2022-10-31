@@ -1,5 +1,6 @@
 package com.eae.busbarar.presentation
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -12,6 +13,7 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
+import androidx.camera.core.impl.utils.Exif
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -135,7 +137,11 @@ class CameraActivity : AppCompatActivity() {
                     ).show()
                 }
 
+                @SuppressLint("RestrictedApi")
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    val inputStream = contentResolver.openInputStream(Uri.fromFile(photoFile))
+                    val exif = inputStream?.let { Exif.createFromInputStream(it) }
+                    val rotation = exif?.rotation
                     val savedUri = Uri.fromFile(photoFile)
                     savedUri.path?.let { safePath ->
                         PreviewActivity.path = safePath
