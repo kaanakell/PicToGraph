@@ -17,7 +17,6 @@ interface CameraApi {
         @Header("Accept") header1: String = "multipart/form-data",
         @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",
         @Header("X-EAE-Auth") header3: String = Constants.API_KEY,
-        @Header("Accept-Encoding") header4: String = "gzip, deflate, br",
         @Header("Connection") header5: String= "keep-alive",
         @Part files: MultipartBody.Part,
     ) : ApiResponse
@@ -28,7 +27,6 @@ interface CameraApi {
         @Header("Accept") header1: String = "application/json",
         @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",
         @Header("X-EAE-Auth") header3: String = Constants.API_KEY,
-        @Header("Accept-Encoding") header4: String = "gzip, deflate, br",
         @Header("Connection") header5: String= "keep-alive",
         @Body fileNameRequest: FileNameRequest,
     ) : FileNameResponse

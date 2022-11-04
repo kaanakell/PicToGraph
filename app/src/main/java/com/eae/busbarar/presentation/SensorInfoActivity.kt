@@ -9,7 +9,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.eae.busbarar.databinding.ActivitySensorInfoBinding
 import com.eae.busbarar.data.model.TextRecognitionRequest
-import android.R
 import android.content.Intent
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aatools.AAColor
@@ -108,7 +107,6 @@ class SensorInfoActivity : AppCompatActivity() {
                         .layout(AAChartLayoutType.Vertical)
                         .align(AAChartAlignType.Right)
                 }
-
                 binding.chartView.aa_drawChartWithChartModel(aaChartModel)
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()

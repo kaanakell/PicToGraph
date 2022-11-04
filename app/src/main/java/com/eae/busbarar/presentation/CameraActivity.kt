@@ -42,6 +42,7 @@ class CameraActivity : AppCompatActivity() {
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         binding.imageCaptureButton.setOnClickListener {
             photoCapture()
         }
@@ -205,6 +206,8 @@ class CameraActivity : AppCompatActivity() {
             override fun onScale(detector: ScaleGestureDetector): Boolean {
 
                 val currentZoomRatio = cameraInfo.zoomState.value?.zoomRatio ?: 0F
+
+                binding.zoomSeekBar.progress = currentZoomRatio.toInt()
 
                 val delta = detector.scaleFactor
 

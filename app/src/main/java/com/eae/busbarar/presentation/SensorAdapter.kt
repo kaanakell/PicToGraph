@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eae.busbarar.databinding.ListItemSensorBinding
+import com.eae.busbarar.presentation.SensorInfoActivity.Companion.sensorId
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 
 
 class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.ViewHolder>() {
@@ -19,9 +21,6 @@ class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.V
             binding.textView.text = list[position]
             binding.root.setOnClickListener {
                 listener.onItemClick(list[position])
-            }
-            binding.backToCamera.setOnClickListener {
-                listener.onBackCamera()
             }
         }
     }

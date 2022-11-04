@@ -29,6 +29,8 @@ class PreviewActivity : AppCompatActivity() {
         initializeView()
         observeLiveDataResponse()
         hideSystemNavigationBars()
+        binding.buttonUpload.performClick()
+        binding.buttonUpload.visibility = View.INVISIBLE
     }
 
     private fun hideSystemNavigationBars() {
@@ -54,7 +56,7 @@ class PreviewActivity : AppCompatActivity() {
 
         viewModel.fileNameResponse.observe(this){response ->
             response?.let {
-                SensorActivity.List = listOf(it.DetectedSensor ?: "")
+                SensorActivity.list = SensorActivity.list + listOf(it.DetectedSensor ?: "EMPTY")
                 startActivity(Intent(this, SensorActivity::class.java))
                 finish()
             } ?: run {
