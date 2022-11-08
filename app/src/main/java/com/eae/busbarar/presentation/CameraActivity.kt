@@ -170,8 +170,7 @@ class CameraActivity : AppCompatActivity() {
                 val camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
                 val cameraControl = camera.cameraControl
                 val cameraInfo = camera.cameraInfo
-                tapToFocusFeature(cameraControl)
-                pinchToZoomFeature(cameraControl, cameraInfo)
+                cameraTouchControls(cameraControl, cameraInfo)
                 sliderBarZoomFeature(cameraControl)
             } catch(e: Exception) {
                 e.printStackTrace()
@@ -179,28 +178,7 @@ class CameraActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-    private fun tapToFocusFeature(cameraControl: CameraControl) {
-        binding.previewView.setOnTouchListener(View.OnTouchListener setOnTouchListener@{ _: View, motionEvent: MotionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_DOWN -> return@setOnTouchListener true
-                MotionEvent.ACTION_UP -> {
-
-                    val factory = binding.previewView.meteringPointFactory
-
-                    val point = factory.createPoint(motionEvent.x, motionEvent.y)
-
-                    val action = FocusMeteringAction.Builder(point).build()
-
-                    cameraControl.startFocusAndMetering(action)
-
-                    return@setOnTouchListener true
-                }
-                else -> return@setOnTouchListener false
-            }
-        })
-    }
-
-    private fun pinchToZoomFeature(cameraControl: CameraControl, cameraInfo: CameraInfo) {
+    private fun cameraTouchControls(cameraControl: CameraControl, cameraInfo: CameraInfo) {
         val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
 
             override fun onScale(detector: ScaleGestureDetector): Boolean {
@@ -219,7 +197,6 @@ class CameraActivity : AppCompatActivity() {
 
         val scaleGestureDetector = ScaleGestureDetector(baseContext, listener)
 
-        // Attach the pinch gesture listener to the viewfinder
         binding.previewView.setOnTouchListener { _, event ->
             scaleGestureDetector.onTouchEvent(event)
             if (event.action == MotionEvent.ACTION_DOWN) {

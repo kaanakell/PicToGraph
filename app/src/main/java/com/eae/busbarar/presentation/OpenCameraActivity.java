@@ -16,7 +16,7 @@ public class OpenCameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opencamera);
 
-        button = (Button)findViewById(R.id.openCamera);
+        button = findViewById(R.id.openCamera);
         button.setOnClickListener(v -> openCameraActivityButton());
 
     }

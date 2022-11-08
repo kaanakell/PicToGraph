@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.eae.busbarar.data.model.FileNameResponse
 import com.eae.busbarar.data.model.TextRecognitionRequest
 import com.eae.busbarar.databinding.ActivitySensorBinding
-import com.eae.busbarar.databinding.ListItemSensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AASeries
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AASeriesEvents
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,7 +37,7 @@ class SensorActivity : AppCompatActivity(), ISensor{
 
     override fun onBackPressed() {
         startActivity(Intent(this, CameraActivity::class.java))
-        //finish()
+        finish()
     }
 
     override fun onStart() {
@@ -49,6 +52,7 @@ class SensorActivity : AppCompatActivity(), ISensor{
     override fun onItemClick(item: String) {
         viewModel.uploadSensorId(TextRecognitionRequest(item, 10))
     }
+
 
     private fun lineChartForDataObservation() {
         viewModel.sensorResponse.observe(this) { response ->
@@ -69,27 +73,34 @@ class SensorActivity : AppCompatActivity(), ISensor{
                     .markerSymbol(AAChartSymbolType.Circle)
                     .backgroundColor(AAColor.DarkGray)
                     .axesTextColor(AAColor.Black)
+                    .touchEventEnabled(true)
                     .legendEnabled(true)
                     .yAxisTitle("Values")
+                    .zoomType(AAChartZoomType.XY)
+                    .scrollablePlotArea(
+                        AAScrollablePlotArea()
+                            .minWidth(3000)
+                            .scrollPositionX(1f))
                     .stacking(AAChartStackingType.Normal)
                     .dataLabelsEnabled(true)
                     .series(
-                        arrayOf(
+                        arrayListOf(
                             AASeriesElement()
-                                .name(SensorInfoActivity.sensorId)
+                                //.name(list.lastIndex.toString())
                                 .data(values.toArray())
                                 .color(AAColor.Red)
                                 .allowPointSelect(true)
+                                .dashStyle(AAChartLineDashStyleType.Solid),
+                            AASeriesElement()
+                                .data(values.toArray())
+                                .color(AAColor.Blue)
+                                .allowPointSelect(true)
                                 .dashStyle(AAChartLineDashStyleType.Solid)
-                        )
+                        ).toTypedArray()
                     )
-                    .categories(
-                        arrayOf(
-                            *dates.toTypedArray()
-                        )
-                    )
+                    .categories(dates.toTypedArray())
 
-                val aaOptions = aaChartModel.aa_toAAOptions()
+                val aaOptions :AAOptions = aaChartModel.aa_toAAOptions()
 
                 aaOptions.xAxis?.apply {
                     gridLineColor(AAColor.Black)
@@ -113,7 +124,12 @@ class SensorActivity : AppCompatActivity(), ISensor{
                         .layout(AAChartLayoutType.Vertical)
                         .align(AAChartAlignType.Right)
                 }
+
+                aaOptions.run {
+
+                }
                 binding.chartViewLandscape?.aa_drawChartWithChartModel(aaChartModel)
+
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
             }
