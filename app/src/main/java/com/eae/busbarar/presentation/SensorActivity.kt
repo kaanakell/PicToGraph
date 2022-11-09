@@ -5,13 +5,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.eae.busbarar.data.model.FileNameResponse
 import com.eae.busbarar.data.model.TextRecognitionRequest
 import com.eae.busbarar.databinding.ActivitySensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AASeries
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AASeriesEvents
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,6 +28,7 @@ class SensorActivity : AppCompatActivity(), ISensor{
         }
         binding.recyclerView.adapter = adapter
         //adapter.list = list
+
 
         lineChartForDataObservation()
     }
@@ -86,14 +84,9 @@ class SensorActivity : AppCompatActivity(), ISensor{
                     .series(
                         arrayListOf(
                             AASeriesElement()
-                                //.name(list.lastIndex.toString())
+                                //.name()
                                 .data(values.toArray())
                                 .color(AAColor.Red)
-                                .allowPointSelect(true)
-                                .dashStyle(AAChartLineDashStyleType.Solid),
-                            AASeriesElement()
-                                .data(values.toArray())
-                                .color(AAColor.Blue)
                                 .allowPointSelect(true)
                                 .dashStyle(AAChartLineDashStyleType.Solid)
                         ).toTypedArray()

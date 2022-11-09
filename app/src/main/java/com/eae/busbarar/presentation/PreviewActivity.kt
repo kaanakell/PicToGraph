@@ -48,6 +48,7 @@ class PreviewActivity : AppCompatActivity() {
                 viewModel.uploadFileName(response.FileName)
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, CameraActivity::class.java))
             }
             binding.layoutLoading.visibility = View.GONE
             Toast.makeText(this, "Please wait for Sensor Respond.", Toast.LENGTH_LONG).show()
@@ -61,6 +62,7 @@ class PreviewActivity : AppCompatActivity() {
                 finish()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, CameraActivity::class.java))
             }
         }
 
