@@ -18,6 +18,9 @@ class SensorActivity : AppCompatActivity(), ISensor{
     private lateinit var binding: ActivitySensorBinding
     private val viewModel: PreviewViewModel by viewModels()
     private val adapter = SensorAdapter(this)
+    private val aaChartModel : AAChartModel = AAChartModel()
+    private val chartModels : ArrayList<AASeriesElement> = arrayListOf()
+    private val sensorClicks : ArrayList<String> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,10 +29,15 @@ class SensorActivity : AppCompatActivity(), ISensor{
         binding.backToCamera.setOnClickListener {
             startActivity(Intent(this, CameraActivity::class.java))
         }
+        binding.emptyList?.setOnClickListener {
+            emptyList()
+        }
+        binding.clearGraph?.setOnClickListener {
+            clearGraph()
+        }
         binding.recyclerView.adapter = adapter
-        //adapter.list = list
 
-
+        chartOptions()
         lineChartForDataObservation()
     }
 
@@ -48,9 +56,81 @@ class SensorActivity : AppCompatActivity(), ISensor{
     }
 
     override fun onItemClick(item: String) {
+        if(sensorClicks.contains(item))
+            return
+        sensorClicks.add(item)
         viewModel.uploadSensorId(TextRecognitionRequest(item, 10))
     }
 
+    private fun emptyList() {
+        adapter.list = listOf()
+    }
+
+    private fun clearGraph() {
+        sensorClicks.clear()
+        chartModels.clear()
+        drawEmptyCharts()
+    }
+
+    private fun chartOptions() {
+        val aaOptions :AAOptions = aaChartModel.aa_toAAOptions()
+
+        aaOptions.xAxis?.apply {
+            gridLineColor(AAColor.Black)
+                .gridLineWidth(1)
+                .minorGridLineColor(AAColor.Black)
+                .minorGridLineWidth(0.5)
+                .minorTickInterval("auto")
+        }
+
+        aaOptions.yAxis?.apply {
+            gridLineColor(AAColor.Black)
+                .gridLineWidth(1)
+                .minorGridLineColor(AAColor.Black)
+                .minorGridLineWidth(0.5)
+                .minorTickInterval("auto")
+        }
+
+        aaOptions.legend?.apply {
+            enabled(true)
+                .verticalAlign(AAChartVerticalAlignType.Top)
+                .layout(AAChartLayoutType.Vertical)
+                .align(AAChartAlignType.Right)
+        }
+    }
+
+    private fun drawEmptyCharts() {
+        chartModels.add(
+            AASeriesElement()
+                //.name()
+                .data(arrayOf())
+                .allowPointSelect(true)
+                .dashStyle(AAChartLineDashStyleType.Solid))
+        aaChartModel
+            .chartType(AAChartType.Line)
+            .title("Sensor Temperature")
+            .markerRadius(5.0)
+            .markerSymbol(AAChartSymbolType.Circle)
+            .backgroundColor(AAColor.DarkGray)
+            .axesTextColor(AAColor.Black)
+            .touchEventEnabled(true)
+            .legendEnabled(true)
+            .yAxisTitle("Values")
+            .zoomType(AAChartZoomType.XY)
+            .scrollablePlotArea(
+                AAScrollablePlotArea()
+                    .minWidth(300)
+                    .scrollPositionX(1f)
+                    .scrollPositionY(1f))
+            .stacking(AAChartStackingType.Normal)
+            .dataLabelsEnabled(true)
+            .series(
+                chartModels.toTypedArray()
+            )
+            .categories(arrayOf())
+
+        binding.chartViewLandscape?.aa_drawChartWithChartModel(aaChartModel)
+    }
 
     private fun lineChartForDataObservation() {
         viewModel.sensorResponse.observe(this) { response ->
@@ -64,7 +144,13 @@ class SensorActivity : AppCompatActivity(), ISensor{
                     item.value?.let{values.add(it)}
                     item.datetime?.let{dates.add(it)}
                 }
-                val aaChartModel : AAChartModel = AAChartModel()
+                chartModels.add(
+                    AASeriesElement()
+                    //.name()
+                    .data(values.toArray())
+                    .allowPointSelect(true)
+                    .dashStyle(AAChartLineDashStyleType.Solid))
+                aaChartModel
                     .chartType(AAChartType.Line)
                     .title("Sensor Temperature")
                     .markerRadius(5.0)
@@ -77,50 +163,16 @@ class SensorActivity : AppCompatActivity(), ISensor{
                     .zoomType(AAChartZoomType.XY)
                     .scrollablePlotArea(
                         AAScrollablePlotArea()
-                            .minWidth(3000)
-                            .scrollPositionX(1f))
+                            .minWidth(300)
+                            .scrollPositionX(1f)
+                            .scrollPositionY(1f))
                     .stacking(AAChartStackingType.Normal)
                     .dataLabelsEnabled(true)
                     .series(
-                        arrayListOf(
-                            AASeriesElement()
-                                //.name()
-                                .data(values.toArray())
-                                .color(AAColor.Red)
-                                .allowPointSelect(true)
-                                .dashStyle(AAChartLineDashStyleType.Solid)
-                        ).toTypedArray()
+                        chartModels.toTypedArray()
                     )
                     .categories(dates.toTypedArray())
 
-                val aaOptions :AAOptions = aaChartModel.aa_toAAOptions()
-
-                aaOptions.xAxis?.apply {
-                    gridLineColor(AAColor.Black)
-                        .gridLineWidth(1)
-                        .minorGridLineColor(AAColor.Black)
-                        .minorGridLineWidth(0.5)
-                        .minorTickInterval("auto")
-                }
-
-                aaOptions.yAxis?.apply {
-                    gridLineColor(AAColor.Black)
-                        .gridLineWidth(1)
-                        .minorGridLineColor(AAColor.Black)
-                        .minorGridLineWidth(0.5)
-                        .minorTickInterval("auto")
-                }
-
-                aaOptions.legend?.apply {
-                    enabled(true)
-                        .verticalAlign(AAChartVerticalAlignType.Top)
-                        .layout(AAChartLayoutType.Vertical)
-                        .align(AAChartAlignType.Right)
-                }
-
-                aaOptions.run {
-
-                }
                 binding.chartViewLandscape?.aa_drawChartWithChartModel(aaChartModel)
 
             } ?: run {

@@ -16,7 +16,6 @@ class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.V
 
     inner class ViewHolder(private val binding: ListItemSensorBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-
             binding.textView.text = list[position]
             binding.root.setOnClickListener {
                 listener.onItemClick(list[position])
