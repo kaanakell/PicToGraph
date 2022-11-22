@@ -61,7 +61,7 @@ class CameraActivity : AppCompatActivity() {
         initializeCamera()
         cameraCloseButton()
         hideSystemNavigationBars()
-
+        supportActionBar?.hide()
     }
 
     override fun onBackPressed() {

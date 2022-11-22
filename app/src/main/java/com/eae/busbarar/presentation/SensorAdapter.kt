@@ -23,31 +23,6 @@ class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.V
         }
     }
 
-
-
-    /*override fun getItemViewType(
-    groupPosition: Int,
-    isExpanded: Boolean,
-    convertView: View?,
-    parent: ViewGroup
-    ): View? {
-
-    var convertView = convertView
-    val groupHolder: ViewHolderGroup
-    if(convertView == null) {
-     convertView = LayoutInflater.from(mContext).inflate(
-         R.layout.list_item_sensor, parent, false
-     )
-     groupHolder = ViewHolderGroup()
-     groupHolder.textView = convertView.findViewById<View>(R.id.text_view) as TextView
-     convertView.tag = groupHolder
-    } else {
-        groupHolder = convertView.tag as ViewHolderGroup
-    }
-    groupHolder.textView!!.text = list[groupPosition]
-    return convertView
-}*/
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ListItemSensorBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
