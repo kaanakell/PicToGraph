@@ -5,6 +5,7 @@ import android.app.AlertDialog.THEME_HOLO_DARK
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.PathDashPathEffect
 import android.os.Bundle
 import android.widget.Button
 import android.widget.DatePicker
@@ -24,6 +25,7 @@ import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
+import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,10 +35,6 @@ import kotlin.collections.ArrayList
 class SensorActivity : AppCompatActivity(), ISensor{
 
     private lateinit var binding : ActivitySensorBinding
-    private lateinit var btnDatePickerStart : Button
-    private lateinit var tvDatePickerStart : TextView
-    private lateinit var tvTimeStart : TextView
-    private lateinit var btnTimePickerStart : Button
     private val viewModel : PreviewViewModel by viewModels()
     private val adapter = SensorAdapter(this)
     private val aaChartModel : AAChartModel = AAChartModel()
@@ -58,17 +56,12 @@ class SensorActivity : AppCompatActivity(), ISensor{
         }
         binding.recyclerView.adapter = adapter
 
-        btnDatePickerStart = findViewById(R.id.btnDatePickerStart)
-        tvDatePickerStart = findViewById(R.id.tvDatePickerStart)
-
-
-        tvTimeStart = findViewById(R.id.tvTimePickerStart)
-        btnTimePickerStart = findViewById(R.id.btnTimePickerStart)
+        binding.btnShowDateRangePicker?.setOnClickListener {
+            showDateRangePicker()
+        }
 
         chartOptions()
         lineChartForDataObservation()
-        datePickerStart()
-        timePickerStart()
         hideSystemNavigationBars()
         supportActionBar?.hide()
 
@@ -103,42 +96,37 @@ class SensorActivity : AppCompatActivity(), ISensor{
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
-    private fun timePickerStart() {
-        btnTimePickerStart.setOnClickListener {
-            val currentTime = Calendar.getInstance()
-            val startHour = currentTime.get(Calendar.HOUR_OF_DAY)
-            val startMinute = currentTime.get(Calendar.MINUTE)
+    private fun showDateRangePicker() {
+        val dateRangePicker = MaterialDatePicker.Builder
+            .dateRangePicker()
+            .setTitleText("Select Date")
+            .setTheme(R.style.Theme_CameraEAE_NoActionBar)
+            .build()
 
-            TimePickerDialog(this, THEME_HOLO_DARK, { _, hourOfDay, minute ->
-                tvTimeStart.setText("$hourOfDay:$minute")
-            }, startHour, startMinute, true).show()
+        dateRangePicker.show(
+            supportFragmentManager,
+            "date_range_picker"
+        )
+
+        dateRangePicker.addOnPositiveButtonClickListener { datePicked ->
+
+            val startDate = datePicked.first
+            val endDate = datePicked.second
+
+            binding.tvDateRange?.text = "StartDate: " + convertLongToDate(startDate) + " - EndDate: " + convertLongToDate(endDate)
+
         }
     }
 
+    private fun convertLongToDate(time:Long): String {
 
-    private fun datePickerStart() {
-        val myCalendar = Calendar.getInstance()
-
-        val datePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            myCalendar.set(Calendar.YEAR, year)
-            myCalendar.set(Calendar.MONTH, month)
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            updateLableStart(myCalendar)
-        }
-
-        btnDatePickerStart.setOnClickListener {
-            DatePickerDialog(this, datePicker, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show()
-        }
-
+        val date = Date(time)
+        val format = SimpleDateFormat(
+            "dd-MM-yy",
+            Locale.getDefault()
+        )
+        return format.format(date)
     }
-
-
-    private fun updateLableStart(myCalendar: Calendar) {
-        val myFormat = "dd-MM-yyyy"
-        val simpleDateFormat = SimpleDateFormat(myFormat, Locale.US)
-        tvDatePickerStart.setText(simpleDateFormat.format(myCalendar.time))
-    }
-
 
     private fun emptyList() {
         adapter.list = listOf()
