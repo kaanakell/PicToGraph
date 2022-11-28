@@ -40,4 +40,13 @@ interface CameraApi {
         @Body request: TextRecognitionRequest,
     ) : TemperatureResponse
 
+    /*@POST("getsensortempv3")
+    suspend fun uploadSensorId(
+        @Header("Accept") header1: String = "application/json",
+        @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",
+        @Header("X-EAE-Auth") header3: String = Constants.API_KEY,
+        @Header("Connection") header5: String= "keep-alive",
+        @Body request: TextRecognitionRequest,
+    ) : TemperatureResponse*/
+
 }

@@ -40,7 +40,7 @@ class SensorInfoActivity : AppCompatActivity() {
 
     private fun sendDataForLineChart() {
         binding.sendData.setOnClickListener {
-            viewModel.uploadSensorId(TextRecognitionRequest(sensorId, 10))
+            //viewModel.uploadSensorId(TextRecognitionRequest(sensorId, 10))
         }
     }
 

@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class TextRecognitionRequest(
     val sensor: String?,
     val ndata: Int?,
-    //val date: Int?,
-    //val time: Int?
+    val startdt: String?,
+    val enddt: String?
+    //val avg: Int?
 ) : Parcelable

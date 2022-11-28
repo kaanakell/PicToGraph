@@ -40,6 +40,10 @@ class SensorActivity : AppCompatActivity(), ISensor{
     private val aaChartModel : AAChartModel = AAChartModel()
     private val chartModels : ArrayList<AASeriesElement> = arrayListOf()
     private val sensorClicks : ArrayList<String> = arrayListOf()
+    private val sensorHide : ArrayList<String> = arrayListOf()
+    private var dates = arrayListOf<String>()
+    private var startDate : String ?= null
+    private var endDate : String ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,12 +63,10 @@ class SensorActivity : AppCompatActivity(), ISensor{
         binding.btnShowDateRangePicker?.setOnClickListener {
             showDateRangePicker()
         }
-
         chartOptions()
         lineChartForDataObservation()
         hideSystemNavigationBars()
         supportActionBar?.hide()
-
     }
 
     override fun onBackPressed() {
@@ -82,10 +84,32 @@ class SensorActivity : AppCompatActivity(), ISensor{
     }
 
     override fun onItemClick(item: String) {
-        if(sensorClicks.contains(item))
+        if(sensorClicks.contains(item)){
+            var position = 0
+            sensorClicks.forEachIndexed { index, s ->
+                if (item == s)
+                    position = index
+            }
+            if(sensorHide.contains(item)){
+                binding.chartViewLandscape?.aa_showTheSeriesElementContent(position)
+                sensorHide.remove(item)
+            }else{
+                binding.chartViewLandscape?.aa_hideTheSeriesElementContent(position)
+                sensorHide.add(item)
+            }
+            /*var position = 0
+            sensorClicks.forEachIndexed { index, s ->
+                if (item == s)
+                    position = index
+            }
+            chartModels.removeAt(position)
+            drawChart()
+            sensorClicks.remove(item)*/
             return
+        }
         sensorClicks.add(item)
-        viewModel.uploadSensorId(TextRecognitionRequest(item, 10))
+
+        viewModel.uploadSensorId(TextRecognitionRequest(item, 10, startDate, endDate))
     }
 
     private fun hideSystemNavigationBars() {
@@ -110,10 +134,10 @@ class SensorActivity : AppCompatActivity(), ISensor{
 
         dateRangePicker.addOnPositiveButtonClickListener { datePicked ->
 
-            val startDate = datePicked.first
-            val endDate = datePicked.second
+            startDate = convertLongToDate(datePicked.first)
+            endDate = convertLongToDate(datePicked.second)
 
-            binding.tvDateRange?.text = "StartDate: " + convertLongToDate(startDate) + " - EndDate: " + convertLongToDate(endDate)
+            binding.tvDateRange?.text = "StartDate: " + startDate + " - EndDate: " + endDate
 
         }
     }
@@ -122,7 +146,7 @@ class SensorActivity : AppCompatActivity(), ISensor{
 
         val date = Date(time)
         val format = SimpleDateFormat(
-            "dd-MM-yy",
+            "yy-MM-dd",
             Locale.getDefault()
         )
         return format.format(date)
@@ -201,7 +225,7 @@ class SensorActivity : AppCompatActivity(), ISensor{
         viewModel.sensorResponse.observe(this) { response ->
             response?.let {safeResponse ->
                 val values = arrayListOf<Float>()
-                val dates = arrayListOf<String>()
+                dates = arrayListOf()
                 val names = arrayListOf<String>()
                 for (item in safeResponse.temps?: listOf()){
                     item.name
@@ -215,39 +239,43 @@ class SensorActivity : AppCompatActivity(), ISensor{
                 chartModels.add(
                     AASeriesElement()
                         //.dataLabels()
-                        .name(names.component1())
+                        //.name(names.component1())
                         .data(values.toArray())
                         .allowPointSelect(true)
                         .dashStyle(AAChartLineDashStyleType.Solid))
-                aaChartModel
-                    .chartType(AAChartType.Line)
-                    .title("Sensor Temperature")
-                    .markerRadius(5.0)
-                    .markerSymbol(AAChartSymbolType.Circle)
-                    .backgroundColor(AAColor.DarkGray)
-                    .axesTextColor(AAColor.Black)
-                    .touchEventEnabled(true)
-                    .legendEnabled(true)
-                    .yAxisTitle("Values")
-                    .zoomType(AAChartZoomType.XY)
-                    .scrollablePlotArea(
-                        AAScrollablePlotArea()
-                            .minWidth(500)
-                            .scrollPositionX(1f)
-                            .scrollPositionY(1f))
-                    .stacking(AAChartStackingType.Normal)
-                    .dataLabelsEnabled(true)
-                    .dataLabelsStyle(AAStyle())
-                    .series(
-                        chartModels.toTypedArray()
-                    )
-                    .categories(dates.toTypedArray())
-
-                binding.chartViewLandscape?.aa_drawChartWithChartModel(aaChartModel)
-
+                drawChart()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, CameraActivity::class.java))
             }
         }
+    }
+
+    private fun drawChart() {
+        aaChartModel
+            .chartType(AAChartType.Line)
+            .title("Sensor Temperature")
+            .markerRadius(5.0)
+            .markerSymbol(AAChartSymbolType.Circle)
+            .backgroundColor(AAColor.DarkGray)
+            .axesTextColor(AAColor.Black)
+            .touchEventEnabled(true)
+            .legendEnabled(true)
+            .yAxisTitle("Values")
+            .zoomType(AAChartZoomType.XY)
+            .scrollablePlotArea(
+                AAScrollablePlotArea()
+                    .minWidth(500)
+                    .scrollPositionX(1f)
+                    .scrollPositionY(1f))
+            .stacking(AAChartStackingType.Normal)
+            .dataLabelsEnabled(true)
+            .dataLabelsStyle(AAStyle())
+            .series(
+                chartModels.toTypedArray()
+            )
+            .categories(dates.toTypedArray())
+
+        binding.chartViewLandscape?.aa_drawChartWithChartModel(aaChartModel)
     }
 }

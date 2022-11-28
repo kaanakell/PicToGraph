@@ -2,11 +2,15 @@ package com.eae.busbarar.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.eae.busbarar.R
 import com.eae.busbarar.databinding.ListItemSensorBinding
 
 
 class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.ViewHolder>() {
+
+    private var sensorClicks : ArrayList<String> = arrayListOf()
 
     var list : List<String> = listOf()
         set(value) {
@@ -16,9 +20,23 @@ class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.V
 
     inner class ViewHolder(private val binding: ListItemSensorBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-            binding.textView.text = list[position]
+            val item = list[position]
+            binding.textView.text = item
             binding.root.setOnClickListener {
-                listener.onItemClick(list[position])
+                if (sensorClicks.contains(item)){
+                    sensorClicks.remove(item)
+                }else{
+                    sensorClicks.add(item)
+                }
+                listener.onItemClick(item)
+                notifyItemChanged(position)
+            }
+            if (sensorClicks.contains(item)){
+                binding.textView.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.purple_200))
+            }else{
+                binding.textView.setBackgroundColor(ContextCompat.getColor(binding.root.context,
+                    R.color.transparent
+                ))
             }
         }
     }
