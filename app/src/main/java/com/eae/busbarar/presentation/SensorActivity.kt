@@ -1,15 +1,7 @@
 package com.eae.busbarar.presentation
 
-import android.app.AlertDialog
-import android.app.AlertDialog.THEME_HOLO_DARK
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Intent
-import android.graphics.PathDashPathEffect
 import android.os.Bundle
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -19,9 +11,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.eae.busbarar.R
 import com.eae.busbarar.data.model.TextRecognitionRequest
 import com.eae.busbarar.databinding.ActivitySensorBinding
-import com.eae.busbarar.presentation.SensorInfoActivity.Companion.sensorId
 import com.github.aachartmodel.aainfographics.aachartcreator.*
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
@@ -29,10 +19,10 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
-class SensorActivity : AppCompatActivity(), ISensor{
+class SensorActivity : AppCompatActivity(), ISensor {
+
 
     private lateinit var binding : ActivitySensorBinding
     private val viewModel : PreviewViewModel by viewModels()
@@ -63,6 +53,10 @@ class SensorActivity : AppCompatActivity(), ISensor{
         binding.btnShowDateRangePicker?.setOnClickListener {
             showDateRangePicker()
         }
+        binding.btnTimeRangePicker?.setOnClickListener {
+            showTimeRangePicker()
+        }
+
         chartOptions()
         lineChartForDataObservation()
         hideSystemNavigationBars()
@@ -118,6 +112,18 @@ class SensorActivity : AppCompatActivity(), ISensor{
         windowInsetsController.systemBarsBehavior =
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+    }
+
+    private fun showTimeRangePicker() {
+        val dialog = TimePickerDialog(context = this)
+        dialog.listener = {
+            dialog.dismiss()
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.HOUR_OF_DAY, it.startHour)
+            calendar.set(Calendar.MINUTE, it.startMinute)
+            calendar.set(Calendar.DAY_OF_MONTH)
+        }
+        dialog.show()
     }
 
     private fun showDateRangePicker() {
