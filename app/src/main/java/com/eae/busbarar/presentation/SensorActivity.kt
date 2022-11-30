@@ -2,14 +2,17 @@ package com.eae.busbarar.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.eae.busbarar.R
 import com.eae.busbarar.data.model.TextRecognitionRequest
+import com.eae.busbarar.data.model.Times
 import com.eae.busbarar.databinding.ActivitySensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
@@ -18,6 +21,8 @@ import com.github.aachartmodel.aainfographics.aatools.AAColor
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.*
 
 @AndroidEntryPoint
@@ -34,6 +39,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
     private var dates = arrayListOf<String>()
     private var startDate : String ?= null
     private var endDate : String ?= null
+    private var ndata: Int ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,19 +97,12 @@ class SensorActivity : AppCompatActivity(), ISensor {
                 binding.chartViewLandscape?.aa_hideTheSeriesElementContent(position)
                 sensorHide.add(item)
             }
-            /*var position = 0
-            sensorClicks.forEachIndexed { index, s ->
-                if (item == s)
-                    position = index
-            }
-            chartModels.removeAt(position)
-            drawChart()
-            sensorClicks.remove(item)*/
             return
         }
         sensorClicks.add(item)
 
-        viewModel.uploadSensorId(TextRecognitionRequest(item, 10, startDate, endDate))
+        ndata = 10
+        viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, startDate, endDate))
     }
 
     private fun hideSystemNavigationBars() {
@@ -120,17 +119,20 @@ class SensorActivity : AppCompatActivity(), ISensor {
             dialog.dismiss()
             val calendar = Calendar.getInstance()
             calendar.set(Calendar.HOUR_OF_DAY, it.startHour)
+            calendar.set(Calendar.HOUR_OF_DAY, it.endHour)
             calendar.set(Calendar.MINUTE, it.startMinute)
-            calendar.set(Calendar.DAY_OF_MONTH)
+            calendar.set(Calendar.MINUTE, it.endMinute)
+            //calendar.set(Calendar.DAY_OF_MONTH)
         }
         dialog.show()
+
     }
 
     private fun showDateRangePicker() {
-        val dateRangePicker = MaterialDatePicker.Builder
+        /*val dateRangePicker = MaterialDatePicker.Builder
             .dateRangePicker()
             .setTitleText("Select Date")
-            .setTheme(R.style.Theme_CameraEAE_NoActionBar)
+            .setTheme(R.style.DialogTheme)
             .build()
 
         dateRangePicker.show(
@@ -140,22 +142,15 @@ class SensorActivity : AppCompatActivity(), ISensor {
 
         dateRangePicker.addOnPositiveButtonClickListener { datePicked ->
 
-            startDate = convertLongToDate(datePicked.first)
-            endDate = convertLongToDate(datePicked.second)
 
             binding.tvDateRange?.text = "StartDate: " + startDate + " - EndDate: " + endDate
 
+        }*/
+        val dialog = DatePickerDialog(context = this)
+        dialog.listener = {
+            dialog.dismiss()
         }
-    }
-
-    private fun convertLongToDate(time:Long): String {
-
-        val date = Date(time)
-        val format = SimpleDateFormat(
-            "yy-MM-dd",
-            Locale.getDefault()
-        )
-        return format.format(date)
+        dialog.show()
     }
 
     private fun emptyList() {
@@ -234,13 +229,13 @@ class SensorActivity : AppCompatActivity(), ISensor {
                 dates = arrayListOf()
                 val names = arrayListOf<String>()
                 for (item in safeResponse.temps?: listOf()){
-                    item.name
+                    item.sensor
                     item.datetime
                     item.pred
                     item.value
                     item.value?.let{values.add(it)}
                     item.datetime?.let{dates.add(it)}
-                    item.name?.let{names.add(it)}
+                    item.sensor?.let{names.add(it)}
                 }
                 chartModels.add(
                     AASeriesElement()
