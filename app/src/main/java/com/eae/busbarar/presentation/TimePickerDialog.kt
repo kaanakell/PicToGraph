@@ -49,11 +49,30 @@ class TimePickerDialog(
 
 
         binding.button.setOnClickListener {
-            val startHour = binding.pickHour.value
-            val endHour = binding.pickHourEnd.value
-            val startMinute = binding.pickMinute.value
-            val endMinute = binding.pickMinuteEnd.value
-            val times = Times(startHour, startMinute, endHour, endMinute)
+            val startHour = if (binding.pickHour.value < 10){
+                "0${binding.pickHour.value}"
+            }else{
+                "${binding.pickHour.value}"
+            }
+            val endHour = if (binding.pickHourEnd.value < 10){
+                "0${binding.pickHourEnd.value}"
+            }else{
+                "${binding.pickHourEnd.value}"
+            }
+            val startMinute = if (binding.pickMinute.value < 10){
+                "0${binding.pickMinute.value}"
+            }else{
+                "${binding.pickMinute.value}"
+            }
+            val endMinute = if (binding.pickMinuteEnd.value < 10){
+                "0${binding.pickMinuteEnd.value}"
+            }else{
+                "${binding.pickMinuteEnd.value}"
+            }
+            val startTime = "$startHour:$startMinute:00"
+            val endTime = "$endHour:$endMinute:00"
+
+            val times = Times(startTime, endTime)
             listener?.invoke(times)
         }
     }

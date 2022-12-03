@@ -29,7 +29,30 @@ class DatePickerDialog(
 
 
         binding.button.setOnClickListener {
-
+            val startMonth = if (binding.startDatePicker.month+1 < 10){
+                "0${binding.startDatePicker.month+1}"
+            }else{
+                "${binding.startDatePicker.month+1}"
+            }
+            val endMonth = if (binding.endDatePicker.month+1 < 10){
+                "0${binding.endDatePicker.month+1}"
+            }else{
+                "${binding.endDatePicker.month+1}"
+            }
+            val startDay = if (binding.startDatePicker.dayOfMonth < 10){
+                "0${binding.startDatePicker.dayOfMonth}"
+            }else{
+                "${binding.startDatePicker.dayOfMonth}"
+            }
+            val endDay = if (binding.endDatePicker.dayOfMonth < 10){
+                "0${binding.endDatePicker.dayOfMonth}"
+            }else{
+                "${binding.endDatePicker.dayOfMonth}"
+            }
+            val startDate = "${binding.startDatePicker.year}-$startMonth-$startDay"
+            val endDate = "${binding.endDatePicker.year}-$endMonth-$endDay"
+            val dates = Dates(startDate, endDate)
+            listener?.invoke(dates)
         }
     }
 

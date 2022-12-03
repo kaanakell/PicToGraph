@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.eae.busbarar.R
+import com.eae.busbarar.data.model.Dates
 import com.eae.busbarar.data.model.TextRecognitionRequest
 import com.eae.busbarar.data.model.Times
 import com.eae.busbarar.databinding.ActivitySensorBinding
@@ -37,9 +38,9 @@ class SensorActivity : AppCompatActivity(), ISensor {
     private val sensorClicks : ArrayList<String> = arrayListOf()
     private val sensorHide : ArrayList<String> = arrayListOf()
     private var dates = arrayListOf<String>()
-    private var startDate : String ?= null
-    private var endDate : String ?= null
     private var ndata: Int ?= null
+    private var filterDates: Dates ?= null
+    private var filterTimes: Times ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +103,9 @@ class SensorActivity : AppCompatActivity(), ISensor {
         sensorClicks.add(item)
 
         ndata = 10
-        viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, startDate, endDate))
+        val start = "${filterDates?.startDate} ${filterTimes?.startTime}"
+        val end = "${filterDates?.endDate} ${filterTimes?.endTime}"
+        viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, start, end))
     }
 
     private fun hideSystemNavigationBars() {
@@ -116,38 +119,20 @@ class SensorActivity : AppCompatActivity(), ISensor {
     private fun showTimeRangePicker() {
         val dialog = TimePickerDialog(context = this)
         dialog.listener = {
+            filterTimes = it
+            val text = "${it.startTime}-${it.endTime}"
+            binding.tvTimeRange?.text = text
             dialog.dismiss()
-            val calendar = Calendar.getInstance()
-            calendar.set(Calendar.HOUR_OF_DAY, it.startHour)
-            calendar.set(Calendar.HOUR_OF_DAY, it.endHour)
-            calendar.set(Calendar.MINUTE, it.startMinute)
-            calendar.set(Calendar.MINUTE, it.endMinute)
-            //calendar.set(Calendar.DAY_OF_MONTH)
         }
         dialog.show()
-
     }
 
     private fun showDateRangePicker() {
-        /*val dateRangePicker = MaterialDatePicker.Builder
-            .dateRangePicker()
-            .setTitleText("Select Date")
-            .setTheme(R.style.DialogTheme)
-            .build()
-
-        dateRangePicker.show(
-            supportFragmentManager,
-            "date_range_picker"
-        )
-
-        dateRangePicker.addOnPositiveButtonClickListener { datePicked ->
-
-
-            binding.tvDateRange?.text = "StartDate: " + startDate + " - EndDate: " + endDate
-
-        }*/
         val dialog = DatePickerDialog(context = this)
         dialog.listener = {
+            filterDates = it
+            val text = "${it.startDate}-${it.endDate}"
+            binding.tvDateRange?.text = text
             dialog.dismiss()
         }
         dialog.show()
