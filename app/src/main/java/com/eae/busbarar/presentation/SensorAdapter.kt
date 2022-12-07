@@ -33,10 +33,8 @@ class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.V
             }
             if (sensorClicks.contains(item)){
                 binding.textView.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.purple_200))
-            }else{
-                binding.textView.setBackgroundColor(ContextCompat.getColor(binding.root.context,
-                    R.color.transparent
-                ))
+            }else {
+                binding.textView.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.transparent))
             }
         }
     }

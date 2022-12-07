@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -25,6 +26,7 @@ import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class SensorActivity : AppCompatActivity(), ISensor {
@@ -62,6 +64,9 @@ class SensorActivity : AppCompatActivity(), ISensor {
         }
         binding.btnTimeRangePicker?.setOnClickListener {
             showTimeRangePicker()
+        }
+        binding.btnClearDateTime?.setOnClickListener {
+            clearDateTime()
         }
 
         chartOptions()
@@ -105,7 +110,9 @@ class SensorActivity : AppCompatActivity(), ISensor {
         ndata = 10
         val start = "${filterDates?.startDate} ${filterTimes?.startTime}"
         val end = "${filterDates?.endDate} ${filterTimes?.endTime}"
+
         viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, start, end))
+
     }
 
     private fun hideSystemNavigationBars() {
@@ -136,6 +143,13 @@ class SensorActivity : AppCompatActivity(), ISensor {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun clearDateTime() {
+        binding.tvDateRange?.text = "Date"
+        binding.tvTimeRange?.text = "Time Range"
+        chartModels.clear()
+        adapter.list = listOf()
     }
 
     private fun emptyList() {
@@ -224,7 +238,6 @@ class SensorActivity : AppCompatActivity(), ISensor {
                 }
                 chartModels.add(
                     AASeriesElement()
-                        //.dataLabels()
                         //.name(names.component1())
                         .data(values.toArray())
                         .allowPointSelect(true)
