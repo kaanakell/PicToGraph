@@ -16,6 +16,7 @@ import com.eae.busbarar.data.model.Dates
 import com.eae.busbarar.data.model.TextRecognitionRequest
 import com.eae.busbarar.data.model.Times
 import com.eae.busbarar.databinding.ActivitySensorBinding
+import com.eae.busbarar.databinding.ListItemSensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
@@ -111,7 +112,11 @@ class SensorActivity : AppCompatActivity(), ISensor {
         val start = "${filterDates?.startDate} ${filterTimes?.startTime}"
         val end = "${filterDates?.endDate} ${filterTimes?.endTime}"
 
-        viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, start, end))
+        if(filterDates == null && filterTimes == null){
+            viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, null, null))
+        }else{
+            viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, start, end))
+        }
 
     }
 
@@ -146,10 +151,12 @@ class SensorActivity : AppCompatActivity(), ISensor {
     }
 
     private fun clearDateTime() {
+        /*binding.tvTimeRange?.text = "Time Range"
         binding.tvDateRange?.text = "Date"
-        binding.tvTimeRange?.text = "Time Range"
-        chartModels.clear()
-        adapter.list = listOf()
+        filterTimes = null
+        filterDates = null*/
+        finish()
+        startActivity(intent)
     }
 
     private fun emptyList() {
@@ -160,6 +167,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
         sensorClicks.clear()
         chartModels.clear()
         drawEmptyCharts()
+        //clearDateTime()
     }
 
     private fun chartOptions() {
