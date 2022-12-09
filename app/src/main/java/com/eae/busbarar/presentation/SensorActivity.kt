@@ -74,6 +74,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
         lineChartForDataObservation()
         hideSystemNavigationBars()
         supportActionBar?.hide()
+        drawEmptyCharts()
     }
 
     override fun onBackPressed() {
@@ -98,10 +99,10 @@ class SensorActivity : AppCompatActivity(), ISensor {
                     position = index
             }
             if(sensorHide.contains(item)){
-                binding.chartViewLandscape?.aa_showTheSeriesElementContent(position)
+                binding.chartViewLandscape?.aa_showTheSeriesElementContent(position + 1)
                 sensorHide.remove(item)
             }else{
-                binding.chartViewLandscape?.aa_hideTheSeriesElementContent(position)
+                binding.chartViewLandscape?.aa_hideTheSeriesElementContent(position + 1)
                 sensorHide.add(item)
             }
             return
@@ -114,7 +115,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
 
         if(filterDates == null && filterTimes == null){
             viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, null, null))
-        }else{
+        }else {
             viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, start, end))
         }
 
@@ -151,23 +152,26 @@ class SensorActivity : AppCompatActivity(), ISensor {
     }
 
     private fun clearDateTime() {
-        /*binding.tvTimeRange?.text = "Time Range"
+        binding.tvTimeRange?.text = "Time Range"
         binding.tvDateRange?.text = "Date"
         filterTimes = null
-        filterDates = null*/
-        finish()
-        startActivity(intent)
+        filterDates = null
+        adapter.sensorClicks = arrayListOf()
+        adapter.notifyDataSetChanged()
+        clearGraph()
+        //finish()
+        //startActivity(intent)
     }
 
     private fun emptyList() {
         adapter.list = listOf()
+        list = listOf()
     }
 
     private fun clearGraph() {
         sensorClicks.clear()
         chartModels.clear()
         drawEmptyCharts()
-        //clearDateTime()
     }
 
     private fun chartOptions() {
@@ -210,17 +214,11 @@ class SensorActivity : AppCompatActivity(), ISensor {
             .markerSymbol(AAChartSymbolType.Circle)
             .backgroundColor(AAColor.DarkGray)
             .axesTextColor(AAColor.Black)
-            .touchEventEnabled(true)
-            .legendEnabled(true)
+            .touchEventEnabled(false)
+            .legendEnabled(false)
             .yAxisTitle("Values")
-            .zoomType(AAChartZoomType.XY)
-            .scrollablePlotArea(
-                AAScrollablePlotArea()
-                    .minWidth(300)
-                    .scrollPositionX(1f)
-                    .scrollPositionY(1f))
             .stacking(AAChartStackingType.Normal)
-            .dataLabelsEnabled(true)
+            .dataLabelsEnabled(false)
             .series(
                 chartModels.toTypedArray()
             )

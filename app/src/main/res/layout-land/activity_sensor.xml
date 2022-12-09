@@ -218,7 +218,6 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <Button
-                android:visibility="gone"
                 android:id="@+id/empty_list"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

@@ -10,7 +10,7 @@ import com.eae.busbarar.databinding.ListItemSensorBinding
 
 class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.ViewHolder>() {
 
-    private var sensorClicks : ArrayList<String> = arrayListOf()
+    var sensorClicks : ArrayList<String> = arrayListOf()
 
     var list : List<String> = listOf()
         set(value) {
