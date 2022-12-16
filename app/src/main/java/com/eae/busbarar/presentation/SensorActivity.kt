@@ -2,30 +2,19 @@ package com.eae.busbarar.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.eae.busbarar.R
-import com.eae.busbarar.data.model.Dates
-import com.eae.busbarar.data.model.TextRecognitionRequest
-import com.eae.busbarar.data.model.Times
+import com.eae.busbarar.data.model.*
 import com.eae.busbarar.databinding.ActivitySensorBinding
-import com.eae.busbarar.databinding.ListItemSensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
-import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -42,8 +31,8 @@ class SensorActivity : AppCompatActivity(), ISensor {
     private val sensorHide : ArrayList<String> = arrayListOf()
     private var dates = arrayListOf<String>()
     private var ndata: Int ?= null
-    private var filterDates: Dates ?= null
-    private var filterTimes: Times ?= null
+    private var filterStartDateTime: StartDateTime ?= null
+    private var filterEndDateTime: EndDateTime ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,11 +49,11 @@ class SensorActivity : AppCompatActivity(), ISensor {
         }
         binding.recyclerView.adapter = adapter
 
-        binding.btnShowDateRangePicker?.setOnClickListener {
-            showDateRangePicker()
+        binding.btnShowEndDateTimeRangePicker?.setOnClickListener {
+            showEndDateTimeRangePicker()
         }
-        binding.btnTimeRangePicker?.setOnClickListener {
-            showTimeRangePicker()
+        binding.btnShowStartDateTimeRangePicker?.setOnClickListener {
+            showStartDateTimeRangePicker()
         }
         binding.btnClearDateTime?.setOnClickListener {
             clearDateTime()
@@ -110,10 +99,10 @@ class SensorActivity : AppCompatActivity(), ISensor {
         sensorClicks.add(item)
 
         ndata = 10
-        val start = "${filterDates?.startDate} ${filterTimes?.startTime}"
-        val end = "${filterDates?.endDate} ${filterTimes?.endTime}"
+        val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
+        val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
 
-        if(filterDates == null && filterTimes == null){
+        if(filterStartDateTime == null && filterEndDateTime == null){
             viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, null, null))
         }else {
             viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, start, end))
@@ -129,38 +118,36 @@ class SensorActivity : AppCompatActivity(), ISensor {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
-    private fun showTimeRangePicker() {
-        val dialog = TimePickerDialog(context = this)
+    private fun showStartDateTimeRangePicker() {
+        val dialog = StartDateTimePickerDialog(context = this)
         dialog.listener = {
-            filterTimes = it
-            val text = "${it.startTime}-${it.endTime}"
-            binding.tvTimeRange?.text = text
+            filterStartDateTime = it
+            val text = "${it.startTime} - ${it.startDate}"
+            binding.tvStartDateTimeRange?.text = text
             dialog.dismiss()
         }
         dialog.show()
     }
 
-    private fun showDateRangePicker() {
-        val dialog = DatePickerDialog(context = this)
+    private fun showEndDateTimeRangePicker() {
+        val dialog = EndDateTimePickerDialog(context = this)
         dialog.listener = {
-            filterDates = it
-            val text = "${it.startDate}-${it.endDate}"
-            binding.tvDateRange?.text = text
+            filterEndDateTime = it
+            val text = "${it.endTime} - ${it.endDate}"
+            binding.tvEndDateTimeRange?.text = text
             dialog.dismiss()
         }
         dialog.show()
     }
 
     private fun clearDateTime() {
-        binding.tvTimeRange?.text = "Time Range"
-        binding.tvDateRange?.text = "Date"
-        filterTimes = null
-        filterDates = null
+        binding.tvEndDateTimeRange?.text = "End Date Time"
+        binding.tvStartDateTimeRange?.text = "Start Date Time"
+        filterStartDateTime = null
+        filterEndDateTime = null
         adapter.sensorClicks = arrayListOf()
         adapter.notifyDataSetChanged()
         clearGraph()
-        //finish()
-        //startActivity(intent)
     }
 
     private fun emptyList() {
