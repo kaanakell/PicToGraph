@@ -62,15 +62,14 @@
                 android:text="Start Date Time"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textSize="15sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/tvEndDateTimeRange"
                 app:layout_constraintStart_toEndOf="@+id/btnShowStartDateTimeRangePicker"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/btnShowStartDateTimeRangePicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="168dp"
+                android:layout_height="46dp"
                 android:layout_marginStart="10dp"
                 android:text="Start Date Time Range"
                 android:textSize="11sp"
@@ -131,7 +130,6 @@
                 android:text="Sensor List"
                 android:textColor="@color/black"
                 android:textSize="20dp"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -238,6 +236,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
+            android:visibility="gone"
             android:id="@+id/clear_graph"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

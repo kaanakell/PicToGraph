@@ -21,6 +21,15 @@ interface CameraApi {
         @Part files: MultipartBody.Part,
     ) : ApiResponse
 
+    @POST("token")
+    suspend fun uploadToken(
+        @Header("Accept") header1: String = "application/json",
+        @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",
+        @Header("X-EAE-Auth") header3: String = Constants.API_KEY,
+        @Header("Connection") header5: String= "keep-alive",
+        @Body request: TokenRequest,
+    ) : TokenResponse
+
 
     @POST("getsensorid")
     suspend fun uploadFileName(

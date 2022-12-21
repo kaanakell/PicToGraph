@@ -46,4 +46,14 @@ class CameraRepository @Inject constructor(private val api: CameraApi) {
             null
         }
     }
+
+    suspend fun  uploadToken(request: TokenRequest): TokenResponse?{
+        return try {
+            val response = api.uploadToken(request = request)
+            response
+        }catch (e:Exception){
+            e.printStackTrace()
+            null
+        }
+    }
 }

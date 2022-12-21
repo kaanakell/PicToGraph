@@ -12,28 +12,6 @@ import com.google.firebase.messaging.RemoteMessage
 
 class MyFirebaseMessagingService: FirebaseMessagingService() {
 
-    override fun onCreate() {
-        createToken()
-    }
-
-
-    @SuppressLint("StringFormatInvalid")
-    private fun createToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-
-            // Get new FCM registration token
-            val token = task.result
-
-            // Log and toast
-            val msg = getString(R.string.msg_token_fmt, token)
-            Log.d(TAG, msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-        })
-    }
 
     /**
      * Called if the FCM registration token is updated. This may occur if the security of
@@ -49,9 +27,9 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         //sendRegistrationToServer(token)
     }
 
-    private fun sendRegistrationToServer() {
+    /*private fun sendRegistrationToServer() {
 
-    }
+    }*/
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         // TODO(developer): Handle FCM messages here.

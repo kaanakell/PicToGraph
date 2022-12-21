@@ -24,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
         loginbutton.setOnClickListener { view: View? ->
             if (username.text.toString() == "admin" && password.text.toString() == "admin") {
                 startActivity(Intent(this@LoginActivity, OpenCameraActivity::class.java))
-                Toast.makeText(this@LoginActivity, "LOGIN SUCCESFULL", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@LoginActivity, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show()
             } else Toast.makeText(this@LoginActivity, "LOGIN FAILED", Toast.LENGTH_SHORT).show()
         }
         askNotificationPermission()
