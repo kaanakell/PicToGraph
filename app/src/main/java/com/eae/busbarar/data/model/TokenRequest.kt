@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class TokenRequest(
     val token: String?,
-    val macAddress: String?
+    val mac: String?
 ): Parcelable

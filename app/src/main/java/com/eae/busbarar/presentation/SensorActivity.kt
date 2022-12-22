@@ -102,7 +102,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
         val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
         val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
 
-        if(filterStartDateTime == null && filterEndDateTime == null){
+        if(filterStartDateTime == null && filterEndDateTime == null) {
             viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, null, null))
         }else {
             viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, start, end))
@@ -257,10 +257,8 @@ class SensorActivity : AppCompatActivity(), ISensor {
             .zoomType(AAChartZoomType.XY)
             .scrollablePlotArea(
                 AAScrollablePlotArea()
-                    .minWidth(500)
-                    .scrollPositionX(1f)
-                    .scrollPositionY(1f))
-            .stacking(AAChartStackingType.Normal)
+                    .minWidth(3000)
+                    .scrollPositionX(1f))
             .dataLabelsEnabled(true)
             .dataLabelsStyle(AAStyle())
             .series(

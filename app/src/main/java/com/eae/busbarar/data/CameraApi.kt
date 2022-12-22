@@ -21,7 +21,7 @@ interface CameraApi {
         @Part files: MultipartBody.Part,
     ) : ApiResponse
 
-    @POST("token")
+    @POST("registerfbt")
     suspend fun uploadToken(
         @Header("Accept") header1: String = "application/json",
         @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",

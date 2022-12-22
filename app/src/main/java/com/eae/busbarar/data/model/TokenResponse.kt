@@ -5,5 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TokenResponse(
-    val message: String?
+    val message: String?,
+    val Status: String?,
 ): Parcelable
