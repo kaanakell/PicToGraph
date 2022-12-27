@@ -84,7 +84,7 @@ dependencies {
     implementation "androidx.camera:camera-view:${camerax_version}"
 
 
-    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
+    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:7.1.0'
     implementation 'net.danlew:android.joda:2.12.1'
 
 }

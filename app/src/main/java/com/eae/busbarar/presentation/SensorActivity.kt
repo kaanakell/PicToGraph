@@ -15,7 +15,6 @@ import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotAre
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
@@ -98,7 +97,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
         }
         sensorClicks.add(item)
 
-        ndata = 10
+        ndata = 40
         val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
         val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
 
@@ -166,17 +165,17 @@ class SensorActivity : AppCompatActivity(), ISensor {
 
         aaOptions.xAxis?.apply {
             gridLineColor(AAColor.Black)
-                .gridLineWidth(1)
+                .gridLineWidth(1f)
                 .minorGridLineColor(AAColor.Black)
-                .minorGridLineWidth(0.5)
+                .minorGridLineWidth(0.5f)
                 .minorTickInterval("auto")
         }
 
         aaOptions.yAxis?.apply {
             gridLineColor(AAColor.Black)
-                .gridLineWidth(1)
+                .gridLineWidth(1f)
                 .minorGridLineColor(AAColor.Black)
-                .minorGridLineWidth(0.5)
+                .minorGridLineWidth(0.5f)
                 .minorTickInterval("auto")
         }
 
@@ -197,14 +196,14 @@ class SensorActivity : AppCompatActivity(), ISensor {
         aaChartModel
             .chartType(AAChartType.Line)
             .title("Sensor Temperature")
-            .markerRadius(5.0)
+            .markerRadius(5.0f)
             .markerSymbol(AAChartSymbolType.Circle)
             .backgroundColor(AAColor.DarkGray)
             .axesTextColor(AAColor.Black)
             .touchEventEnabled(false)
             .legendEnabled(false)
             .yAxisTitle("Values")
-            .stacking(AAChartStackingType.Normal)
+            .stacking(AAChartStackingType.False)
             .dataLabelsEnabled(false)
             .series(
                 chartModels.toTypedArray()
@@ -247,7 +246,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
         aaChartModel
             .chartType(AAChartType.Line)
             .title("Sensor Temperature")
-            .markerRadius(5.0)
+            .markerRadius(5.0f)
             .markerSymbol(AAChartSymbolType.Circle)
             .backgroundColor(AAColor.DarkGray)
             .axesTextColor(AAColor.Black)
