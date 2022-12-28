@@ -30,6 +30,16 @@
         android:backgroundTint="#600303"
         android:text="OPEN CAMERA" />
 
+    <Button
+        android:id="@+id/open_add_manuel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/openCamera"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="278dp"
+        android:backgroundTint="#600303"
+        android:text="Add Manuel" />
+
     <TextView
         android:id="@+id/sociallinks"
         android:layout_width="wrap_content"

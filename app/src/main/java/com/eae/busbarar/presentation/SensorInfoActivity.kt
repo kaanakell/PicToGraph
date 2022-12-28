@@ -59,7 +59,7 @@ class SensorInfoActivity : AppCompatActivity() {
                 val aaChartModel : AAChartModel = AAChartModel()
                     .chartType(AAChartType.Line)
                     .title("Sensor Temperature")
-                    .markerRadius(5.0)
+                    .markerRadius(5.0f)
                     .markerSymbol(AAChartSymbolType.Circle)
                     .backgroundColor(AAColor.DarkGray)
                     .axesTextColor(AAColor.Black)
@@ -87,17 +87,17 @@ class SensorInfoActivity : AppCompatActivity() {
 
                 aaOptions.xAxis?.apply {
                     gridLineColor(AAColor.Black)
-                        .gridLineWidth(1)
+                        .gridLineWidth(1f)
                         .minorGridLineColor(AAColor.Black)
-                        .minorGridLineWidth(0.5)
+                        .minorGridLineWidth(0.5f)
                         .minorTickInterval("auto")
                 }
 
                 aaOptions.yAxis?.apply {
                     gridLineColor(AAColor.Black)
-                        .gridLineWidth(1)
+                        .gridLineWidth(1f)
                         .minorGridLineColor(AAColor.Black)
-                        .minorGridLineWidth(0.5)
+                        .minorGridLineWidth(0.5f)
                         .minorTickInterval("auto")
                 }
 

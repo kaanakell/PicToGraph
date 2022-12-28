@@ -17,18 +17,26 @@ import dagger.hilt.android.AndroidEntryPoint
 class OpenCameraActivity : AppCompatActivity() {
     private val viewModel: OpenCameraViewModel by viewModels()
     private var button: Button? = null
+    private var button1: Button? = null
     private var counter = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_opencamera)
         button = findViewById(R.id.openCamera)
+        button1 = findViewById(R.id.open_add_manuel)
         button?.setOnClickListener { _ : View? -> openCameraActivityButton() }
+        button1?.setOnClickListener { _ : View? -> openAddManuelActivityButton() }
         createToken()
         observeLiveData()
     }
 
     private fun openCameraActivityButton() {
         val intent = Intent(this, CameraActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun openAddManuelActivityButton() {
+        val intent = Intent(this, SensorAddManuelActivity::class.java)
         startActivity(intent)
     }
 

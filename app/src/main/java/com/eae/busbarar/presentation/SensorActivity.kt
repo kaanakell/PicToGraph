@@ -33,6 +33,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
     private var filterStartDateTime: StartDateTime ?= null
     private var filterEndDateTime: EndDateTime ?= null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySensorBinding.inflate(layoutInflater)
