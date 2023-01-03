@@ -110,6 +110,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
 
     }
 
+
     private fun hideSystemNavigationBars() {
         val windowInsetsController =
             ViewCompat.getWindowInsetsController(window.decorView) ?: return
