@@ -25,6 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CameraEAE"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31" >
         <activity
             android:name=".presentation.LoginActivity"
@@ -62,6 +63,10 @@
             android:name=".presentation.SensorActivity"
             android:exported="true"
             android:screenOrientation="landscape"/>
+
+        <activity
+            android:name=".presentation.WebViewChartActivity"
+            android:exported="true" />
 
         <activity
             android:name=".presentation.SensorInfoActivity"

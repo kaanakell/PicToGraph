@@ -102,13 +102,21 @@
 
             <Button
                 android:id="@+id/btnClearDateTime"
-                android:layout_width="93dp"
-                android:layout_height="43dp"
+                android:layout_width="135dp"
+                android:layout_height="45dp"
                 android:text="Clear Date/Time"
                 android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btnWebView"
+                android:layout_width="135dp"
+                android:layout_height="45dp"
+                android:text="Candle Stick Chart"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -188,6 +196,14 @@
                 app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
+               <!-- <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+                    android:id="@+id/chartViewLandscape"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" /> -->
 
                 <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                     android:id="@+id/chartViewLandscape"
@@ -197,8 +213,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

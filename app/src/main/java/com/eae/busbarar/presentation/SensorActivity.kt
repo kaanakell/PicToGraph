@@ -58,6 +58,9 @@ class SensorActivity : AppCompatActivity(), ISensor {
         binding.btnClearDateTime?.setOnClickListener {
             clearDateTime()
         }
+        binding.btnWebView?.setOnClickListener {
+            openCandleStickChart()
+        }
 
         chartOptions()
         lineChartForDataObservation()
@@ -67,7 +70,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
     }
 
     override fun onBackPressed() {
-        startActivity(Intent(this, CameraActivity::class.java))
+        startActivity(Intent(this, OpenCameraActivity::class.java))
         finish()
     }
 
@@ -110,6 +113,9 @@ class SensorActivity : AppCompatActivity(), ISensor {
 
     }
 
+    private fun openCandleStickChart() {
+        startActivity(Intent(this, WebViewChartActivity::class.java))
+    }
 
     private fun hideSystemNavigationBars() {
         val windowInsetsController =

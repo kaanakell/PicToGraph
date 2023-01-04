@@ -10,12 +10,21 @@
         android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="50dp"
         android:gravity="center"
         android:text="EAE - AR SYSTEMS"
         android:textColor="@color/white"
         android:textSize="35dp"
         android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="65dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_baseline_menu_24" />
 
     <Button
         android:id="@+id/openCamera"
@@ -39,40 +48,5 @@
         android:layout_marginEnd="278dp"
         android:backgroundTint="#600303"
         android:text="Add Manuel" />
-
-    <TextView
-        android:id="@+id/sociallinks"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/socialicons"
-        android:layout_centerHorizontal="true"
-        android:text="Social Links" />
-
-    <LinearLayout
-        android:id="@id/socialicons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center">
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="20dp"
-            android:src="@drawable/fb" />
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="20dp"
-            android:src="@drawable/twitter" />
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="20dp"
-            android:src="@drawable/linkedin" />
-
-    </LinearLayout>
 
 </RelativeLayout>
