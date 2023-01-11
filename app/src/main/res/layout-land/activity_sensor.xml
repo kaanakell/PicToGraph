@@ -105,7 +105,7 @@
                 android:layout_width="135dp"
                 android:layout_height="45dp"
                 android:text="Clear Date/Time"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -114,7 +114,7 @@
                 android:layout_width="135dp"
                 android:layout_height="45dp"
                 android:text="Candle Stick Chart"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -196,15 +196,6 @@
                 app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
-               <!-- <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
-                    android:id="@+id/chartViewLandscape"
-                    android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" /> -->
-
                 <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                     android:id="@+id/chartViewLandscape"
                     android:layout_width="match_parent"
@@ -235,7 +226,7 @@
                 android:id="@+id/empty_list"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:background="@drawable/ic_baseline_clear_all_24"
+                android:background="@android:drawable/ic_menu_delete"
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

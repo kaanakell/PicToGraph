@@ -39,7 +39,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
         binding = ActivitySensorBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.backToCamera.setOnClickListener {
-            startActivity(Intent(this, CameraActivity::class.java))
+            startActivity(Intent(this, OpenCameraActivity::class.java))
         }
         binding.emptyList?.setOnClickListener {
             emptyList()
@@ -204,7 +204,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
         aaChartModel
             .chartType(AAChartType.Line)
             .title("Sensor Temperature")
-            .markerRadius(5.0f)
+            .markerRadius(1.0f)
             .markerSymbol(AAChartSymbolType.Circle)
             .backgroundColor(AAColor.DarkGray)
             .axesTextColor(AAColor.Black)
@@ -226,7 +226,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
             response?.let {safeResponse ->
                 val values = arrayListOf<Float>()
                 dates = arrayListOf()
-                val names = arrayListOf<String>()
+                val sensors = arrayListOf<String>()
                 for (item in safeResponse.temps?: listOf()){
                     item.sensor
                     item.datetime
@@ -234,11 +234,11 @@ class SensorActivity : AppCompatActivity(), ISensor {
                     item.value
                     item.value?.let{values.add(it)}
                     item.datetime?.let{dates.add(it)}
-                    item.sensor?.let{names.add(it)}
+                    item.sensor?.let{sensors.add(it)}
                 }
                 chartModels.add(
                     AASeriesElement()
-                        //.name(names.component1())
+                        .name(sensors.component1())
                         .data(values.toArray())
                         .allowPointSelect(true)
                         .dashStyle(AAChartLineDashStyleType.Solid))
