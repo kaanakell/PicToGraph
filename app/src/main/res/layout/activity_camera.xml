@@ -32,14 +32,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
+       <!-- <ImageView
             android:layout_width="400dp"
             android:layout_height="231dp"
             android:background="@drawable/capture"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/preview_view" />
+            app:layout_constraintTop_toTopOf="@+id/preview_view" />-->
 
         <Button
             android:id="@+id/image_capture_button"

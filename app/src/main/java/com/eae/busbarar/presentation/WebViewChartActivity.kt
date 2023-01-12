@@ -3,21 +3,21 @@ package com.eae.busbarar.presentation
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.os.PersistableBundle
+import android.util.Log
 import android.webkit.WebSettings
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.eae.busbarar.R
+import com.eae.busbarar.Constants
 import com.eae.busbarar.databinding.ActivityWebviewChartBinding
 
 class WebViewChartActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWebviewChartBinding
-    //private val URL ="http://dev.eae.lumnion.com/csrender?sensor_list=29"
-    private val URL ="http://dev.eae.lumnion.com/csrender?sensor_list=29&sensor_list=28&sensor_list=5&sensor_list=4"
+
+    private val URL = Constants.BASE_URL_WEB
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,10 +40,15 @@ class WebViewChartActivity : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun candleStickWebViewIntoAndroidApp() {
+        val list = SensorActivity.list.toList()
+        val finalUrl = StringBuilder("$URL?sensor_list=${list[0]}")
+        list.drop(1).forEach {
+            finalUrl.append("&sensor_list=$it")
+        }
 
         binding.webView.apply {
             webViewClient = WebViewClient()
-            loadUrl(URL)
+            loadUrl(finalUrl.toString())
             setBackgroundColor(Color.TRANSPARENT)
             settings.apply {
                 javaScriptEnabled = true
