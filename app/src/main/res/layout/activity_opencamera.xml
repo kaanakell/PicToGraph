@@ -47,6 +47,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginEnd="278dp"
         android:backgroundTint="#600303"
-        android:text="Add Manuel" />
+        android:text="Add Manual" />
 
 </RelativeLayout>

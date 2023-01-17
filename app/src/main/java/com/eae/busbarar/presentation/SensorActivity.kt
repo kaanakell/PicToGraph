@@ -84,16 +84,16 @@ class SensorActivity : AppCompatActivity(), ISensor {
     }
 
     override fun onItemClick(item: String) {
-        if(sensorClicks.contains(item)){
+        if(sensorClicks.contains(item)) {
             var position = 0
             sensorClicks.forEachIndexed { index, s ->
                 if (item == s)
                     position = index
             }
-            if(sensorHide.contains(item)){
+            if(sensorHide.contains(item)) {
                 binding.chartViewLandscape?.aa_showTheSeriesElementContent(position + 1)
                 sensorHide.remove(item)
-            }else{
+            }else {
                 binding.chartViewLandscape?.aa_hideTheSeriesElementContent(position + 1)
                 sensorHide.add(item)
             }
@@ -271,7 +271,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
             .series(
                 chartModels.toTypedArray()
             )
-            .categories(dates.toTypedArray())
+            .categories(dates.toTypedArray().reversedArray())
 
         binding.chartViewLandscape?.aa_drawChartWithChartModel(aaChartModel)
     }
