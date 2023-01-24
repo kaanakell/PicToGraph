@@ -3,7 +3,10 @@
     <base-config cleartextTrafficPermitted="true" />
     <domain-config>
         <domain includeSubdomains="true">
-            http://ec2-52-57-246-10.eu-central-1.compute.amazonaws.com/
+            https://3.120.150.108/
+        </domain>
+        <domain includeSubdomains="true">
+            http://10.45.20.92/
         </domain>
     </domain-config>
 </network-security-config>

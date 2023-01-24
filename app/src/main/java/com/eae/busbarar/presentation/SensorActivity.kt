@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.eae.busbarar.data.model.*
 import com.eae.busbarar.databinding.ActivitySensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPane
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
@@ -245,7 +246,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
                 drawChart()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
-                startActivity(Intent(this, CameraActivity::class.java))
+                startActivity(Intent(this, OpenCameraActivity::class.java))
             }
         }
     }
