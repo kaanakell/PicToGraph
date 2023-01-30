@@ -72,6 +72,7 @@ class StartDateTimePickerDialog(
 
             val startDateTime = StartDateTime(startDate, startTime)
             listener?.invoke(startDateTime)
+
         }
     }
 

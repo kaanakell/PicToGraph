@@ -11,7 +11,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.eae.busbarar.data.model.*
 import com.eae.busbarar.databinding.ActivitySensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPane
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
@@ -50,11 +49,8 @@ class SensorActivity : AppCompatActivity(), ISensor {
         }
         binding.recyclerView.adapter = adapter
 
-        binding.btnShowEndDateTimeRangePicker?.setOnClickListener {
-            showEndDateTimeRangePicker()
-        }
         binding.btnShowStartDateTimeRangePicker?.setOnClickListener {
-            showStartDateTimeRangePicker()
+            showDateTimeRangePicker()
         }
         binding.btnClearDateTime?.setOnClickListener {
             clearDateTime()
@@ -126,24 +122,21 @@ class SensorActivity : AppCompatActivity(), ISensor {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
-    private fun showStartDateTimeRangePicker() {
+    private fun showDateTimeRangePicker() {
         val dialog = StartDateTimePickerDialog(context = this)
         dialog.listener = {
             filterStartDateTime = it
-            val text = "${it.startTime} - ${it.startDate}"
+            val text = "${it.startTime}\n ${it.startDate}"
             binding.tvStartDateTimeRange?.text = text
             dialog.dismiss()
-        }
-        dialog.show()
-    }
-
-    private fun showEndDateTimeRangePicker() {
-        val dialog = EndDateTimePickerDialog(context = this)
-        dialog.listener = {
-            filterEndDateTime = it
-            val text = "${it.endTime} - ${it.endDate}"
-            binding.tvEndDateTimeRange?.text = text
-            dialog.dismiss()
+            val endDialog = EndDateTimePickerDialog(context = this)
+            endDialog.listener = {
+                filterEndDateTime = it
+                val text = "${it.endTime}\n  ${it.endDate}"
+                binding.tvEndDateTimeRange?.text = text
+                endDialog.dismiss()
+            }
+            endDialog.show()
         }
         dialog.show()
     }
