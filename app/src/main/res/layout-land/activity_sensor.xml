@@ -58,6 +58,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="140dp"
@@ -206,11 +207,12 @@
             android:id="@+id/chartViewHolder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="140dp"
             android:layout_marginTop="87dp"
+            android:layout_marginStart="140dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            >
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
 
             <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                 android:id="@+id/chartViewLandscape"

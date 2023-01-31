@@ -37,6 +37,9 @@ class SensorActivity : AppCompatActivity(), ISensor {
     private var ndata: Int ?= null
     private var filterStartDateTime: StartDateTime ?= null
     private var filterEndDateTime: EndDateTime ?= null
+    private var initialStartMargin: Int = 0
+    private var initialTopMargin: Int = 0
+    private var isFullscreen = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +67,11 @@ class SensorActivity : AppCompatActivity(), ISensor {
             openCandleStickChart()
         }
         binding.chartFullscreen?.setOnClickListener {
-            chartViewFullscreen()
+            if (isFullscreen) {
+                revertChartViewMargins()
+            } else {
+                chartViewFullscreen()
+            }
         }
 
         chartOptions()
@@ -120,8 +127,21 @@ class SensorActivity : AppCompatActivity(), ISensor {
 
     private fun chartViewFullscreen() {
         val layoutParams = binding.chartViewHolder?.layoutParams as ConstraintLayout.LayoutParams
-        layoutParams.setMargins(0,0,0,0)
-        binding.chartViewHolder?.layoutParams = layoutParams
+        initialStartMargin = layoutParams.leftMargin
+        initialTopMargin = layoutParams.topMargin
+
+        layoutParams.leftMargin = 0
+        layoutParams.topMargin = 0
+        binding.chartViewHolder!!.layoutParams = layoutParams
+        isFullscreen = true
+    }
+
+    private fun revertChartViewMargins() {
+        val layoutParams = binding.chartViewHolder?.layoutParams as ConstraintLayout.LayoutParams
+        layoutParams.leftMargin = initialStartMargin
+        layoutParams.topMargin = initialTopMargin
+        binding.chartViewHolder!!.layoutParams = layoutParams
+        isFullscreen = false
     }
 
 
