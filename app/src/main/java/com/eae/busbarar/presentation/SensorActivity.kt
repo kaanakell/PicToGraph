@@ -2,12 +2,17 @@ package com.eae.busbarar.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
+import androidx.core.view.ViewGroupCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.marginStart
 import com.eae.busbarar.data.model.*
 import com.eae.busbarar.databinding.ActivitySensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
@@ -57,6 +62,9 @@ class SensorActivity : AppCompatActivity(), ISensor {
         }
         binding.btnWebView?.setOnClickListener {
             openCandleStickChart()
+        }
+        binding.chartFullscreen?.setOnClickListener {
+            chartViewFullscreen()
         }
 
         chartOptions()
@@ -110,6 +118,13 @@ class SensorActivity : AppCompatActivity(), ISensor {
 
     }
 
+    private fun chartViewFullscreen() {
+        val layoutParams = binding.chartViewHolder?.layoutParams as ConstraintLayout.LayoutParams
+        layoutParams.setMargins(0,0,0,0)
+        binding.chartViewHolder?.layoutParams = layoutParams
+    }
+
+
     private fun openCandleStickChart() {
         startActivity(Intent(this, WebViewChartActivity::class.java))
     }
@@ -121,6 +136,8 @@ class SensorActivity : AppCompatActivity(), ISensor {
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
+
+
 
     private fun showDateTimeRangePicker() {
         val dialog = StartDateTimePickerDialog(context = this)

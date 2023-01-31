@@ -8,6 +8,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/sensorActivityHolder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background">
@@ -62,7 +63,7 @@
             android:layout_marginStart="140dp"
             android:background="#408F8F8F"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/scrollView2"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
             <TextView
@@ -202,15 +203,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/scrollView2"
+            android:id="@+id/chartViewHolder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="140dp"
             android:layout_marginTop="87dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+            >
 
             <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                 android:id="@+id/chartViewLandscape"
@@ -220,6 +220,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/chartFullscreen"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/fullscreen_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
