@@ -2,25 +2,23 @@ package com.eae.busbarar.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
-import androidx.core.view.ViewGroupCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.marginStart
-import com.eae.busbarar.data.model.*
+import com.eae.busbarar.data.model.EndDateTime
+import com.eae.busbarar.data.model.StartDateTime
+import com.eae.busbarar.data.model.TextRecognitionRequest
 import com.eae.busbarar.databinding.ActivitySensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.collections.ArrayList
+
 
 @AndroidEntryPoint
 class SensorActivity : AppCompatActivity(), ISensor {
@@ -40,6 +38,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
     private var initialStartMargin: Int = 0
     private var initialTopMargin: Int = 0
     private var isFullscreen = false
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,7 +112,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
         }
         sensorClicks.add(item)
 
-        ndata = 40
+        ndata = 1000
         val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
         val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
 
@@ -281,6 +280,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
         }
     }
 
+
     private fun drawChart() {
         aaChartModel
             .chartType(AAChartType.Line)
@@ -290,19 +290,20 @@ class SensorActivity : AppCompatActivity(), ISensor {
             .backgroundColor(AAColor.DarkGray)
             .axesTextColor(AAColor.Black)
             .touchEventEnabled(true)
-            .legendEnabled(true)
+            .legendEnabled(false)
             .yAxisTitle("Values")
             .zoomType(AAChartZoomType.XY)
+            .xAxisTickInterval(20)
             .scrollablePlotArea(
                 AAScrollablePlotArea()
                     .minWidth(3000)
                     .scrollPositionX(1f))
-            .dataLabelsEnabled(true)
+            //.dataLabelsEnabled(true)
             .dataLabelsStyle(AAStyle())
             .series(
                 chartModels.toTypedArray()
             )
-            .categories(dates.toTypedArray().reversedArray())
+            .categories(dates.toTypedArray())
 
         binding.chartViewLandscape?.aa_drawChartWithChartModel(aaChartModel)
     }

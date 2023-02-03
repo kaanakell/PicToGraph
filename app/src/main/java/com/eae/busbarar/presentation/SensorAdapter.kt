@@ -14,7 +14,15 @@ class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.V
 
     var list : List<String> = listOf()
         set(value) {
-            field = value
+            var temp : List<String> = listOf()
+            for(item in value) {
+                if (temp.contains(item)){
+
+                }else {
+                    temp = temp + listOf(item)
+                }
+            }
+            field = temp
             notifyDataSetChanged()
         }
 
@@ -50,5 +58,4 @@ class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.V
     override fun getItemCount(): Int {
         return list.size
     }
-
 }
