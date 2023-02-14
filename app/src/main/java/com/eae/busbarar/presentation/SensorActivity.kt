@@ -2,13 +2,16 @@ package com.eae.busbarar.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.eae.busbarar.R
 import com.eae.busbarar.data.model.EndDateTime
 import com.eae.busbarar.data.model.StartDateTime
 import com.eae.busbarar.data.model.TextRecognitionRequest
@@ -25,9 +28,11 @@ class SensorActivity : AppCompatActivity(), ISensor {
 
 
     private lateinit var binding : ActivitySensorBinding
+    private lateinit var  toggle : ActionBarDrawerToggle
     private val viewModel : PreviewViewModel by viewModels()
     private val adapter = SensorAdapter(this)
     private val aaChartModel : AAChartModel = AAChartModel()
+    private val aaOptions :AAOptions = AAOptions()
     private val chartModels : ArrayList<AASeriesElement> = arrayListOf()
     private val sensorClicks : ArrayList<String> = arrayListOf()
     private val sensorHide : ArrayList<String> = arrayListOf()
@@ -48,36 +53,65 @@ class SensorActivity : AppCompatActivity(), ISensor {
         binding.backToCamera.setOnClickListener {
             startActivity(Intent(this, OpenCameraActivity::class.java))
         }
-        binding.emptyList?.setOnClickListener {
+        binding.emptyList.setOnClickListener {
             emptyList()
         }
-        binding.clearGraph?.setOnClickListener {
+        binding.clearGraph.setOnClickListener {
             clearGraph()
         }
         binding.recyclerView.adapter = adapter
 
-        binding.btnShowStartDateTimeRangePicker?.setOnClickListener {
+        binding.btnShowStartDateTimeRangePicker.setOnClickListener {
             showDateTimeRangePicker()
         }
-        binding.btnClearDateTime?.setOnClickListener {
+        binding.btnClearDateTime.setOnClickListener {
             clearDateTime()
         }
-        binding.btnWebView?.setOnClickListener {
+        binding.btnWebView.setOnClickListener {
             openCandleStickChart()
         }
-        binding.chartFullscreen?.setOnClickListener {
+        binding.chartFullscreen.setOnClickListener {
             if (isFullscreen) {
                 revertChartViewMargins()
             } else {
                 chartViewFullscreen()
             }
         }
+        binding.apply {
+            toggle = ActionBarDrawerToggle(this@SensorActivity, drawerLayout, R.string.open, R.string.close)
+            drawerLayout.addDrawerListener(toggle)
+            toggle.syncState()
 
-        chartOptions()
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+            navView.setNavigationItemSelectedListener {
+                when(it.itemId) {
+                    R.id.firstItem ->{
+                        startActivity(Intent(this@SensorActivity, OpenCameraActivity::class.java))
+                        Toast.makeText(this@SensorActivity, "First Item Clicked", Toast.LENGTH_SHORT).show()
+                    }
+                    R.id.secondItem ->{
+                        Toast.makeText(this@SensorActivity, "Second Item Clicked", Toast.LENGTH_SHORT).show()
+                    }
+                    R.id.thirdItem ->{
+                        Toast.makeText(this@SensorActivity, "Third Item Clicked", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                true
+            }
+        }
+        //chartOptions()
         lineChartForDataObservation()
         hideSystemNavigationBars()
         supportActionBar?.hide()
         drawEmptyCharts()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
@@ -102,17 +136,17 @@ class SensorActivity : AppCompatActivity(), ISensor {
                     position = index
             }
             if(sensorHide.contains(item)) {
-                binding.chartViewLandscape?.aa_showTheSeriesElementContent(position + 1)
+                binding.chartViewLandscape.aa_showTheSeriesElementContent(position + 1)
                 sensorHide.remove(item)
             }else {
-                binding.chartViewLandscape?.aa_hideTheSeriesElementContent(position + 1)
+                binding.chartViewLandscape.aa_hideTheSeriesElementContent(position + 1)
                 sensorHide.add(item)
             }
             return
         }
         sensorClicks.add(item)
 
-        ndata = 1000
+        ndata = 100
         val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
         val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
 
@@ -125,21 +159,21 @@ class SensorActivity : AppCompatActivity(), ISensor {
     }
 
     private fun chartViewFullscreen() {
-        val layoutParams = binding.chartViewHolder?.layoutParams as ConstraintLayout.LayoutParams
+        val layoutParams = binding.chartViewHolder.layoutParams as ConstraintLayout.LayoutParams
         initialStartMargin = layoutParams.leftMargin
         initialTopMargin = layoutParams.topMargin
 
         layoutParams.leftMargin = 0
         layoutParams.topMargin = 0
-        binding.chartViewHolder!!.layoutParams = layoutParams
+        binding.chartViewHolder.layoutParams = layoutParams
         isFullscreen = true
     }
 
     private fun revertChartViewMargins() {
-        val layoutParams = binding.chartViewHolder?.layoutParams as ConstraintLayout.LayoutParams
+        val layoutParams = binding.chartViewHolder.layoutParams as ConstraintLayout.LayoutParams
         layoutParams.leftMargin = initialStartMargin
         layoutParams.topMargin = initialTopMargin
-        binding.chartViewHolder!!.layoutParams = layoutParams
+        binding.chartViewHolder.layoutParams = layoutParams
         isFullscreen = false
     }
 
@@ -163,13 +197,13 @@ class SensorActivity : AppCompatActivity(), ISensor {
         dialog.listener = {
             filterStartDateTime = it
             val text = "${it.startTime}\n ${it.startDate}"
-            binding.tvStartDateTimeRange?.text = text
+            binding.tvStartDateTimeRange.text = text
             dialog.dismiss()
             val endDialog = EndDateTimePickerDialog(context = this)
             endDialog.listener = {
                 filterEndDateTime = it
                 val text = "${it.endTime}\n  ${it.endDate}"
-                binding.tvEndDateTimeRange?.text = text
+                binding.tvEndDateTimeRange.text = text
                 endDialog.dismiss()
             }
             endDialog.show()
@@ -178,8 +212,8 @@ class SensorActivity : AppCompatActivity(), ISensor {
     }
 
     private fun clearDateTime() {
-        binding.tvEndDateTimeRange?.text = "End Date Time"
-        binding.tvStartDateTimeRange?.text = "Start Date Time"
+        binding.tvEndDateTimeRange.text = "End Date Time"
+        binding.tvStartDateTimeRange.text = "Start Date Time"
         filterStartDateTime = null
         filterEndDateTime = null
         adapter.sensorClicks = arrayListOf()
@@ -198,22 +232,22 @@ class SensorActivity : AppCompatActivity(), ISensor {
         drawEmptyCharts()
     }
 
-    private fun chartOptions() {
-        val aaOptions :AAOptions = aaChartModel.aa_toAAOptions()
+    private fun chartOptions(aaOptions: AAOptions) {
 
         aaOptions.xAxis?.apply {
             gridLineColor(AAColor.Black)
-                .gridLineWidth(1f)
+                .gridLineWidth(100f)
                 .minorGridLineColor(AAColor.Black)
-                .minorGridLineWidth(0.5f)
+                .minorGridLineWidth(10f)
                 .minorTickInterval("auto")
+                .gridLineColor("Red")
         }
 
         aaOptions.yAxis?.apply {
             gridLineColor(AAColor.Black)
-                .gridLineWidth(1f)
+                .gridLineWidth(100f)
                 .minorGridLineColor(AAColor.Black)
-                .minorGridLineWidth(0.5f)
+                .minorGridLineWidth(100f)
                 .minorTickInterval("auto")
         }
 
@@ -241,6 +275,8 @@ class SensorActivity : AppCompatActivity(), ISensor {
             .touchEventEnabled(false)
             .legendEnabled(false)
             .yAxisTitle("Values")
+            .xAxisReversed(true)
+
             .stacking(AAChartStackingType.False)
             .dataLabelsEnabled(false)
             .series(
@@ -248,7 +284,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
             )
             .categories(arrayOf())
 
-        binding.chartViewLandscape?.aa_drawChartWithChartModel(aaChartModel)
+        binding.chartViewLandscape.aa_drawChartWithChartModel(aaChartModel)
     }
 
     private fun lineChartForDataObservation() {
@@ -282,6 +318,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
 
 
     private fun drawChart() {
+
         aaChartModel
             .chartType(AAChartType.Line)
             .title("Sensor Temperature")
@@ -293,7 +330,8 @@ class SensorActivity : AppCompatActivity(), ISensor {
             .legendEnabled(false)
             .yAxisTitle("Values")
             .zoomType(AAChartZoomType.XY)
-            .xAxisTickInterval(20)
+            .xAxisTickInterval(2)
+            .xAxisGridLineWidth(10f)
             .scrollablePlotArea(
                 AAScrollablePlotArea()
                     .minWidth(3000)
@@ -305,6 +343,9 @@ class SensorActivity : AppCompatActivity(), ISensor {
             )
             .categories(dates.toTypedArray())
 
-        binding.chartViewLandscape?.aa_drawChartWithChartModel(aaChartModel)
+        binding.chartViewLandscape.aa_drawChartWithChartModel(aaChartModel)
     }
+
+
+
 }
