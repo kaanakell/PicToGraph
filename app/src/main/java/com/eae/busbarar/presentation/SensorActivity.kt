@@ -1,13 +1,18 @@
 package com.eae.busbarar.presentation
 
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
+import android.view.Gravity
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -50,6 +55,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
         super.onCreate(savedInstanceState)
         binding = ActivitySensorBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
         binding.backToCamera.setOnClickListener {
             startActivity(Intent(this, OpenCameraActivity::class.java))
         }
@@ -78,16 +84,16 @@ class SensorActivity : AppCompatActivity(), ISensor {
             }
         }
         binding.apply {
-            toggle = ActionBarDrawerToggle(this@SensorActivity, drawerLayout, R.string.open, R.string.close)
+            toggle = ActionBarDrawerToggle(this@SensorActivity,drawerLayout, myToolbar, R.string.open, R.string.close)
             drawerLayout.addDrawerListener(toggle)
             toggle.syncState()
 
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
             navView.setNavigationItemSelectedListener {
                 when(it.itemId) {
                     R.id.firstItem ->{
-                        startActivity(Intent(this@SensorActivity, OpenCameraActivity::class.java))
+                        //startActivity(Intent(this@SensorActivity, OpenCameraActivity::class.java))
                         Toast.makeText(this@SensorActivity, "First Item Clicked", Toast.LENGTH_SHORT).show()
                     }
                     R.id.secondItem ->{
@@ -103,7 +109,6 @@ class SensorActivity : AppCompatActivity(), ISensor {
         //chartOptions()
         lineChartForDataObservation()
         hideSystemNavigationBars()
-        supportActionBar?.hide()
         drawEmptyCharts()
     }
 
