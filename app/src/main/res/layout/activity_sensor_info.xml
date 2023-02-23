@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/sensorName_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/sensorId"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/sensorId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="Sensor Id:"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/temperatureValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@+id/spinner"
+                app:layout_constraintTop_toBottomOf="@+id/sensorId" />
+
+            <Button
+                android:id="@+id/sendData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="145dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/white"
+                android:gravity="center"
+                android:text="Send"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/spinner"
+                app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+            <Button
+                android:id="@+id/backToCamera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="145dp"
+                android:layout_marginStart="68dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/white"
+                android:gravity="center"
+                android:onClick="backToCamera"
+                android:text="Back To Camera"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/sendData"
+                app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/sensorId"
+                app:layout_constraintTop_toBottomOf="@+id/sensorId" />
+
+            <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+                android:id="@+id/chartView"
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintTop_toBottomOf="@id/sendData" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</layout>
