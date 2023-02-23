@@ -15,9 +15,9 @@
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="50dp"
         android:gravity="center"
-        android:text="EAE - AR SYSTEMS"
+        android:text="@string/eae_ar_systems_title"
         android:textColor="@color/white"
-        android:textSize="35dp"
+        android:textSize="35sp"
         android:textStyle="bold" />
 
     <ImageButton
@@ -37,7 +37,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#600303"
-        android:text="OPEN CAMERA" />
+        android:text="@string/open_camera_title" />
 
     <Button
         android:id="@+id/open_add_manuel"
@@ -47,6 +47,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginEnd="278dp"
         android:backgroundTint="#600303"
-        android:text="Add Manual" />
+        android:text="@string/add_manual_btn_text" />
 
 </RelativeLayout>
