@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 
+import com.eae.busbarar.R;
 import com.minddrawer.ultracamera.adapters.ViewPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
