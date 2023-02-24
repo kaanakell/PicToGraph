@@ -12,9 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="50dp"
         android:gravity="center"
-        android:text="Sign in"
+        android:text="@string/sign_in"
         android:textColor="@color/white"
-        android:textSize="35dp"
+        android:textSize="35sp"
         android:textStyle="bold" />
 
     <EditText
@@ -24,9 +24,9 @@
         android:layout_below="@+id/signin"
         android:layout_margin="10dp"
         android:background="#30ffffff"
-        android:drawableLeft="@drawable/ic_baseline_person_outline_24"
+        android:drawableStart="@drawable/ic_baseline_person_outline_24"
         android:drawablePadding="20dp"
-        android:hint="Username"
+        android:hint="@string/username_hint"
         android:padding="20dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white" />
@@ -38,9 +38,9 @@
         android:layout_below="@+id/username"
         android:layout_margin="10dp"
         android:background="#30ffffff"
-        android:drawableLeft="@drawable/ic_baseline_info_24"
+        android:drawableStart="@drawable/ic_baseline_info_24"
         android:drawablePadding="20dp"
-        android:hint="Password"
+        android:hint="@string/password_hint"
         android:inputType="textPassword"
         android:padding="20dp"
         android:textColor="@color/white"
@@ -57,7 +57,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:backgroundTint="#600303"
-        android:text="LOGIN" />
+        android:text="@string/login" />
 
     <TextView
         android:id="@+id/forgotpassword"
@@ -67,7 +67,7 @@
         android:layout_marginTop="350dp"
         android:layout_marginEnd="2dp"
         android:layout_toEndOf="@+id/loginbutton"
-        android:text="Forgot password?"
+        android:text="@string/forgot_password"
         android:textColor="@color/white" />
 
 

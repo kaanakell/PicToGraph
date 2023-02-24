@@ -32,5 +32,30 @@
 
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="capture">Capture</string>
+    <string name="sign_in">Sign in</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="eae_ar_systems_title">EAE - AR SYSTEMS</string>
+    <string name="open_camera_title">OPEN CAMERA</string>
+    <string name="add_manual_btn_text">Add Manual</string>
+    <string name="upload">Upload</string>
+    <string name="sensor_charts">Sensor Charts</string>
+    <string name="date_format">dd/MM/yy</string>
+    <string name="coma">-</string>
+    <string name="pick_date_time">Pick Date Time</string>
+    <string name="clear_date_time">Clear Date/Time</string>
+    <string name="candle_stick_chart">Candle Stick Chart</string>
+    <string name="add_sensor">Add Sensor</string>
+    <string name="submit">Submıt</string>
+    <string name="sensor_id">Sensor Id:</string>
+    <string name="send">Send</string>
+    <string name="back_to_camera">Back To Camera</string>
+    <string name="end_date">End Date</string>
+    <string name="pick_time">Pick Time</string>
+    <string name="start_date">Start Date</string>
+    <string name="pick_date">Pick Date</string>
 
 </resources>

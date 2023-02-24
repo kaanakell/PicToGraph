@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -34,7 +34,7 @@
                     android:id="@+id/sensors"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sensor Charts"
+                    android:text="@string/sensor_charts"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -70,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="dd/MM/yy"
+                    android:text="@string/date_format"
                     android:textAllCaps="false"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textSize="15sp"
@@ -82,7 +82,7 @@
                     android:id="@+id/coma"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="-"
+                    android:text="@string/coma"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textSize="30sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -94,7 +94,7 @@
                     android:id="@+id/btnShowStartDateTimeRangePicker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pick Date Time"
+                    android:text="@string/pick_date_time"
                     android:textAllCaps="false"
                     android:textSize="11sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -107,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
                     android:gravity="center"
-                    android:text="dd/MM/yy"
+                    android:text="@string/date_format"
                     android:textAllCaps="false"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textSize="15sp"
@@ -119,7 +119,7 @@
                     android:id="@+id/btnClearDateTime"
                     android:layout_width="135dp"
                     android:layout_height="45dp"
-                    android:text="Clear Date/Time"
+                    android:text="@string/clear_date_time"
                     android:textAllCaps="false"
                     android:textSize="11sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -131,7 +131,7 @@
                     android:layout_width="135dp"
                     android:layout_height="45dp"
                     android:layout_marginEnd="32dp"
-                    android:text="Candle Stick Chart"
+                    android:text="@string/candle_stick_chart"
                     android:textAllCaps="false"
                     android:textSize="11sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -156,10 +156,9 @@
                     android:id="@+id/bottom_bar"
                     android:layout_width="135dp"
                     android:layout_height="30dp"
-                    android:background="#00000000"
+                    android:background="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
-
                     app:layout_constraintStart_toStartOf="parent">
 
                     <Button
@@ -205,8 +204,8 @@
                 android:id="@+id/chartViewHolder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="87dp"
                 android:layout_marginStart="140dp"
+                android:layout_marginTop="88dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
@@ -219,8 +218,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
                     android:id="@+id/chartFullscreen"
@@ -233,14 +231,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
             <Button
-                android:visibility="gone"
                 android:id="@+id/clear_graph"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Clear Graph"
                 android:textSize="11sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -257,7 +254,6 @@
             app:menu="@menu/nav_menu" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
-
 
 
 </layout>
