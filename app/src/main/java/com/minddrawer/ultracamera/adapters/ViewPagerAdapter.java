@@ -17,24 +17,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.viewpager2.widget.ViewPager2;
 
-
-import com.minddrawer.ultracamera.R;
-
+import com.eae.busbarar.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.ViewHolder>{
+public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.ViewHolder> {
 
     private ArrayList<File> bitmapArrayList = new ArrayList<File>();
-    private LayoutInflater mInflator ;
+    private LayoutInflater mInflator;
     private ViewPager2 viewPager2;
     private ImageView viewPagerImage;
     private Context context;
     private ProgressBar progressBar;
     public int currentPos;
+
     public ViewPagerAdapter(Context context, ArrayList<File> bmp, ViewPager2 viewPager2) {
         this.mInflator = LayoutInflater.from(context);
         this.bitmapArrayList = bmp;
@@ -46,12 +45,11 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflator.inflate(R.layout.slide,parent,false);
+        View view = mInflator.inflate(R.layout.slide, parent, false);
         viewPagerImage = view.findViewById(R.id.slideImg);
         progressBar = view.findViewById(R.id.progressBarLayout);
         return new ViewHolder(view);
     }
-
 
 
     @Override
@@ -71,7 +69,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         });
     }
 
-    public int getCurrentPos(){
+    public int getCurrentPos() {
         return currentPos;
     }
 
@@ -81,7 +79,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         return bitmapArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

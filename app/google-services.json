@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "433560124716",
+    "project_id": "cameraeae",
+    "storage_bucket": "cameraeae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433560124716:android:944b6aa88d2e1e736e4089",
+        "android_client_info": {
+          "package_name": "com.eae.busbarar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "433560124716-iqjavan3krkjlemulfa345rm4jme9evv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBgKXrTDFKagjRWZYoK1fRknXVBgPkolM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "433560124716-iqjavan3krkjlemulfa345rm4jme9evv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
