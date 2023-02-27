@@ -19,6 +19,7 @@ import java.io.File
 class PreviewActivity : AppCompatActivity() {
 
     private val viewModel: PreviewViewModel by viewModels()
+    private val chartViewModel: ChartActivityViewModel by viewModels()
     private lateinit var binding: ActivityPreviewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +67,7 @@ class PreviewActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.sensorResponse.observe(this) { response ->
+        chartViewModel.sensorResponse.observe(this) { response ->
             response?.let {
 
             } ?: run {

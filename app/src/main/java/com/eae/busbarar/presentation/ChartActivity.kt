@@ -34,7 +34,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
 
     private lateinit var binding : ActivitySensorBinding
     private lateinit var  toggle : ActionBarDrawerToggle
-    private val viewModel : PreviewViewModel by viewModels()
+    private val viewModel : ChartActivityViewModel by viewModels()
     private val adapter = SensorAdapter(this)
     private val aaChartModel : AAChartModel = AAChartModel()
     private val aaOptions :AAOptions = AAOptions()
