@@ -22,8 +22,7 @@ class PreviewViewModel @Inject constructor(
     private val _response = MutableLiveData<ApiResponse>()
     val response: LiveData<ApiResponse> = _response
 
-    private val _sensorResponse = MutableLiveData<TemperatureResponse>()
-    val sensorResponse: LiveData<TemperatureResponse> = _sensorResponse
+
 
     private val _fileNameResponse = MutableLiveData<FileNameResponse>()
     val fileNameResponse: LiveData<FileNameResponse> = _fileNameResponse
@@ -41,10 +40,6 @@ class PreviewViewModel @Inject constructor(
         }
     }
 
-    fun uploadSensorId(request: TextRecognitionRequest) {
-        viewModelScope.launch {
-            _sensorResponse.postValue(repository.uploadSensorId(request))
-        }
-    }
+
 
 }
