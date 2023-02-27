@@ -16,9 +16,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
 @AndroidEntryPoint
-class PreviewActivity : AppCompatActivity() {
+class CameraPreviewActivity : AppCompatActivity() {
 
-    private val viewModel: PreviewViewModel by viewModels()
+    private val viewModel: CameraPreviewViewModel by viewModels()
     private val chartViewModel: ChartActivityViewModel by viewModels()
     private lateinit var binding: ActivityPreviewBinding
 
@@ -58,8 +58,8 @@ class PreviewActivity : AppCompatActivity() {
 
         viewModel.fileNameResponse.observe(this){response ->
             response?.let {
-                SensorActivity.list = SensorActivity.list + listOf(it.DetectedSensor ?: "EMPTY")
-                startActivity(Intent(this, SensorActivity::class.java))
+                ChartActivity.list = ChartActivity.list + listOf(it.DetectedSensor ?: "EMPTY")
+                startActivity(Intent(this, ChartActivity::class.java))
                 finish()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()

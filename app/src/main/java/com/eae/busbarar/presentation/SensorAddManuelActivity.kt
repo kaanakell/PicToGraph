@@ -17,8 +17,8 @@ class SensorAddManuelActivity: AppCompatActivity() {
         binding = ActivitySensorAddManuelBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.submit.setOnClickListener {
-            SensorActivity.list = SensorActivity.list + listOf(binding.inputText.text.toString())
-            val intent = Intent(this, SensorActivity::class.java)
+            ChartActivity.list = ChartActivity.list + listOf(binding.inputText.text.toString())
+            val intent = Intent(this, ChartActivity::class.java)
             startActivity(intent)
         }
         supportActionBar?.hide()

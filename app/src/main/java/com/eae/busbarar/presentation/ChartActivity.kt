@@ -29,7 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class SensorActivity : AppCompatActivity(), ISensor {
+class ChartActivity : AppCompatActivity(), ISensor {
 
 
     private lateinit var binding : ActivitySensorBinding
@@ -84,7 +84,7 @@ class SensorActivity : AppCompatActivity(), ISensor {
             }
         }
         binding.apply {
-            toggle = ActionBarDrawerToggle(this@SensorActivity,drawerLayout, myToolbar, R.string.open, R.string.close)
+            toggle = ActionBarDrawerToggle(this@ChartActivity,drawerLayout, myToolbar, R.string.open, R.string.close)
             drawerLayout.addDrawerListener(toggle)
             toggle.syncState()
 
@@ -94,13 +94,13 @@ class SensorActivity : AppCompatActivity(), ISensor {
                 when(it.itemId) {
                     R.id.firstItem ->{
                         //startActivity(Intent(this@SensorActivity, OpenCameraActivity::class.java))
-                        Toast.makeText(this@SensorActivity, "First Item Clicked", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ChartActivity, "First Item Clicked", Toast.LENGTH_SHORT).show()
                     }
                     R.id.secondItem ->{
-                        Toast.makeText(this@SensorActivity, "Second Item Clicked", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ChartActivity, "Second Item Clicked", Toast.LENGTH_SHORT).show()
                     }
                     R.id.thirdItem ->{
-                        Toast.makeText(this@SensorActivity, "Third Item Clicked", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ChartActivity, "Third Item Clicked", Toast.LENGTH_SHORT).show()
                     }
                 }
                 true

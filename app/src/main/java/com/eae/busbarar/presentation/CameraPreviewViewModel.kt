@@ -15,13 +15,12 @@ import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class PreviewViewModel @Inject constructor(
+class CameraPreviewViewModel @Inject constructor(
     private val repository: CameraRepository
 ) : ViewModel() {
 
     private val _response = MutableLiveData<ApiResponse>()
     val response: LiveData<ApiResponse> = _response
-
 
 
     private val _fileNameResponse = MutableLiveData<FileNameResponse>()
