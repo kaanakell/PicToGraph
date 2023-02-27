@@ -16,9 +16,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
 @AndroidEntryPoint
-class PreviewActivity : AppCompatActivity() {
+class CameraPreviewActivity : AppCompatActivity() {
 
-    private val viewModel: PreviewViewModel by viewModels()
+    private val viewModel: CameraPreviewViewModel by viewModels()
     private val chartViewModel: ChartActivityViewModel by viewModels()
     private lateinit var binding: ActivityPreviewBinding
 

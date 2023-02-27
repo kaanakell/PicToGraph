@@ -145,8 +145,8 @@ class CameraActivity : AppCompatActivity() {
                     val rotation = exif?.rotation
                     val savedUri = Uri.fromFile(photoFile)
                     savedUri.path?.let { safePath ->
-                        PreviewActivity.path = safePath
-                        startActivity(Intent(this@CameraActivity, PreviewActivity::class.java))
+                        CameraPreviewActivity.path = safePath
+                        startActivity(Intent(this@CameraActivity, CameraPreviewActivity::class.java))
                     }
                 }
             }

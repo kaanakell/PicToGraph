@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class SensorInfoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySensorInfoBinding
-    private val viewModel: PreviewViewModel by viewModels()
+    private val viewModel: ChartActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
