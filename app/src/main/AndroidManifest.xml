@@ -56,13 +56,13 @@
             android:screenOrientation="fullSensor">
         </activity>
         <activity
-            android:name=".presentation.PreviewActivity"
+            android:name=".presentation.CameraPreviewActivity"
             android:exported="true"
             android:screenOrientation="fullSensor"/>
 
 
         <activity
-            android:name=".presentation.SensorActivity"
+            android:name=".presentation.ChartActivity"
             android:exported="true"
             android:screenOrientation="landscape"/>
 

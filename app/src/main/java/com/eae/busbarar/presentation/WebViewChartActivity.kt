@@ -40,7 +40,7 @@ class WebViewChartActivity : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun candleStickWebViewIntoAndroidApp() {
-        val list = SensorActivity.list.toList()
+        val list = ChartActivity.list.toList()
         val finalUrl = StringBuilder("$URL?sensor_list=${list[0]}")
         list.drop(1).forEach {
             finalUrl.append("&sensor_list=$it")
