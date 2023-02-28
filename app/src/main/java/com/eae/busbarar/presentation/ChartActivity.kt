@@ -55,7 +55,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
         super.onCreate(savedInstanceState)
         binding = ActivitySensorBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(findViewById(R.id.my_toolbar))
+        //setSupportActionBar(findViewById(R.id.my_toolbar))
         binding.backToCamera.setOnClickListener {
             startActivity(Intent(this, OpenCameraActivity::class.java))
         }
@@ -84,11 +84,10 @@ class ChartActivity : AppCompatActivity(), ISensor {
             }
         }
         binding.apply {
-            toggle = ActionBarDrawerToggle(this@ChartActivity,drawerLayout, myToolbar, R.string.open, R.string.close)
-            drawerLayout.addDrawerListener(toggle)
-            toggle.syncState()
 
-            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            topAppBar?.setNavigationOnClickListener {
+                drawerLayout.open()
+            }
 
             navView.setNavigationItemSelectedListener {
                 when(it.itemId) {
@@ -103,6 +102,8 @@ class ChartActivity : AppCompatActivity(), ISensor {
                         Toast.makeText(this@ChartActivity, "Third Item Clicked", Toast.LENGTH_SHORT).show()
                     }
                 }
+                it.isChecked = true
+                drawerLayout.close()
                 true
             }
         }

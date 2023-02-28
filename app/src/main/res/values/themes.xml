@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.CameraEAE" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">#DF0D0D</item>
         <item name="colorPrimaryVariant">#8E0303</item>
