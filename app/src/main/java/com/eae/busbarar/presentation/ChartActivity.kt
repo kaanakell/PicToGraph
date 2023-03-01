@@ -1,18 +1,11 @@
 package com.eae.busbarar.presentation
 
 import android.content.Intent
-import android.graphics.PorterDuff
 import android.os.Bundle
-import android.view.Gravity
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -31,9 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ChartActivity : AppCompatActivity(), ISensor {
 
-
     private lateinit var binding : ActivitySensorBinding
-    private lateinit var  toggle : ActionBarDrawerToggle
     private val viewModel : ChartActivityViewModel by viewModels()
     private val adapter = SensorAdapter(this)
     private val aaChartModel : AAChartModel = AAChartModel()
@@ -55,7 +46,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
         super.onCreate(savedInstanceState)
         binding = ActivitySensorBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //setSupportActionBar(findViewById(R.id.my_toolbar))
         binding.backToCamera.setOnClickListener {
             startActivity(Intent(this, OpenCameraActivity::class.java))
         }
@@ -91,15 +81,24 @@ class ChartActivity : AppCompatActivity(), ISensor {
 
             navView.setNavigationItemSelectedListener {
                 when(it.itemId) {
-                    R.id.firstItem ->{
-                        //startActivity(Intent(this@SensorActivity, OpenCameraActivity::class.java))
-                        Toast.makeText(this@ChartActivity, "First Item Clicked", Toast.LENGTH_SHORT).show()
+                    R.id.firstItem -> {
+                        startActivity(Intent(this@ChartActivity, OpenCameraActivity::class.java))
+                        Toast.makeText(this@ChartActivity, "Menu Opened", Toast.LENGTH_SHORT).show()
                     }
-                    R.id.secondItem ->{
-                        Toast.makeText(this@ChartActivity, "Second Item Clicked", Toast.LENGTH_SHORT).show()
+                    R.id.secondItem -> {
+                        startActivity(Intent(this@ChartActivity, CameraActivity::class.java))
+                        Toast.makeText(this@ChartActivity, "Camera Opened", Toast.LENGTH_SHORT).show()
                     }
-                    R.id.thirdItem ->{
-                        Toast.makeText(this@ChartActivity, "Third Item Clicked", Toast.LENGTH_SHORT).show()
+                    R.id.thirdItem -> {
+                        startActivity(Intent(this@ChartActivity, SensorAddManuelActivity::class.java))
+                        Toast.makeText(this@ChartActivity, "Activity Opened", Toast.LENGTH_SHORT).show()
+                    }
+                    R.id.forthItem -> {
+                        Toast.makeText(this@ChartActivity, "Already Here", Toast.LENGTH_SHORT).show()
+                    }
+                    R.id.fifthItem -> {
+                        //startActivity(Intent(this@ChartActivity, SensorAddManuelActivity::class.java))
+                        Toast.makeText(this@ChartActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
                     }
                 }
                 it.isChecked = true
@@ -113,12 +112,12 @@ class ChartActivity : AppCompatActivity(), ISensor {
         drawEmptyCharts()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (toggle.onOptionsItemSelected(item)) {
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
+    }*/
 
     override fun onBackPressed() {
         startActivity(Intent(this, OpenCameraActivity::class.java))

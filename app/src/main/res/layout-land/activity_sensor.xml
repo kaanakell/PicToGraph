@@ -31,6 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
+                    app:liftOnScroll="true"
                     android:fitsSystemWindows="true">
 
                     <com.google.android.material.appbar.MaterialToolbar

@@ -4,28 +4,63 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings.Secure
 import android.util.Log
-import android.view.View
-import android.widget.Button
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.eae.busbarar.R
 import com.eae.busbarar.data.model.TokenRequest
+import com.eae.busbarar.databinding.ActivityOpencameraBinding
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OpenCameraActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityOpencameraBinding
     private val viewModel: OpenCameraViewModel by viewModels()
-    private var button: Button? = null
-    private var button1: Button? = null
     private var counter = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_opencamera)
-        button = findViewById(R.id.openCamera)
-        button1 = findViewById(R.id.open_add_manuel)
-        button?.setOnClickListener { _ : View? -> openCameraActivityButton() }
-        button1?.setOnClickListener { _ : View? -> openAddManuelActivityButton() }
+        binding = ActivityOpencameraBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.openCamera.setOnClickListener {
+            startActivity(Intent(this, OpenCameraActivity::class.java))
+        }
+        binding.openAddManuel.setOnClickListener {
+            startActivity(Intent(this, SensorAddManuelActivity::class.java))
+        }
+        binding.apply {
+
+            topAppBar?.setNavigationOnClickListener {
+                drawerLayout.open()
+            }
+
+            navView.setNavigationItemSelectedListener {
+                when(it.itemId) {
+                    R.id.firstItem -> {
+                        Toast.makeText(this@OpenCameraActivity, "Already Here", Toast.LENGTH_SHORT).show()
+                    }
+                    R.id.secondItem -> {
+                        startActivity(Intent(this@OpenCameraActivity, CameraActivity::class.java))
+                        Toast.makeText(this@OpenCameraActivity, "Camera Opened", Toast.LENGTH_SHORT).show()
+                    }
+                    R.id.thirdItem -> {
+                        startActivity(Intent(this@OpenCameraActivity, SensorAddManuelActivity::class.java))
+                        Toast.makeText(this@OpenCameraActivity, "Activity Opened", Toast.LENGTH_SHORT).show()
+                    }
+                    R.id.forthItem -> {
+                        startActivity(Intent(this@OpenCameraActivity, ChartActivity::class.java))
+                        Toast.makeText(this@OpenCameraActivity, "Charts Opened", Toast.LENGTH_SHORT).show()
+                    }
+                    R.id.fifthItem -> {
+                        //startActivity(Intent(this@ChartActivity, SensorAddManuelActivity::class.java))
+                        Toast.makeText(this@OpenCameraActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                it.isChecked = true
+                drawerLayout.close()
+                true
+            }
+        }
         createToken()
         observeLiveData()
     }
