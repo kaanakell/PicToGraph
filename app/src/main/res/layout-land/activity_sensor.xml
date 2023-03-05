@@ -44,6 +44,7 @@
                         app:titleCentered="true"
                         app:titleTextColor="@color/white"
                         app:navigationIcon="@drawable/ic_baseline_menu_24"
+                        app:navigationIconTint="@color/white"
                         />
 
                 </com.google.android.material.appbar.AppBarLayout>
