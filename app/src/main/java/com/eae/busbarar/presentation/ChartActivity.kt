@@ -76,10 +76,10 @@ class ChartActivity : AppCompatActivity(), ISensor {
         binding.apply {
 
             topAppBar?.setNavigationOnClickListener {
-                drawerLayout.open()
+                menuDrawerLayout.open()
             }
 
-            navView.setNavigationItemSelectedListener {
+            navigationView.setNavigationItemSelectedListener {
                 when(it.itemId) {
                     R.id.firstItem -> {
                         startActivity(Intent(this@ChartActivity, OpenCameraActivity::class.java))
@@ -97,12 +97,11 @@ class ChartActivity : AppCompatActivity(), ISensor {
                         Toast.makeText(this@ChartActivity, "Already Here", Toast.LENGTH_SHORT).show()
                     }
                     R.id.fifthItem -> {
-                        //startActivity(Intent(this@ChartActivity, SensorAddManuelActivity::class.java))
                         Toast.makeText(this@ChartActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
                     }
                 }
                 it.isChecked = true
-                drawerLayout.close()
+                menuDrawerLayout.close()
                 true
             }
         }
@@ -111,13 +110,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
         hideSystemNavigationBars()
         drawEmptyCharts()
     }
-
-    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (toggle.onOptionsItemSelected(item)) {
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }*/
 
     override fun onBackPressed() {
         startActivity(Intent(this, OpenCameraActivity::class.java))

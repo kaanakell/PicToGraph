@@ -22,19 +22,19 @@ class OpenCameraActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityOpencameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.openCamera.setOnClickListener {
-            startActivity(Intent(this, OpenCameraActivity::class.java))
+        binding.openCameraButton.setOnClickListener {
+            startActivity(Intent(this, CameraActivity::class.java))
         }
-        binding.openAddManuel.setOnClickListener {
+        binding.openAddManuelButton.setOnClickListener {
             startActivity(Intent(this, SensorAddManuelActivity::class.java))
         }
         binding.apply {
 
-            topAppBar?.setNavigationOnClickListener {
-                drawerLayout.open()
+            topAppBar.setNavigationOnClickListener {
+                menuDrawerLayout.open()
             }
 
-            navView.setNavigationItemSelectedListener {
+            navigationView.setNavigationItemSelectedListener {
                 when(it.itemId) {
                     R.id.firstItem -> {
                         Toast.makeText(this@OpenCameraActivity, "Already Here", Toast.LENGTH_SHORT).show()
@@ -57,22 +57,12 @@ class OpenCameraActivity : AppCompatActivity() {
                     }
                 }
                 it.isChecked = true
-                drawerLayout.close()
+                menuDrawerLayout.close()
                 true
             }
         }
         createToken()
         observeLiveData()
-    }
-
-    private fun openCameraActivityButton() {
-        val intent = Intent(this, CameraActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun openAddManuelActivityButton() {
-        val intent = Intent(this, SensorAddManuelActivity::class.java)
-        startActivity(intent)
     }
 
     override fun onBackPressed() {

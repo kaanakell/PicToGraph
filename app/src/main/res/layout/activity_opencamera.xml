@@ -11,24 +11,26 @@
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawerLayout"
+        android:id="@+id/menuDrawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:openDrawer="start">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/activityConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/background">
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
-                android:id="@+id/coordinator_layout"
+                android:id="@+id/activityCoordinatorLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true">
 
 
                 <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/appBarLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
@@ -53,7 +55,7 @@
 
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/appLogo"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="end"
@@ -63,7 +65,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/logo"
+                android:id="@+id/activityTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -74,39 +76,39 @@
                 android:layout_marginTop="226dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                app:layout_constraintTop_toBottomOf="@+id/appLogo" />
 
             <Button
-                android:id="@+id/openCamera"
+                android:id="@+id/openCameraButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/logo"
+                android:layout_below="@+id/activityTitleText"
                 android:layout_centerHorizontal="true"
                 android:backgroundTint="#600303"
                 android:text="@string/open_camera_title"
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/open_add_manuel" />
+                app:layout_constraintTop_toBottomOf="@+id/open_add_manuel_button" />
 
             <Button
-                android:id="@+id/open_add_manuel"
+                android:id="@+id/open_add_manuel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/openCamera"
+                android:layout_below="@+id/openCameraButton"
                 android:layout_centerHorizontal="true"
                 android:backgroundTint="#600303"
                 android:text="@string/add_manual_btn_text"
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logo" />
+                app:layout_constraintTop_toBottomOf="@+id/activityTitleText" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navView"
+            android:id="@+id/navigationView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"

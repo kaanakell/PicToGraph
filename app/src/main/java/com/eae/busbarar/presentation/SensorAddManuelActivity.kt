@@ -18,7 +18,7 @@ class SensorAddManuelActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySensorAddManuelBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.submit.setOnClickListener {
+        binding.submitButton.setOnClickListener {
             ChartActivity.list = ChartActivity.list + listOf(binding.inputText.text.toString())
             val intent = Intent(this, ChartActivity::class.java)
             startActivity(intent)
@@ -26,11 +26,11 @@ class SensorAddManuelActivity: AppCompatActivity() {
 
         binding.apply {
 
-            topAppBar?.setNavigationOnClickListener {
-                drawerLayout.open()
+            topAppBar.setNavigationOnClickListener {
+                menuDrawerLayout.open()
             }
 
-            navView.setNavigationItemSelectedListener {
+            navigationView.setNavigationItemSelectedListener {
                 when(it.itemId) {
                     R.id.firstItem -> {
                         startActivity(Intent(this@SensorAddManuelActivity, OpenCameraActivity::class.java))
@@ -48,12 +48,11 @@ class SensorAddManuelActivity: AppCompatActivity() {
                         Toast.makeText(this@SensorAddManuelActivity, "Chart Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.fifthItem -> {
-                        //startActivity(Intent(this@ChartActivity, SensorAddManuelActivity::class.java))
                         Toast.makeText(this@SensorAddManuelActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
                     }
                 }
                 it.isChecked = true
-                drawerLayout.close()
+                menuDrawerLayout.close()
                 true
             }
         }

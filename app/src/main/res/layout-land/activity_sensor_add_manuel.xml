@@ -9,20 +9,20 @@
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawerLayout"
+        android:id="@+id/menuDrawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:openDrawer="start"
         >
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/activityConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/background">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/addSensorTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -33,7 +33,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                app:layout_constraintTop_toBottomOf="@+id/appLogo" />
 
             <EditText
                 android:id="@+id/input_text"
@@ -47,10 +47,10 @@
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toBottomOf="@+id/addSensorTitle" />
 
             <Button
-                android:id="@+id/submit"
+                android:id="@+id/submitButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/submit"
@@ -63,7 +63,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/input_text" />
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
-                android:id="@+id/coordinator_layout"
+                android:id="@+id/activityCoordinatorLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
@@ -74,6 +74,7 @@
 
 
                 <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/appBarLayout"
                     style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,7 +98,7 @@
 
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/appLogo"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="end"
@@ -110,7 +111,7 @@
 
 
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navView"
+            android:id="@+id/navigationView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
