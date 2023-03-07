@@ -10,10 +10,10 @@
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawerLayout"
+        android:id="@+id/menuDrawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.SensorActivity">
+        tools:openDrawer="start">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/sensorActivityHolder"
@@ -21,41 +21,57 @@
             android:layout_height="match_parent"
             android:background="@drawable/background">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/my_toolbar"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/activityCoordinatorLayout"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="?attr/colorPrimary"
-                android:elevation="4dp"
-                android:theme="@style/Theme.CameraEAE"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:popupTheme="@style/Theme.CameraEAE"
-                app:title="Sensor Chart"
-                app:titleCentered="true"
-                app:titleTextColor="@color/white" />
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true">
+
+                <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/appBarLayout"
+                    style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true"
+                    app:liftOnScroll="true">
+
+                    <com.google.android.material.appbar.MaterialToolbar
+                        android:id="@+id/topAppBar"
+                        style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:elevation="0dp"
+                        app:navigationIcon="@drawable/ic_baseline_menu_24"
+                        app:navigationIconTint="@color/white"
+                        app:title="@string/sensor_charts"
+                        app:titleCentered="true"
+                        app:titleTextColor="@color/white" />
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <ImageView
+                android:id="@+id/appLogo"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="end"
                 android:layout_marginEnd="20dp"
-                android:elevation="4dp"
+                android:elevation="0dp"
                 android:src="@drawable/applogo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout4"
+                android:id="@+id/dateTimePickerHolderConstraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="140dp"
                 android:layout_marginTop="40dp"
                 android:background="@color/eae_gray"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
-                app:layout_constraintTop_toTopOf="@+id/my_toolbar">
+                app:layout_constraintStart_toEndOf="@+id/sensorListHolderConstraintLayout"
+                app:layout_constraintTop_toTopOf="@+id/activityCoordinatorLayout">
 
                 <TextView
                     android:id="@+id/tvStartDateTimeRange"
@@ -135,21 +151,20 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout2"
+                android:id="@+id/sensorListHolderConstraintLayout"
                 android:layout_width="140dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="40dp"
-                android:background="#408F8F8F"
+                android:background="@color/eae_gray"
                 app:layout_constraintStart_toStartOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/bottom_bar"
+                    android:id="@+id/listBottomBarContainer"
                     android:layout_width="135dp"
                     android:layout_height="30dp"
-                    android:background="#00000000"
+                    android:background="@color/eae_gray"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
-
+                    app:layout_constraintEnd_toEndOf="@+id/sensorListHolderConstraintLayout"
                     app:layout_constraintStart_toStartOf="parent">
 
                     <Button
@@ -177,7 +192,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="30dp"
-                    app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
+                    app:layout_constraintBottom_toTopOf="@+id/listBottomBarContainer"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -199,8 +214,8 @@
                 android:layout_marginTop="86dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+                app:layout_constraintStart_toEndOf="@+id/sensorListHolderConstraintLayout"
+                app:layout_constraintTop_toBottomOf="@+id/dateTimePickerHolderConstraintLayout">
 
                 <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                     android:id="@+id/chartViewLandscape"
@@ -226,7 +241,7 @@
                 android:id="@+id/clear_graph"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clear Graph"
+                android:text="@string/clear_graph"
                 android:textSize="11sp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -236,7 +251,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navView"
+            android:id="@+id/navigationView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"

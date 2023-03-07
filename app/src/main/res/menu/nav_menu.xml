@@ -1,18 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/firstItem"
-        android:title="First Item"
-        app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/secondItem"
-        android:title="Second Item"
-        app:showAsAction="never"/>
+    <group
+        android:id="@+id/firstGroup"
+        android:checkableBehavior="single">
 
-    <item
-        android:id="@+id/thirdItem"
-        android:title="Third Item"
-        app:showAsAction="never"/>
+        <item
+            android:id="@+id/firstItem"
+            android:icon="@drawable/baseline_home_24"
+            android:title="@string/menu"
+            app:showAsAction="never" />
+
+    </group>
+
+    <group
+        android:id="@+id/secondGroup"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/subtitle"
+            android:title="@string/sensor_recognition">
+
+            <menu>
+
+                <item
+                    android:id="@+id/secondItem"
+                    android:icon="@drawable/baseline_photo_camera_24"
+                    android:title="@string/camera"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/thirdItem"
+                    android:icon="@drawable/baseline_bookmark_24"
+                    android:title="@string/manuel_input"
+                    app:showAsAction="never" />
+
+            </menu>
+
+        </item>
+
+    </group>
+
+
+    <group
+        android:id="@+id/thirdGroup"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/subtitleTwo"
+            android:title="@string/busbar_system_check">
+
+            <menu>
+
+                <item
+                    android:id="@+id/forthItem"
+                    android:icon="@drawable/baseline_insert_chart_outlined_24"
+                    android:title="@string/chart"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/fifthItem"
+                    android:icon="@drawable/baseline_warning_24"
+                    android:title="@string/alert_screen"
+                    app:showAsAction="never" />
+
+            </menu>
+
+        </item>
+
+    </group>
+
 </menu>
