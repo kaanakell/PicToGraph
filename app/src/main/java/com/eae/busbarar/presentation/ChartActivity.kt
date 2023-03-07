@@ -75,7 +75,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
         }
         binding.apply {
 
-            topAppBar?.setNavigationOnClickListener {
+            topAppBar.setNavigationOnClickListener {
                 menuDrawerLayout.open()
             }
 

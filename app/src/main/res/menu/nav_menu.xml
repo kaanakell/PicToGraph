@@ -8,9 +8,9 @@
 
         <item
             android:id="@+id/firstItem"
-            android:title="Menu"
-            app:showAsAction="never"
-            android:icon="@drawable/baseline_home_24"/>
+            android:icon="@drawable/baseline_home_24"
+            android:title="@string/menu"
+            app:showAsAction="never" />
 
     </group>
 
@@ -20,29 +20,26 @@
 
         <item
             android:id="@+id/subtitle"
-            android:title="Sensor Recognition">
+            android:title="@string/sensor_recognition">
 
             <menu>
 
                 <item
                     android:id="@+id/secondItem"
-                    android:title="Camera"
-                    app:showAsAction="never"
-                    android:icon="@drawable/baseline_photo_camera_24"/>
-
+                    android:icon="@drawable/baseline_photo_camera_24"
+                    android:title="@string/camera"
+                    app:showAsAction="never" />
                 <item
                     android:id="@+id/thirdItem"
-                    android:title="Manuel Input"
-                    app:showAsAction="never"
-                    android:icon="@drawable/baseline_bookmark_24"/>
-
+                    android:icon="@drawable/baseline_bookmark_24"
+                    android:title="@string/manuel_input"
+                    app:showAsAction="never" />
 
             </menu>
 
         </item>
 
     </group>
-
 
 
     <group
@@ -51,28 +48,25 @@
 
         <item
             android:id="@+id/subtitleTwo"
-            android:title="Busbar System Check">
+            android:title="@string/busbar_system_check">
 
             <menu>
 
                 <item
                     android:id="@+id/forthItem"
-                    android:title="Chart"
-                    app:showAsAction="never"
-                    android:icon="@drawable/baseline_insert_chart_outlined_24"/>
-
+                    android:icon="@drawable/baseline_insert_chart_outlined_24"
+                    android:title="@string/chart"
+                    app:showAsAction="never" />
                 <item
                     android:id="@+id/fifthItem"
-                    android:title="Alert Screen"
-                    app:showAsAction="never"
-                    android:icon="@drawable/baseline_warning_24"/>
+                    android:icon="@drawable/baseline_warning_24"
+                    android:title="@string/alert_screen"
+                    app:showAsAction="never" />
 
             </menu>
-
 
         </item>
 
     </group>
-
 
 </menu>

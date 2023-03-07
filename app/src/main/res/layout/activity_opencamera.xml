@@ -2,8 +2,8 @@
 
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -31,23 +31,22 @@
 
                 <com.google.android.material.appbar.AppBarLayout
                     android:id="@+id/appBarLayout"
+                    style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
-                    app:liftOnScroll="true"
-                    android:fitsSystemWindows="true">
+                    android:fitsSystemWindows="true"
+                    app:liftOnScroll="true">
 
                     <com.google.android.material.appbar.MaterialToolbar
                         android:id="@+id/topAppBar"
+                        style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
                         android:elevation="0dp"
-                        app:titleCentered="true"
-                        app:titleTextColor="@color/white"
                         app:navigationIcon="@drawable/ic_baseline_menu_24"
                         app:navigationIconTint="@color/white"
-                        />
+                        app:titleCentered="true"
+                        app:titleTextColor="@color/white" />
 
                 </com.google.android.material.appbar.AppBarLayout>
 
@@ -68,12 +67,12 @@
                 android:id="@+id/activityTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="226dp"
                 android:gravity="center"
                 android:text="@string/eae_ar_systems_title"
                 android:textColor="@color/white"
                 android:textSize="35sp"
                 android:textStyle="bold"
-                android:layout_marginTop="226dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appLogo" />
@@ -84,9 +83,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/activityTitleText"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="24dp"
                 android:backgroundTint="#600303"
                 android:text="@string/open_camera_title"
-                android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/open_add_manuel_button" />
@@ -97,9 +96,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/openCameraButton"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="24dp"
                 android:backgroundTint="#600303"
                 android:text="@string/add_manual_btn_text"
-                android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/activityTitleText" />

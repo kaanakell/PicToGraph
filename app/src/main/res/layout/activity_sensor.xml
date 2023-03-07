@@ -29,24 +29,23 @@
 
                 <com.google.android.material.appbar.AppBarLayout
                     android:id="@+id/appBarLayout"
+                    style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
-                    app:liftOnScroll="true"
-                    android:fitsSystemWindows="true">
+                    android:fitsSystemWindows="true"
+                    app:liftOnScroll="true">
 
                     <com.google.android.material.appbar.MaterialToolbar
                         android:id="@+id/topAppBar"
+                        style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
                         android:elevation="0dp"
-                        app:title="Sensor Chart"
-                        app:titleCentered="true"
-                        app:titleTextColor="@color/white"
                         app:navigationIcon="@drawable/ic_baseline_menu_24"
                         app:navigationIconTint="@color/white"
-                        />
+                        app:title="Sensor Chart"
+                        app:titleCentered="true"
+                        app:titleTextColor="@color/white" />
 
                 </com.google.android.material.appbar.AppBarLayout>
 
@@ -156,14 +155,14 @@
                 android:layout_width="140dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="40dp"
-                android:background="#408F8F8F"
+                android:background="@color/eae_gray"
                 app:layout_constraintStart_toStartOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/listBottomBarContainer"
                     android:layout_width="135dp"
                     android:layout_height="30dp"
-                    android:background="#00000000"
+                    android:background="@color/eae_gray"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/sensorListHolderConstraintLayout"
                     app:layout_constraintStart_toStartOf="parent">
@@ -218,14 +217,14 @@
                 app:layout_constraintStart_toEndOf="@+id/sensorListHolderConstraintLayout"
                 app:layout_constraintTop_toBottomOf="@+id/dateTimePickerHolderConstraintLayout">
 
-                <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+                <!--<com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                     android:id="@+id/chartViewLandscape"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent" />-->
 
                 <ImageButton
                     android:id="@+id/chartFullscreen"
@@ -242,7 +241,7 @@
                 android:id="@+id/clear_graph"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clear Graph"
+                android:text="@string/clear_graph"
                 android:textSize="11sp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
