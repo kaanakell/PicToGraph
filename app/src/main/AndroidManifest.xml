@@ -72,6 +72,11 @@
             android:screenOrientation="landscape"/>
 
         <activity
+            android:name=".presentation.AlertScreenActivity"
+            android:exported="true"
+            android:screenOrientation="landscape"/>
+
+        <activity
             android:name=".presentation.SensorInfoActivity"
             android:exported="true" />
 

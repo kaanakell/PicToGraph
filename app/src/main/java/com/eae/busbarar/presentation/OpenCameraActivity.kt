@@ -52,6 +52,7 @@ class OpenCameraActivity : AppCompatActivity() {
                         Toast.makeText(this@OpenCameraActivity, "Charts Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.fifthItem -> {
+                        startActivity(Intent(this@OpenCameraActivity, AlertScreenActivity::class.java))
                         Toast.makeText(this@OpenCameraActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
                     }
                 }

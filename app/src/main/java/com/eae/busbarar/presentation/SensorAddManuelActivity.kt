@@ -48,6 +48,7 @@ class SensorAddManuelActivity: AppCompatActivity() {
                         Toast.makeText(this@SensorAddManuelActivity, "Chart Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.fifthItem -> {
+                        startActivity(Intent(this@SensorAddManuelActivity, AlertScreenActivity::class.java))
                         Toast.makeText(this@SensorAddManuelActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
                     }
                 }

@@ -16,9 +16,7 @@ import com.eae.busbarar.databinding.ActivityWebviewChartBinding
 class WebViewChartActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWebviewChartBinding
-
-    private val URL = Constants.BASE_URL_WEB
-
+    private val URL = Constants.BASE_URL_WEB_CHART
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +35,6 @@ class WebViewChartActivity : AppCompatActivity() {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
-
     @SuppressLint("SetJavaScriptEnabled")
     private fun candleStickWebViewIntoAndroidApp() {
         val list = ChartActivity.list.toList()
@@ -46,7 +43,7 @@ class WebViewChartActivity : AppCompatActivity() {
             finalUrl.append("&sensor_list=$it")
         }
 
-        binding.webView.apply {
+        binding.chartWebView.apply {
             webViewClient = WebViewClient()
             loadUrl(finalUrl.toString())
             setBackgroundColor(Color.TRANSPARENT)
