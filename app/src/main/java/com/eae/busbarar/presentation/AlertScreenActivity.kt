@@ -19,6 +19,7 @@ class AlertScreenActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityAlertscreenBinding
     private val URL = Constants.BASE_URL_ALERT_SCREEN
+    private val APIKEY = Constants.API_KEY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,25 +74,27 @@ class AlertScreenActivity: AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun alertScreenWebViewIntoAndroidApp() {
-
         binding.alertScreenWebView.apply {
             webViewClient = WebViewClient()
-            loadUrl(URL)
             setBackgroundColor(Color.TRANSPARENT)
+            //loadUrl(URL)
             settings.apply {
-                javaScriptEnabled = true
-                cacheMode = WebSettings.LOAD_DEFAULT
-                setSupportZoom(true)
-                builtInZoomControls = true
-                displayZoomControls = true
-                textZoom = 100
-                blockNetworkImage = false
-                loadsImagesAutomatically = true
-                allowContentAccess = true
-                domStorageEnabled = true
-                loadWithOverviewMode = true
-                useWideViewPort = true
+            javaScriptEnabled = true
+            cacheMode = WebSettings.LOAD_DEFAULT
+            setSupportZoom(true)
+            builtInZoomControls = true
+            displayZoomControls = true
+            textZoom = 100
+            blockNetworkImage = false
+            loadsImagesAutomatically = true
+            allowContentAccess = true
+            domStorageEnabled = true
+            loadWithOverviewMode = true
+            useWideViewPort = true
             }
+            val headers = mutableMapOf<String, String>()
+            headers["X-EAE-Auth"] = APIKEY
+            loadUrl(URL, headers)
         }
     }
 }
