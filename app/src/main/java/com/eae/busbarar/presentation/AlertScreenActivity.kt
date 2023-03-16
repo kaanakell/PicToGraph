@@ -3,10 +3,12 @@ package com.eae.busbarar.presentation
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
-import android.webkit.WebSettings
-import android.webkit.WebViewClient
+import android.util.Log
+import android.webkit.*
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -14,12 +16,15 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.eae.busbarar.Constants
 import com.eae.busbarar.R
 import com.eae.busbarar.databinding.ActivityAlertscreenBinding
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 class AlertScreenActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityAlertscreenBinding
     private val URL = Constants.BASE_URL_ALERT_SCREEN
     private val APIKEY = Constants.API_KEY
+    private val USERAGENT = Constants.USER_AGENT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +64,6 @@ class AlertScreenActivity: AppCompatActivity() {
                 true
             }
         }
-
         hideSystemNavigationBars()
         alertScreenWebViewIntoAndroidApp()
     }
@@ -72,10 +76,35 @@ class AlertScreenActivity: AppCompatActivity() {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
+    private fun getCustomHeaders(): Map<String, String> {
+        val headers: MutableMap<String, String> = HashMap()
+        headers["X-EAE-Auth"] = APIKEY
+        return headers
+    }
+
+    private fun getWebViewClient(): WebViewClient {
+        return object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                view.loadUrl(request.url.toString(), getCustomHeaders())
+                return true
+            }
+
+            @Deprecated("Deprecated in Java")
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                if (view != null) {
+                    if (url != null) {
+                        view.loadUrl(URL, getCustomHeaders())
+                    }
+                }
+                return true
+            }
+        }
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     private fun alertScreenWebViewIntoAndroidApp() {
+        binding.alertScreenWebView.webViewClient = getWebViewClient()
         binding.alertScreenWebView.apply {
-            webViewClient = WebViewClient()
             setBackgroundColor(Color.TRANSPARENT)
             //loadUrl(URL)
             settings.apply {
@@ -92,9 +121,6 @@ class AlertScreenActivity: AppCompatActivity() {
             loadWithOverviewMode = true
             useWideViewPort = true
             }
-            val headers = mutableMapOf<String, String>()
-            headers["X-EAE-Auth"] = APIKEY
-            loadUrl(URL, headers)
         }
     }
 }
