@@ -67,5 +67,6 @@
     <string name="camera">Camera</string>
     <string name="sensor_recognition">Sensor Recognition</string>
     <string name="menu">Menu</string>
+    <string name="chart_webview">Chart Webview</string>
 
 </resources>

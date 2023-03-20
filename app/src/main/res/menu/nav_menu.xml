@@ -31,7 +31,7 @@
                     app:showAsAction="never" />
                 <item
                     android:id="@+id/thirdItem"
-                    android:icon="@drawable/baseline_bookmark_24"
+                    android:icon="@drawable/baseline_text_fields_24"
                     android:title="@string/manuel_input"
                     app:showAsAction="never" />
 
