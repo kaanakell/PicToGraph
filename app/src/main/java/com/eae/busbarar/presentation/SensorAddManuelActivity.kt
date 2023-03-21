@@ -24,6 +24,10 @@ class SensorAddManuelActivity: AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.switchCameraButton.setOnClickListener {
+            startActivity(Intent(this@SensorAddManuelActivity, CameraActivity::class.java))
+        }
+
         binding.apply {
 
             topAppBar.setNavigationOnClickListener {

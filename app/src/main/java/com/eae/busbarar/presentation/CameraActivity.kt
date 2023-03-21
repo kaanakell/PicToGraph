@@ -47,6 +47,10 @@ class CameraActivity : AppCompatActivity() {
             photoCapture()
         }
 
+        binding.switchTextInputButton.setOnClickListener {
+            startActivity(Intent(this@CameraActivity, SensorAddManuelActivity::class.java))
+        }
+
         if(allPermissionsGrantedByUser()) {
             Toast.makeText(this,
             "We Have Permission",
