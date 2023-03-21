@@ -51,9 +51,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
         binding.backToCamera.setOnClickListener {
             startActivity(Intent(this, OpenCameraActivity::class.java))
         }
-        binding.emptyList.setOnClickListener {
-            emptyList()
-        }
         binding.clearGraph.setOnClickListener {
             clearGraph()
         }
@@ -250,12 +247,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
         adapter.notifyDataSetChanged()
         clearGraph()
     }
-
-    private fun emptyList() {
-        adapter.list = listOf()
-        list = listOf()
-    }
-
     private fun clearGraph() {
         sensorClicks.clear()
         chartModels.clear()
