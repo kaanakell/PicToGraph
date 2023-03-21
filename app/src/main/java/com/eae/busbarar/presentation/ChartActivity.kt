@@ -9,6 +9,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.eae.busbarar.R
 import com.eae.busbarar.data.model.EndDateTime
 import com.eae.busbarar.data.model.StartDateTime
@@ -105,6 +107,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 true
             }
         }
+        setRecyclerView()
         //chartOptions()
         lineChartForDataObservation()
         hideSystemNavigationBars()
@@ -153,6 +156,36 @@ class ChartActivity : AppCompatActivity(), ISensor {
             viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, start, end))
         }
 
+    }
+
+    private fun setRecyclerView() {
+        val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
+            ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.RIGHT
+            ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+                val position =  viewHolder.position
+                val temp = arrayListOf<String>()
+                list.forEachIndexed { index, s ->
+                    if(index != position) {
+                        temp.add(s)
+                    }
+                }
+                list = temp
+                adapter.list = list
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
     private fun chartViewFullscreen() {

@@ -6,6 +6,7 @@
 
     </data>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -16,8 +17,10 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/l1e9"
-            android:textColor="@color/black"
-            android:textSize="35sp"
+            android:textColor="@color/white"
+            android:textSize="34sp"
+            android:background="@color/black"
+            android:layout_marginTop="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

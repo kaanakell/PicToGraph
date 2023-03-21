@@ -40,9 +40,9 @@ class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.V
                 notifyItemChanged(position)
             }
             if (sensorClicks.contains(item)){
-                binding.textView.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.purple_200))
+                binding.textView.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.list_select))
             }else {
-                binding.textView.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.transparent))
+                binding.textView.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.list_grey))
             }
         }
     }

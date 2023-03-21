@@ -68,5 +68,6 @@
     <string name="sensor_recognition">Sensor Recognition</string>
     <string name="menu">Menu</string>
     <string name="chart_webview">Chart Webview</string>
+    <string name="delete_button_text">delete</string>
 
 </resources>
