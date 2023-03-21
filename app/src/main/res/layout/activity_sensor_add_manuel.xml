@@ -101,7 +101,6 @@
                         app:title="@string/manuel_input"
                         app:navigationIcon="@drawable/ic_baseline_menu_24"
                         app:navigationIconTint="@color/white"
-                        app:title="@string/manuel_input"
                         app:titleCentered="true"
                         app:titleTextColor="@color/white" />
 
@@ -118,7 +117,6 @@
                 android:layout_marginEnd="16dp"
                 android:elevation="0dp"
                 android:src="@drawable/applogo"
-                android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
