@@ -46,7 +46,7 @@ class WebViewChartActivity : AppCompatActivity() {
             finalUrl.append("&sensor_list=$it")
         }
 
-        binding.webView.apply {
+        binding.chartWebView.apply {
             webViewClient = WebViewClient()
             loadUrl(finalUrl.toString())
             setBackgroundColor(Color.TRANSPARENT)

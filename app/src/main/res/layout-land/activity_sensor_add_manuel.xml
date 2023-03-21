@@ -61,6 +61,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/input_text" />
 
+            <ImageButton
+                android:id="@+id/switchCameraButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/baseline_photo_camera_24"
+                android:backgroundTint="@color/black"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appLogo" />
+
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/activityCoordinatorLayout"
                 android:layout_width="match_parent"
@@ -70,7 +81,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
-
 
                 <com.google.android.material.appbar.AppBarLayout
                     android:id="@+id/appBarLayout"
@@ -86,6 +96,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:elevation="0dp"
+                        app:title="@string/manuel_input"
                         app:navigationIcon="@drawable/ic_baseline_menu_24"
                         app:navigationIconTint="@color/white"
                         app:titleCentered="true"
@@ -95,7 +106,6 @@
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
             <ImageView
                 android:id="@+id/appLogo"
                 android:layout_width="40dp"
@@ -103,11 +113,11 @@
                 android:layout_gravity="end"
                 android:elevation="0dp"
                 android:src="@drawable/applogo"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigationView"
@@ -119,6 +129,5 @@
             app:menu="@menu/nav_menu" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
-
 
 </layout>
