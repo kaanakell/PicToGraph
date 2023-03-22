@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.eae.busbarar.BuildConfig
 import com.eae.busbarar.Constants
 import com.eae.busbarar.R
 import com.eae.busbarar.databinding.ActivityAlertscreenBinding
@@ -25,7 +26,7 @@ class AlertScreenActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityAlertscreenBinding
     private val URL = Constants.BASE_URL_ALERT_SCREEN
-    private val APIKEY = Constants.API_KEY
+    private val APIKEY = BuildConfig.API_KEY
     private val USERAGENT = Constants.USER_AGENT
     private val headerMap = HashMap<String, String>()
 
