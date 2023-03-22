@@ -1,5 +1,6 @@
 package com.eae.busbarar.data
 
+import com.eae.busbarar.BuildConfig
 import com.eae.busbarar.Constants
 import com.eae.busbarar.data.model.*
 import okhttp3.MultipartBody
@@ -16,7 +17,7 @@ interface CameraApi {
     suspend fun uploadImage(
         @Header("Accept") header1: String = "multipart/form-data",
         @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",
-        @Header("X-EAE-Auth") header3: String = Constants.API_KEY,
+        @Header("X-EAE-Auth") header3: String = BuildConfig.API_KEY,
         @Header("Connection") header5: String= "keep-alive",
         @Part files: MultipartBody.Part,
     ) : ApiResponse
@@ -25,7 +26,7 @@ interface CameraApi {
     suspend fun uploadToken(
         @Header("Accept") header1: String = "application/json",
         @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",
-        @Header("X-EAE-Auth") header3: String = Constants.API_KEY,
+        @Header("X-EAE-Auth") header3: String = BuildConfig.API_KEY,
         @Header("Connection") header5: String= "keep-alive",
         @Body request: TokenRequest,
     ) : TokenResponse
@@ -35,7 +36,7 @@ interface CameraApi {
     suspend fun uploadFileName(
         @Header("Accept") header1: String = "application/json",
         @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",
-        @Header("X-EAE-Auth") header3: String = Constants.API_KEY,
+        @Header("X-EAE-Auth") header3: String = BuildConfig.API_KEY,
         @Header("Connection") header5: String= "keep-alive",
         @Body fileNameRequest: FileNameRequest,
     ) : FileNameResponse
@@ -44,7 +45,7 @@ interface CameraApi {
     suspend fun uploadSensorId(
         @Header("Accept") header1: String = "application/json",
         @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",
-        @Header("X-EAE-Auth") header3: String = Constants.API_KEY,
+        @Header("X-EAE-Auth") header3: String = BuildConfig.API_KEY,
         @Header("Connection") header5: String= "keep-alive",
         @Body request: TextRecognitionRequest,
     ) : TemperatureResponse

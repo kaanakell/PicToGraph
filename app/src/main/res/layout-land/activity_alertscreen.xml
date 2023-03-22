@@ -11,7 +11,7 @@
         android:id="@+id/menuDrawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:openDrawer="start">
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/activityConstraintLayout"
@@ -38,9 +38,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:elevation="4dp"
+                        app:title="@string/alert_screen"
                         app:navigationIcon="@drawable/ic_baseline_menu_24"
                         app:navigationIconTint="@color/white"
-                        app:title="@string/chart_webview"
                         app:titleCentered="true"
                         app:titleTextColor="@color/white" />
 
@@ -60,7 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <WebView
-                android:id="@+id/chartWebView"
+                android:id="@+id/alertScreenWebView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="40dp"

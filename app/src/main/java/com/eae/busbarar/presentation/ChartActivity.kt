@@ -96,6 +96,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                         Toast.makeText(this@ChartActivity, "Already Here", Toast.LENGTH_SHORT).show()
                     }
                     R.id.fifthItem -> {
+                        startActivity(Intent(this@ChartActivity, AlertScreenActivity::class.java))
                         Toast.makeText(this@ChartActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
                     }
                 }

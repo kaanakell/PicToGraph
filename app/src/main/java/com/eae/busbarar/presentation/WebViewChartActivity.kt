@@ -16,9 +16,7 @@ import com.eae.busbarar.databinding.ActivityWebviewChartBinding
 class WebViewChartActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWebviewChartBinding
-
-    private val URL = Constants.BASE_URL_WEB
-
+    private val URL = Constants.BASE_URL_WEB_CHART
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +34,6 @@ class WebViewChartActivity : AppCompatActivity() {
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
-
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun candleStickWebViewIntoAndroidApp() {
