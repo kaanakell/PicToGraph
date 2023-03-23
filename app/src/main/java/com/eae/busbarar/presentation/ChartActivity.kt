@@ -149,9 +149,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
         val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
 
         if(filterStartDateTime == null && filterEndDateTime == null) {
-            viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, null, null))
+            viewModel.uploadSensorId(TextRecognitionRequest(item, ndata!!, null, null))
         }else {
-            viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, start, end))
+            viewModel.uploadSensorId(TextRecognitionRequest(item, ndata!!, start, end))
         }
 
     }
@@ -316,13 +316,18 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 dates = arrayListOf()
                 val sensors = arrayListOf<String>()
                 for (item in safeResponse.temps?: listOf()){
-                    item.sensor
                     item.datetime
-                    item.pred
-                    item.value
-                    item.value?.let{values.add(it)}
+                    item.avg_temp
+                    item.min_temp
+                    item.max_temp
+                    item.open_temp
+                    item.close_temp
+                    item.avg_temp?.let{values.add(it)}
+                    item.min_temp?.let{values.add(it)}
+                    item.max_temp?.let{values.add(it)}
+                    item.open_temp?.let{values.add(it)}
+                    item.close_temp?.let{values.add(it)}
                     item.datetime?.let{dates.add(it)}
-                    item.sensor?.let{sensors.add(it)}
                 }
                 chartModels.add(
                     AASeriesElement()

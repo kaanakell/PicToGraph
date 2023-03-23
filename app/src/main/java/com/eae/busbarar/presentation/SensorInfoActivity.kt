@@ -51,9 +51,16 @@ class SensorInfoActivity : AppCompatActivity() {
                 val dates = arrayListOf<String>()
                 for (item in safeResponse.temps?: listOf()){
                     item.datetime
-                    item.pred
-                    item.value
-                    item.value?.let{values.add(it)}
+                    item.avg_temp
+                    item.min_temp
+                    item.max_temp
+                    item.open_temp
+                    item.close_temp
+                    item.avg_temp?.let{values.add(it)}
+                    item.min_temp?.let{values.add(it)}
+                    item.max_temp?.let{values.add(it)}
+                    item.open_temp?.let{values.add(it)}
+                    item.close_temp?.let{values.add(it)}
                     item.datetime?.let{dates.add(it)}
                 }
                 val aaChartModel : AAChartModel = AAChartModel()
