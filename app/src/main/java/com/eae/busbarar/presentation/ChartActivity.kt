@@ -149,7 +149,12 @@ class ChartActivity : AppCompatActivity(), ISensor {
         val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
         val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
 
-        viewModel.uploadSensorId(TextRecognitionRequest(item, 15, "2022-11-14 11:15:00", "2022-11-14 13:45:00"))
+        if(filterStartDateTime == null && filterEndDateTime == null) {
+            viewModel.uploadSensorId(TextRecognitionRequest(item, 100, null, null))
+        }else {
+            viewModel.uploadSensorId(TextRecognitionRequest(item, 100, start, end))
+        }
+
     }
 
     private fun setRecyclerView() {
@@ -308,34 +313,27 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private fun lineChartForDataObservation() {
         viewModel.sensorResponse.observe(this) { response ->
             response?.let {safeResponse ->
-                val valuesAvg = arrayListOf<Float>()
+                val values = arrayListOf<Float>()
                 val valuesClose = arrayListOf<Float>()
                 val valuesOpen = arrayListOf<Float>()
                 val valuesMax = arrayListOf<Float>()
                 val valuesMin = arrayListOf<Float>()
                 dates = arrayListOf()
                 val sensors = arrayListOf<String>()
-                for (item in safeResponse.tempsAgg?: listOf()){
-                    //item.sensor
+                for (item in safeResponse.temps?: listOf()){
+                    item.sensor
                     item.datetime
-                    item.avg_temp
-                    item.open_temp
-                    item.close_temp
-                    item.max_temp
-                    item.min_temp
-                    item.msg
-                    item.avg_temp?.let{valuesAvg.add(it)}
-                    item.close_temp?.let{valuesClose.add(it)}
-                    item.max_temp?.let{valuesMax.add(it)}
-                    item.min_temp?.let{valuesMin.add(it)}
-                    item.open_temp?.let{valuesOpen.add(it)}
+                    item.pred
+                    item.value
+                    item.value?.let{values.add(it)}
                     item.datetime?.let{dates.add(it)}
-                    //item.sensor?.let{sensors.add(it)}
+                    item.sensor?.let{sensors.add(it)}
                 }
+
                 chartModels.add(
                     AASeriesElement()
-                        //.name(sensors.component1())
-                        .data(valuesAvg.toArray())
+                        .name(sensors.component1())
+                        .data(values.toArray())
                         .allowPointSelect(true)
                         .dashStyle(AAChartLineDashStyleType.Solid))
                 drawChart()
