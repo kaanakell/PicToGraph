@@ -5,5 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TemperatureResponse(
-    val temps: List<Temperature>?
+    val temps: List<Temperature>?,
+    val tempsAgg: List<TemperatureAgg>?
 ) : Parcelable

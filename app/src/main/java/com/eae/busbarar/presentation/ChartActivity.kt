@@ -2,6 +2,7 @@ package com.eae.busbarar.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -148,12 +149,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
         val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
         val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
 
-        if(filterStartDateTime == null && filterEndDateTime == null) {
-            viewModel.uploadSensorId(TextRecognitionRequest(item, ndata!!, null, null))
-        }else {
-            viewModel.uploadSensorId(TextRecognitionRequest(item, ndata!!, start, end))
-        }
-
+        viewModel.uploadSensorId(TextRecognitionRequest(item, 15, "2022-11-14 11:15:00", "2022-11-14 13:45:00"))
     }
 
     private fun setRecyclerView() {
@@ -312,27 +308,34 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private fun lineChartForDataObservation() {
         viewModel.sensorResponse.observe(this) { response ->
             response?.let {safeResponse ->
-                val values = arrayListOf<Float>()
+                val valuesAvg = arrayListOf<Float>()
+                val valuesClose = arrayListOf<Float>()
+                val valuesOpen = arrayListOf<Float>()
+                val valuesMax = arrayListOf<Float>()
+                val valuesMin = arrayListOf<Float>()
                 dates = arrayListOf()
                 val sensors = arrayListOf<String>()
-                for (item in safeResponse.temps?: listOf()){
+                for (item in safeResponse.tempsAgg?: listOf()){
+                    //item.sensor
                     item.datetime
                     item.avg_temp
-                    item.min_temp
-                    item.max_temp
                     item.open_temp
                     item.close_temp
-                    item.avg_temp?.let{values.add(it)}
-                    item.min_temp?.let{values.add(it)}
-                    item.max_temp?.let{values.add(it)}
-                    item.open_temp?.let{values.add(it)}
-                    item.close_temp?.let{values.add(it)}
+                    item.max_temp
+                    item.min_temp
+                    item.msg
+                    item.avg_temp?.let{valuesAvg.add(it)}
+                    item.close_temp?.let{valuesClose.add(it)}
+                    item.max_temp?.let{valuesMax.add(it)}
+                    item.min_temp?.let{valuesMin.add(it)}
+                    item.open_temp?.let{valuesOpen.add(it)}
                     item.datetime?.let{dates.add(it)}
+                    //item.sensor?.let{sensors.add(it)}
                 }
                 chartModels.add(
                     AASeriesElement()
-                        .name(sensors.component1())
-                        .data(values.toArray())
+                        //.name(sensors.component1())
+                        .data(valuesAvg.toArray())
                         .allowPointSelect(true)
                         .dashStyle(AAChartLineDashStyleType.Solid))
                 drawChart()
@@ -342,6 +345,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
             }
         }
     }
+
+
+
 
 
     private fun drawChart() {

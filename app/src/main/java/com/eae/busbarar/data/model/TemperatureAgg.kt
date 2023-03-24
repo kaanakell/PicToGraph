@@ -4,8 +4,8 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class TemperatureAggResponse(
-    val datetime : String?,
+data class TemperatureAgg(
+    val datetime: String?,
     val avg_temp: Float?,
     val min_temp: Float?,
     val max_temp: Float?,
