@@ -319,11 +319,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
                     item.close_temp?.let { valuesClose.add(it) }
                     item.min_temp?.let { valuesMin.add(it) }
                     item.max_temp?.let { valuesMax.add(it) }
-                    //item.sensor?.let { sensors.add(it) }
                 }
                 chartModels.add(
                     AASeriesElement()
-                        //.name(sensors.component1())
                         .data(values.toArray())
                         .allowPointSelect(true)
                         .dashStyle(AAChartLineDashStyleType.Solid))
