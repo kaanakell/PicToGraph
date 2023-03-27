@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class TemperatureAgg(
+data class TemperatureResponseAggregation(
     @SerializedName("datetime")
     val datetime: String?,
     @SerializedName("avg_temp")

@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.eae.busbarar.Constants
 import com.eae.busbarar.R
 import com.eae.busbarar.data.model.EndDateTime
 import com.eae.busbarar.data.model.StartDateTime
@@ -36,7 +37,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private val sensorClicks : ArrayList<String> = arrayListOf()
     private val sensorHide : ArrayList<String> = arrayListOf()
     private var dates = arrayListOf<String>()
-    private var ndata: Int ?= null
     private var filterStartDateTime: StartDateTime ?= null
     private var filterEndDateTime: EndDateTime ?= null
     private var initialStartMargin: Int = 0
@@ -145,11 +145,11 @@ class ChartActivity : AppCompatActivity(), ISensor {
         }
         sensorClicks.add(item)
 
-        ndata = 100
+        val aggvalue = 15
         val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
         val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
 
-        viewModel.uploadSensorId(TextRecognitionRequest(item, 15, "2022-11-14 11:15:00", "2022-11-14 13:30:00"))
+        viewModel.uploadSensorId(TextRecognitionRequest(item, aggvalue, Constants.startDateTime, Constants.endDateTime ))//TODO Api request with aggregation value and start/end date&time
     }
 
     private fun setRecyclerView() {
@@ -201,7 +201,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
         isFullscreen = false
     }
 
-
     private fun openCandleStickChart() {
         startActivity(Intent(this, WebViewChartActivity::class.java))
     }
@@ -213,8 +212,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
-
-
 
     private fun showDateTimeRangePicker() {
         val dialog = StartDateTimePickerDialog(context = this)
@@ -338,12 +335,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
         }
     }
 
-
-
-
-
     private fun drawChart() {
-
         aaChartModel
             .chartType(AAChartType.Line)
             .title("Sensor Temperature")
@@ -370,7 +362,5 @@ class ChartActivity : AppCompatActivity(), ISensor {
 
         binding.chartViewLandscape.aa_drawChartWithChartModel(aaChartModel)
     }
-
-
 
 }
