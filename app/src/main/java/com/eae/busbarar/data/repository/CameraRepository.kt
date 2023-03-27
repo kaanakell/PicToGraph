@@ -35,7 +35,7 @@ class CameraRepository @Inject constructor(private val api: CameraApi) {
         }
     }
 
-    suspend fun uploadSensorId(request: TextRecognitionRequest): TemperatureResponse? {
+    suspend fun uploadSensorId(request: TextRecognitionRequest): List<TemperatureResponseAggregation>? {
         return try {
             val response = api.uploadSensorId(
                 request = request

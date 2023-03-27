@@ -2,6 +2,7 @@ package com.eae.busbarar.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.eae.busbarar.Constants
 import com.eae.busbarar.R
 import com.eae.busbarar.data.model.EndDateTime
 import com.eae.busbarar.data.model.StartDateTime
@@ -35,7 +37,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private val sensorClicks : ArrayList<String> = arrayListOf()
     private val sensorHide : ArrayList<String> = arrayListOf()
     private var dates = arrayListOf<String>()
-    private var ndata: Int ?= null
     private var filterStartDateTime: StartDateTime ?= null
     private var filterEndDateTime: EndDateTime ?= null
     private var initialStartMargin: Int = 0
@@ -144,16 +145,11 @@ class ChartActivity : AppCompatActivity(), ISensor {
         }
         sensorClicks.add(item)
 
-        ndata = 100
+        val aggvalue = 15
         val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
         val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
 
-        if(filterStartDateTime == null && filterEndDateTime == null) {
-            viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, null, null))
-        }else {
-            viewModel.uploadSensorId(TextRecognitionRequest(item, ndata, start, end))
-        }
-
+        viewModel.uploadSensorId(TextRecognitionRequest(item, aggvalue, Constants.startDateTime, Constants.endDateTime ))//TODO Api request with aggregation value and start/end date&time
     }
 
     private fun setRecyclerView() {
@@ -205,7 +201,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
         isFullscreen = false
     }
 
-
     private fun openCandleStickChart() {
         startActivity(Intent(this, WebViewChartActivity::class.java))
     }
@@ -217,8 +212,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
-
-
 
     private fun showDateTimeRangePicker() {
         val dialog = StartDateTimePickerDialog(context = this)
@@ -311,22 +304,24 @@ class ChartActivity : AppCompatActivity(), ISensor {
 
     private fun lineChartForDataObservation() {
         viewModel.sensorResponse.observe(this) { response ->
-            response?.let {safeResponse ->
+            response?.let { safeResponse ->
                 val values = arrayListOf<Float>()
+                val valuesClose = arrayListOf<Float>()
+                val valuesOpen = arrayListOf<Float>()
+                val valuesMax = arrayListOf<Float>()
+                val valuesMin = arrayListOf<Float>()
                 dates = arrayListOf()
                 val sensors = arrayListOf<String>()
-                for (item in safeResponse.temps?: listOf()){
-                    item.sensor
-                    item.datetime
-                    item.pred
-                    item.value
-                    item.value?.let{values.add(it)}
-                    item.datetime?.let{dates.add(it)}
-                    item.sensor?.let{sensors.add(it)}
+                for (item in safeResponse.listIterator()) {
+                    item.datetime?.let { dates.add(it) }
+                    item.avg_temp?.let { values.add(it) }
+                    item.open_temp?.let { valuesOpen.add(it) }
+                    item.close_temp?.let { valuesClose.add(it) }
+                    item.min_temp?.let { valuesMin.add(it) }
+                    item.max_temp?.let { valuesMax.add(it) }
                 }
                 chartModels.add(
                     AASeriesElement()
-                        .name(sensors.component1())
                         .data(values.toArray())
                         .allowPointSelect(true)
                         .dashStyle(AAChartLineDashStyleType.Solid))
@@ -338,9 +333,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
         }
     }
 
-
     private fun drawChart() {
-
         aaChartModel
             .chartType(AAChartType.Line)
             .title("Sensor Temperature")
@@ -367,7 +360,5 @@ class ChartActivity : AppCompatActivity(), ISensor {
 
         binding.chartViewLandscape.aa_drawChartWithChartModel(aaChartModel)
     }
-
-
 
 }
