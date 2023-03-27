@@ -4,6 +4,7 @@ import com.eae.busbarar.data.CameraApi
 import com.eae.busbarar.data.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import retrofit2.Response
 import java.io.File
 import javax.inject.Inject
 
@@ -35,7 +36,7 @@ class CameraRepository @Inject constructor(private val api: CameraApi) {
         }
     }
 
-    suspend fun uploadSensorId(request: TextRecognitionRequest): TemperatureResponse? {
+    suspend fun uploadSensorId(request: TextRecognitionRequest): List<TemperatureAgg>? {
         return try {
             val response = api.uploadSensorId(
                 request = request

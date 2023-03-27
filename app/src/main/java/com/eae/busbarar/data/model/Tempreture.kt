@@ -9,5 +9,5 @@ data class Temperature(
     val sensor: String?,
     val pred: String?,
     val value: Float?
-) : Parcelable
+):Parcelable
 

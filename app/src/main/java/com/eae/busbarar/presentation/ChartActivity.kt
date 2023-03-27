@@ -149,12 +149,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
         val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
         val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
 
-        if(filterStartDateTime == null && filterEndDateTime == null) {
-            viewModel.uploadSensorId(TextRecognitionRequest(item, 100, null, null))
-        }else {
-            viewModel.uploadSensorId(TextRecognitionRequest(item, 100, start, end))
-        }
-
+        viewModel.uploadSensorId(TextRecognitionRequest(item, 15, "2022-11-14 11:15:00", "2022-11-14 13:30:00"))
     }
 
     private fun setRecyclerView() {
@@ -312,7 +307,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
 
     private fun lineChartForDataObservation() {
         viewModel.sensorResponse.observe(this) { response ->
-            response?.let {safeResponse ->
+            response?.let { safeResponse ->
                 val values = arrayListOf<Float>()
                 val valuesClose = arrayListOf<Float>()
                 val valuesOpen = arrayListOf<Float>()
@@ -320,19 +315,18 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 val valuesMin = arrayListOf<Float>()
                 dates = arrayListOf()
                 val sensors = arrayListOf<String>()
-                for (item in safeResponse.temps?: listOf()){
-                    item.sensor
-                    item.datetime
-                    item.pred
-                    item.value
-                    item.value?.let{values.add(it)}
-                    item.datetime?.let{dates.add(it)}
-                    item.sensor?.let{sensors.add(it)}
+                for (item in safeResponse.listIterator()) {
+                    item.datetime?.let { dates.add(it) }
+                    item.avg_temp?.let { values.add(it) }
+                    item.open_temp?.let { valuesOpen.add(it) }
+                    item.close_temp?.let { valuesClose.add(it) }
+                    item.min_temp?.let { valuesMin.add(it) }
+                    item.max_temp?.let { valuesMax.add(it) }
+                    //item.sensor?.let { sensors.add(it) }
                 }
-
                 chartModels.add(
                     AASeriesElement()
-                        .name(sensors.component1())
+                        //.name(sensors.component1())
                         .data(values.toArray())
                         .allowPointSelect(true)
                         .dashStyle(AAChartLineDashStyleType.Solid))

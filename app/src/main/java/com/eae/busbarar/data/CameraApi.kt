@@ -3,7 +3,9 @@ package com.eae.busbarar.data
 import com.eae.busbarar.BuildConfig
 import com.eae.busbarar.Constants
 import com.eae.busbarar.data.model.*
+import okhttp3.Call
 import okhttp3.MultipartBody
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -41,16 +43,7 @@ interface CameraApi {
         @Body fileNameRequest: FileNameRequest,
     ) : FileNameResponse
 
-    @POST("getsensortempv2")
-    suspend fun uploadSensorId(
-        @Header("Accept") header1: String = "application/json",
-        @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",
-        @Header("X-EAE-Auth") header3: String = BuildConfig.API_KEY,
-        @Header("Connection") header5: String= "keep-alive",
-        @Body request: TextRecognitionRequest,
-    ) : TemperatureResponse
-
-    /*@POST("getaggtemp")
+    /*@POST("getsensortempv2")
     suspend fun uploadSensorId(
         @Header("Accept") header1: String = "application/json",
         @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",
@@ -58,6 +51,15 @@ interface CameraApi {
         @Header("Connection") header5: String= "keep-alive",
         @Body request: TextRecognitionRequest,
     ) : TemperatureResponse*/
+
+    @POST("getaggtemp")
+    suspend fun uploadSensorId(
+        @Header("Accept") header1: String = "application/json",
+        @Header("User-Agent") header2: String = "Thunder Client(https://www.thunderclient.com/)",
+        @Header("X-EAE-Auth") header3: String = BuildConfig.API_KEY,
+        @Header("Connection") header5: String= "keep-alive",
+        @Body request: TextRecognitionRequest,
+    ) : List<TemperatureAgg>
 
     /*@POST("getsensortempv3")
     suspend fun uploadSensorId(
