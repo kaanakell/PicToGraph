@@ -30,9 +30,6 @@ class AlertScreenActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityAlertscreenBinding
     private val URL = Constants.BASE_URL_ALERT_SCREEN
-    private val APIKEY = BuildConfig.API_KEY
-    private val USERAGENT = Constants.USER_AGENT
-    private val headerMap = HashMap<String, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,10 +139,5 @@ class AlertScreenActivity: AppCompatActivity() {
             }
         }
     }
-
-
-
-
-
 }
 
