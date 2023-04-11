@@ -19,6 +19,8 @@ import com.eae.busbarar.BuildConfig
 import com.eae.busbarar.Constants
 import com.eae.busbarar.R
 import com.eae.busbarar.databinding.ActivityAlertscreenBinding
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
@@ -26,9 +28,6 @@ class AlertScreenActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityAlertscreenBinding
     private val URL = Constants.BASE_URL_ALERT_SCREEN
-    private val APIKEY = BuildConfig.API_KEY
-    private val USERAGENT = Constants.USER_AGENT
-    private val headerMap = HashMap<String, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +84,40 @@ class AlertScreenActivity: AppCompatActivity() {
     private fun alertScreenWebViewIntoAndroidApp() {
 
         binding.alertScreenWebView.apply {
-            webViewClient = WebViewClient()
+            WebView.setWebContentsDebuggingEnabled(true)
+            webViewClient = object : WebViewClient() {
+
+                // Handle API until level 21
+                @Deprecated("Deprecated in Java")
+                @Suppress("DEPRECATION")
+                override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
+                    return getNewResponse(url)
+                }
+
+                // Handle API 21+
+                override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+                    val url = request?.url.toString()
+                    return getNewResponse(url)
+                }
+
+                private fun getNewResponse(url: String?): WebResourceResponse? {
+                    return try {
+                        val httpClient = OkHttpClient()
+                        val request = Request.Builder()
+                            .url(url!!)
+                            .addHeader("X-EAE-Auth", BuildConfig.API_KEY)
+                            .build()
+                        val response = httpClient.newCall(request).execute()
+                        WebResourceResponse(
+                            "text/html",
+                            response.header("content-encoding", "utf-8"),
+                            response.body!!.byteStream()
+                        )
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+            }
             loadUrl(URL)
             setBackgroundColor(Color.TRANSPARENT)
             settings.apply {
@@ -95,6 +127,7 @@ class AlertScreenActivity: AppCompatActivity() {
                 builtInZoomControls = true
                 displayZoomControls = true
                 textZoom = 100
+                setSupportMultipleWindows(true)
                 blockNetworkImage = false
                 loadsImagesAutomatically = true
                 allowContentAccess = true
@@ -105,4 +138,3 @@ class AlertScreenActivity: AppCompatActivity() {
         }
     }
 }
-
