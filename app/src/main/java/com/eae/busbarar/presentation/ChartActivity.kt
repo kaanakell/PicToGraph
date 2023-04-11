@@ -303,71 +303,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
         binding.chartViewLandscape.aa_drawChartWithChartModel(aaChartModel)
     }
 
-    /*private fun lineChartForDataObservation() {
-        viewModel.sensorResponse.observe(this) { response ->
-            response?.let { safeResponse ->
-                val values = arrayListOf<Float>()
-                val valuesPred = arrayListOf<Float>()
-                val valuesClose = arrayListOf<Float>()
-                val valuesOpen = arrayListOf<Float>()
-                val valuesMax = arrayListOf<Float>()
-                val valuesMin = arrayListOf<Float>()
-                dates = arrayListOf()
-                val sensors = arrayListOf<Int>()
-                for (item in safeResponse) {
-                    item.datetime?.let { dates.add(it.toString()) }
-                    item.pred?.let { valuesPred.add(it)  }
-                    item.average?.let { values.add(it) }
-                    item.open?.let { valuesOpen.add(it) }
-                    item.close?.let { valuesClose.add(it) }
-                    item.min?.let { valuesMin.add(it) }
-                    item.max?.let { valuesMax.add(it) }
-                }
-                chartModels.add(
-                    AASeriesElement()
-                        .name(sensors.component1().toString())
-                        .data(values.toTypedArray())
-                        .allowPointSelect(true)
-                        .dashStyle(AAChartLineDashStyleType.Solid)
-                )
-                drawChart()
-            } ?: run {
-                Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
-                startActivity(Intent(this, OpenCameraActivity::class.java))
-            }
-        }
-    }
-
-
-
-
-    private fun drawChart() {
-        aaChartModel
-            .chartType(AAChartType.Line)
-            .title("Sensor Temperature")
-            .markerRadius(5.0f)
-            .markerSymbol(AAChartSymbolType.Circle)
-            .backgroundColor(AAColor.DarkGray)
-            .axesTextColor(AAColor.Black)
-            .touchEventEnabled(true)
-            .legendEnabled(false)
-            .yAxisTitle("Values")
-            .zoomType(AAChartZoomType.XY)
-            .xAxisTickInterval(2)
-            .xAxisGridLineWidth(10f)
-            .scrollablePlotArea(
-                AAScrollablePlotArea()
-                    .minWidth(3000)
-                    .scrollPositionX(1f))
-            //.dataLabelsEnabled(true)
-            .dataLabelsStyle(AAStyle())
-            .series(
-                chartModels.toTypedArray()
-            )
-            .categories(dates.toTypedArray())
-        binding.chartViewLandscape.aa_drawChartWithChartModel(aaChartModel)
-    }*/
-
     private fun lineChartForDataObservation() {
         viewModel.sensorResponse.observe(this) { response ->
             response?.let { safeResponse ->
@@ -401,10 +336,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
             }
         }
     }
-
-
-
-
 
     private fun drawChart() {
         aaChartModel
