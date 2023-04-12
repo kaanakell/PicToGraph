@@ -1,5 +1,6 @@
 package com.eae.busbarar.presentation
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,9 @@ import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotAre
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -306,6 +310,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
         viewModel.sensorResponse.observe(this) { response ->
             response?.let { safeResponse ->
                 val values = arrayListOf<Float>()
+                val valuesPred = arrayListOf<Int>()
                 val valuesClose = arrayListOf<Float>()
                 val valuesOpen = arrayListOf<Float>()
                 val valuesMax = arrayListOf<Float>()
@@ -313,22 +318,26 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 dates = arrayListOf()
                 val sensors = arrayListOf<String>()
                 for (item in safeResponse.listIterator()) {
-                    item.datetime?.let { dates.add(it) }
-                    item.avg_temp?.let { values.add(it) }
-                    item.open_temp?.let { valuesOpen.add(it) }
-                    item.close_temp?.let { valuesClose.add(it) }
-                    item.min_temp?.let { valuesMin.add(it) }
-                    item.max_temp?.let { valuesMax.add(it) }
+                    item.datetime?.let {
+                        dates.add(it.epochToFormattedString("dd/MM/yyyy HH:mm:ss"))
+                    }
+                    item.pred?.let { valuesPred.add(it) }
+                    item.average?.let { values.add(it) }
+                    item.open?.let { valuesOpen.add(it) }
+                    item.close?.let { valuesClose.add(it) }
+                    item.min?.let { valuesMin.add(it) }
+                    item.max?.let { valuesMax.add(it) }
                 }
                 chartModels.add(
                     AASeriesElement()
+                        .name(sensors.toString())
                         .data(values.toArray())
                         .allowPointSelect(true)
                         .dashStyle(AAChartLineDashStyleType.Solid))
                 drawChart()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
-                startActivity(Intent(this, OpenCameraActivity::class.java))
+                startActivity(Intent(this, ChartActivity::class.java))
             }
         }
     }
@@ -360,5 +369,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
 
         binding.chartViewLandscape.aa_drawChartWithChartModel(aaChartModel)
     }
+}
 
+fun Int.epochToFormattedString(format: String): String {
+    val date = Date(this * 1000L)
+    return SimpleDateFormat(format, Locale.getDefault()).format(date)
 }

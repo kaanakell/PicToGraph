@@ -24,5 +24,4 @@ class ChartActivityViewModel @Inject constructor(
             _sensorResponse.postValue(repository.uploadSensorId(request))
         }
     }
-
 }

@@ -1,17 +1,13 @@
 package com.eae.busbarar.presentation
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
 import android.webkit.*
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -140,4 +136,3 @@ class AlertScreenActivity: AppCompatActivity() {
         }
     }
 }
-

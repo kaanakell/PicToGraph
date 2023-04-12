@@ -4,20 +4,27 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
+
 @Parcelize
 data class TemperatureResponseAggregation(
     @SerializedName("datetime")
-    val datetime: String?,
-    @SerializedName("avg_temp")
-    val avg_temp: Float?,
-    @SerializedName("min_temp")
-    val min_temp: Float?,
-    @SerializedName("max_temp")
-    val max_temp: Float?,
-    @SerializedName("open_temp")
-    val open_temp: Float?,
-    @SerializedName("close_temp")
-    val close_temp: Float?,
-    @SerializedName("msg")
-    val msg: String?
-):Parcelable
+    val datetime: Int?,
+    @SerializedName("pred")
+    val pred: Int?,
+    @SerializedName("sensor")
+    val sensor: Int?,
+    @SerializedName("average")
+    val average: Float?,
+    @SerializedName("min")
+    val min: Float?,
+    @SerializedName("max")
+    val max: Float?,
+    @SerializedName("open")
+    val open: Float?,
+    @SerializedName("close")
+    val close: Float?
+) : Parcelable
+
+
+
+

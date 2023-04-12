@@ -22,7 +22,6 @@ import javax.net.ssl.X509TrustManager
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private val contentType = "application/json".toMediaType()
     @Provides
     @Singleton
     fun provideCameraApi(okHttpClient: OkHttpClient): CameraApi {
