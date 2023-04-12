@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Base64
@@ -21,8 +22,10 @@ import com.eae.busbarar.R
 import com.eae.busbarar.databinding.ActivityAlertscreenBinding
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.internal.userAgent
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
+
 
 class AlertScreenActivity: AppCompatActivity() {
 
