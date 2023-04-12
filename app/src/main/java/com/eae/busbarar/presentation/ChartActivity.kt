@@ -318,9 +318,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 dates = arrayListOf()
                 val sensors = arrayListOf<String>()
                 for (item in safeResponse.listIterator()) {
-                    item.datetime?.let { val date = Date(item.datetime * 1000L) // Convert epoch time to normal date time
-                        val formattedDate = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(date) // Format the date time as per your requirement
-                        dates.add(formattedDate) }
+                    item.datetime?.let {
+                        dates.add(it.epochToFormattedString("dd/MM/yyyy HH:mm:ss"))
+                    }
                     item.pred?.let { valuesPred.add(it) }
                     item.average?.let { values.add(it) }
                     item.open?.let { valuesOpen.add(it) }
@@ -337,7 +337,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 drawChart()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
-                startActivity(Intent(this, OpenCameraActivity::class.java))
+                startActivity(Intent(this, ChartActivity::class.java))
             }
         }
     }
@@ -369,6 +369,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
 
         binding.chartViewLandscape.aa_drawChartWithChartModel(aaChartModel)
     }
+}
 
-
+fun Int.epochToFormattedString(format: String): String {
+    val date = Date(this * 1000L)
+    return SimpleDateFormat(format, Locale.getDefault()).format(date)
 }

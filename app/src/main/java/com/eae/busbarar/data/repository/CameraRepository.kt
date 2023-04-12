@@ -1,9 +1,13 @@
 package com.eae.busbarar.data.repository
 
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import com.eae.busbarar.data.CameraApi
 import com.eae.busbarar.data.model.*
+import com.eae.busbarar.presentation.ChartActivity
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONArray
@@ -64,7 +68,6 @@ class CameraRepository @Inject constructor(private val api: CameraApi) {
             emptyList()
         }
     }
-
 
     suspend fun  uploadToken(request: TokenRequest): TokenResponse?{
         return try {

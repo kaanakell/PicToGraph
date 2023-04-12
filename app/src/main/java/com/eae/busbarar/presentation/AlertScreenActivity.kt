@@ -1,17 +1,11 @@
 package com.eae.busbarar.presentation
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
 import android.webkit.*
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -22,11 +16,6 @@ import com.eae.busbarar.R
 import com.eae.busbarar.databinding.ActivityAlertscreenBinding
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.internal.userAgent
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
-
-
 class AlertScreenActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityAlertscreenBinding
