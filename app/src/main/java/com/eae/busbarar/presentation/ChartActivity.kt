@@ -24,6 +24,9 @@ import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotAre
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -315,7 +318,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 dates = arrayListOf()
                 val sensors = arrayListOf<String>()
                 for (item in safeResponse.listIterator()) {
-                    item.datetime?.let { dates.add(it.toString()) }
+                    item.datetime?.let { val date = Date(item.datetime * 1000L) // Convert epoch time to normal date time
+                        val formattedDate = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(date) // Format the date time as per your requirement
+                        dates.add(formattedDate) }
                     item.pred?.let { valuesPred.add(it) }
                     item.average?.let { values.add(it) }
                     item.open?.let { valuesOpen.add(it) }
