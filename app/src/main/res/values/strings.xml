@@ -70,6 +70,7 @@
     <string name="chart_webview">Chart Webview</string>
     <string name="delete_button_text">delete</string>
     <string name="add">+ Add</string>
+    <string name="delete">delete</string>
 
 </resources>
 
