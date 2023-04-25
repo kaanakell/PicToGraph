@@ -31,7 +31,10 @@
 
         <activity
             android:name=".presentation.LoginActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.CameraEAE"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,19 +49,20 @@
         <activity
             android:name=".presentation.CameraActivity"
             android:exported="true"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.Material3.Light.NoActionBar">
         </activity>
 
         <activity
             android:name=".presentation.OpenCameraActivity"
             android:exported="true"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="landscape">
         </activity>
 
         <activity
             android:name=".presentation.SensorAddManuelActivity"
             android:exported="true"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="landscape">
         </activity>
 
         <activity
@@ -80,10 +84,6 @@
             android:name=".presentation.AlertScreenActivity"
             android:exported="true"
             android:screenOrientation="landscape"/>
-
-        <activity
-            android:name=".presentation.SensorInfoActivity"
-            android:exported="true" />
 
         <service
             android:name=".presentation.MyFirebaseMessagingService"

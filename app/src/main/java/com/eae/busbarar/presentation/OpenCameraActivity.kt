@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings.Secure
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -63,6 +64,13 @@ class OpenCameraActivity : AppCompatActivity() {
         }
         createToken()
         observeLiveData()
+        hideSystemNavigationBars()
+    }
+
+    private fun hideSystemNavigationBars() {
+        window.decorView.apply {
+            systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
     }
 
     override fun onBackPressed() {

@@ -3,14 +3,15 @@
     <style name="Theme.CameraEAE" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowContentOverlay">@null</item>
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#DF0D0D</item>
-        <item name="colorPrimaryVariant">#8E0303</item>
+        <item name="colorPrimary">#346968</item>
+        <item name="colorPrimaryVariant">#871015</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">#861515</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
