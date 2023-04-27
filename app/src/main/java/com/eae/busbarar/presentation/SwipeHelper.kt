@@ -33,7 +33,7 @@ abstract class SwipeHelper(
         buttonsBuffer[swipedPosition]?.forEach { it.handle(event) }
         recoverQueue.add(swipedPosition)
         swipedPosition = -1
-        recoverSwipedItem()
+        //recoverSwipedItem()
         true
     }
 
@@ -41,12 +41,12 @@ abstract class SwipeHelper(
         recyclerView.setOnTouchListener(touchListener)
     }
 
-    private fun recoverSwipedItem() {
+    /*private fun recoverSwipedItem() {
         while (!recoverQueue.isEmpty()) {
             val position = recoverQueue.poll() ?: return
             recyclerView.adapter?.notifyItemChanged(position)
         }
-    }
+    }*/
 
     private fun drawButtons(
         canvas: Canvas,
@@ -116,7 +116,7 @@ abstract class SwipeHelper(
         val position = viewHolder.adapterPosition
         if (swipedPosition != position) recoverQueue.add(swipedPosition)
         swipedPosition = position
-        recoverSwipedItem()
+        //recoverSwipedItem()
     }
 
     abstract fun instantiateUnderlayButton(position: Int): List<UnderlayButton>
@@ -135,7 +135,7 @@ abstract class SwipeHelper(
     ) {
         private var clickableRegion: RectF? = null
         private val textSizeInPixel: Float = textSize * context.resources.displayMetrics.density // dp to px
-        private val horizontalPadding = 50.0f
+        private val horizontalPadding = 10.0f
         val intrinsicWidth: Float
 
         init {
@@ -145,7 +145,7 @@ abstract class SwipeHelper(
             paint.textAlign = Paint.Align.LEFT
             val titleBounds = Rect()
             paint.getTextBounds(title, 0, title.length, titleBounds)
-            intrinsicWidth = titleBounds.width() + 2 * horizontalPadding
+            intrinsicWidth = titleBounds.width() + 5 * horizontalPadding
         }
 
         fun draw(canvas: Canvas, rect: RectF) {
