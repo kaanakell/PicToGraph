@@ -6,7 +6,7 @@ object Constants {
 
     const val REQUEST_CODE_PERMISSION = 123
     val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
-    const val BASE_URL = "http://10.45.20.92/"
+    const val BASE_URL = "http://10.45.50.32/"
     const val BASE_URL_WEB_CHART = "http://10.45.20.92/csrender"
     const val BASE_URL_ALERT_SCREEN = "10.45.20.92/rulewebview"
     const val USER_AGENT = "Thunder Client(https://www.thunderclient.com/)"

@@ -28,6 +28,13 @@ class LoginActivity : AppCompatActivity() {
             } else Toast.makeText(this@LoginActivity, "LOGIN FAILED", Toast.LENGTH_SHORT).show()
         }
         askNotificationPermission()
+        hideSystemNavigationBars()
+    }
+
+    private fun hideSystemNavigationBars() {
+        window.decorView.apply {
+            systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
     }
 
     // Declare the launcher at the top of your Activity/Fragment:

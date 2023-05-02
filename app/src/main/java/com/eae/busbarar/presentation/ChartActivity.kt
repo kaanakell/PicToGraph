@@ -1,9 +1,7 @@
 package com.eae.busbarar.presentation
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,8 +9,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.eae.busbarar.Constants
 import com.eae.busbarar.R
 import com.eae.busbarar.data.model.EndDateTime
@@ -26,7 +25,6 @@ import com.github.aachartmodel.aainfographics.aatools.AAColor
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -46,8 +44,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private var initialStartMargin: Int = 0
     private var initialTopMargin: Int = 0
     private var isFullscreen = false
-
-
+    private var toast: Toast? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,8 +107,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 true
             }
         }
-        setRecyclerView()
-        //chartOptions()
+        setUpRecyclerView()
         lineChartForDataObservation()
         hideSystemNavigationBars()
         drawEmptyCharts()
@@ -156,34 +152,47 @@ class ChartActivity : AppCompatActivity(), ISensor {
         viewModel.uploadSensorId(TextRecognitionRequest(item, aggvalue, Constants.startDateTime, Constants.endDateTime ))//TODO Api request with aggregation value and start/end date&time
     }
 
-    private fun setRecyclerView() {
-        val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
-            ItemTouchHelper.SimpleCallback(
-                0,
-                ItemTouchHelper.RIGHT
-            ) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
+    private fun setUpRecyclerView() {
+        adapter.list = list
+        binding.recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                val position =  viewHolder.position
-                val temp = arrayListOf<String>()
-                list.forEachIndexed { index, s ->
-                    if(index != position) {
-                        temp.add(s)
-                    }
-                }
-                list = temp
-                adapter.list = list
+        val itemTouchHelper = ItemTouchHelper(object : SwipeHelper(binding.recyclerView) {
+            override fun instantiateUnderlayButton(position: Int): List<UnderlayButton> {
+                val deleteButton = deleteButton(position)
+                return listOf(deleteButton)
             }
-        }
-        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+        })
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+    }
+
+    private fun toast(text: String) {
+        toast?.cancel()
+        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
+        toast?.show()
+    }
+
+    private fun deleteButton(position: Int) : SwipeHelper.UnderlayButton {
+        return SwipeHelper.UnderlayButton(
+            this,
+            "Delete",
+            14.0f,
+            android.R.color.holo_red_light,
+            object : SwipeHelper.UnderlayButtonClickListener {
+                override fun onClick() {
+                    val item = list[position]
+                    val position =  position
+                    val temp = arrayListOf<String>()
+                    list.forEachIndexed { index, s ->
+                        if(index != position) {
+                            temp.add(s)
+                        }
+                    }
+                    list = temp
+                    adapter.list = list
+                    toast("Deleted Sensor $item")
+                }
+            })
     }
 
     private fun chartViewFullscreen() {
