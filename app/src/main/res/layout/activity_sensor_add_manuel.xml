@@ -98,7 +98,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:elevation="0dp"
-                        app:title="@string/manuel_input"
+                        app:title="@string/manual_input"
                         app:navigationIcon="@drawable/ic_baseline_menu_24"
                         app:navigationIconTint="@color/white"
                         app:titleCentered="true"

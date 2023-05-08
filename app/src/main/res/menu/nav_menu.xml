@@ -32,7 +32,7 @@
                 <item
                     android:id="@+id/thirdItem"
                     android:icon="@drawable/baseline_text_fields_24"
-                    android:title="@string/manuel_input"
+                    android:title="@string/manual_input"
                     app:showAsAction="never" />
 
             </menu>

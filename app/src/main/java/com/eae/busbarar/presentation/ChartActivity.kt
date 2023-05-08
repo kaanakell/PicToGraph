@@ -190,6 +190,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                     }
                     list = temp
                     adapter.list = list
+                    binding.chartViewLandscape.aa_removeElementFromChartSeries(position + 1)
                     toast("Deleted Sensor $item")
                 }
             })

@@ -11,14 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 
 abstract class SwipeHelper(
     private val recyclerView: RecyclerView
 ) : ItemTouchHelper.SimpleCallback(
     ItemTouchHelper.ACTION_STATE_IDLE,
-    ItemTouchHelper.LEFT
+    ItemTouchHelper.RIGHT
 ) {
-    private var swipedPosition = -1
+    private var swipedPosition = 1
     private val buttonsBuffer: MutableMap<Int, List<UnderlayButton>> = mutableMapOf()
     private val recoverQueue = object : LinkedList<Int>() {
         override fun add(element: Int): Boolean {
@@ -29,10 +30,10 @@ abstract class SwipeHelper(
 
     @SuppressLint("ClickableViewAccessibility")
     private val touchListener = View.OnTouchListener { _, event ->
-        if (swipedPosition < 0) return@OnTouchListener false
+        if (swipedPosition > 0) return@OnTouchListener false
         buttonsBuffer[swipedPosition]?.forEach { it.handle(event) }
         recoverQueue.add(swipedPosition)
-        swipedPosition = -1
+        swipedPosition = 1
         //recoverSwipedItem()
         true
     }
@@ -54,16 +55,16 @@ abstract class SwipeHelper(
         itemView: View,
         dX: Float
     ) {
-        var right = itemView.right
+        var left = itemView.left
         buttons.forEach { button ->
             val width = button.intrinsicWidth / buttons.intrinsicWidth() * abs(dX)
-            val left = right - width
+            val right = left + width
             button.draw(
                 canvas,
-                RectF(left, itemView.top.toFloat(), right.toFloat(), itemView.bottom.toFloat())
+                RectF(left.toFloat(), itemView.top.toFloat(), right, itemView.bottom.toFloat())
             )
 
-            right = left.toInt()
+            left = right.toInt()
         }
     }
 
@@ -77,31 +78,32 @@ abstract class SwipeHelper(
         isCurrentlyActive: Boolean
     ) {
         val position = viewHolder.adapterPosition
-        var maxDX = dX
         val itemView = viewHolder.itemView
+        val minDX: Float
 
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-            if (dX < 0) {
+            if (dX > 0) {
                 if (!buttonsBuffer.containsKey(position)) {
                     buttonsBuffer[position] = instantiateUnderlayButton(position)
                 }
 
                 val buttons = buttonsBuffer[position] ?: return
                 if (buttons.isEmpty()) return
-                maxDX = max(-buttons.intrinsicWidth(), dX)
-                drawButtons(c, buttons, itemView, maxDX)
+                minDX = min(buttons.intrinsicWidth(), dX)
+                super.onChildDraw(c, recyclerView, viewHolder, minDX, dY, actionState, isCurrentlyActive)
+                drawButtons(c, buttons, itemView, minDX)
             }
+        } else {
+            super.onChildDraw(
+                c,
+                recyclerView,
+                viewHolder,
+                dX,
+                dY,
+                actionState,
+                isCurrentlyActive
+            )
         }
-
-        super.onChildDraw(
-            c,
-            recyclerView,
-            viewHolder,
-            maxDX,
-            dY,
-            actionState,
-            isCurrentlyActive
-        )
     }
 
     override fun onMove(
@@ -142,7 +144,7 @@ abstract class SwipeHelper(
             val paint = Paint()
             paint.textSize = textSizeInPixel
             paint.typeface = Typeface.DEFAULT_BOLD
-            paint.textAlign = Paint.Align.LEFT
+            paint.textAlign = Paint.Align.RIGHT
             val titleBounds = Rect()
             paint.getTextBounds(title, 0, title.length, titleBounds)
             intrinsicWidth = titleBounds.width() + 5 * horizontalPadding
@@ -159,13 +161,13 @@ abstract class SwipeHelper(
             paint.color = ContextCompat.getColor(context, android.R.color.white)
             paint.textSize = textSizeInPixel
             paint.typeface = Typeface.DEFAULT_BOLD
-            paint.textAlign = Paint.Align.LEFT
+            paint.textAlign = Paint.Align.RIGHT
 
             val titleBounds = Rect()
             paint.getTextBounds(title, 0, title.length, titleBounds)
 
             val y = rect.height() / 2 + titleBounds.height() / 2 - titleBounds.bottom
-            canvas.drawText(title, rect.left + horizontalPadding, rect.top + y, paint)
+            canvas.drawText(title, rect.right - horizontalPadding, rect.top + y, paint)
 
             clickableRegion = rect
         }
