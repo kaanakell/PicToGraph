@@ -35,8 +35,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private val adapter = SensorAdapter(this)
     private val aaChartModel : AAChartModel = AAChartModel()
     private val aaOptions :AAOptions = AAOptions()
-    private val chartModels : ArrayList<AASeriesElement> = arrayListOf()
-    private val sensorClicks : ArrayList<String> = arrayListOf()
     private val sensorHide : ArrayList<String> = arrayListOf()
     private var dates = arrayListOf<String>()
     private var filterStartDateTime: StartDateTime ?= null
@@ -121,35 +119,40 @@ class ChartActivity : AppCompatActivity(), ISensor {
     override fun onStart() {
         super.onStart()
         adapter.list = list
+        drawChart()
+        dates.toTypedArray()
     }
 
     companion object {
-        var list: List<String> = listOf()
+        var list: List<SensorItem> = listOf()
+        var chartModels : List<AASeriesElement> = listOf()
+        var sensorClicks : List<String> = listOf()
     }
 
-    override fun onItemClick(item: String) {
-        if(sensorClicks.contains(item)) {
+    override fun onItemClick(item: SensorItem) {
+        if(sensorClicks.contains(item.sensorId)) {
             var position = 0
             sensorClicks.forEachIndexed { index, s ->
-                if (item == s)
+                if (item.sensorId == s)
                     position = index
             }
-            if(sensorHide.contains(item)) {
+            if(sensorHide.contains(item.sensorId)) {
                 binding.chartViewLandscape.aa_showTheSeriesElementContent(position + 1)
-                sensorHide.remove(item)
+                sensorHide.remove(item.sensorId)
             }else {
                 binding.chartViewLandscape.aa_hideTheSeriesElementContent(position + 1)
-                sensorHide.add(item)
+                sensorHide.add(item.sensorId)
             }
             return
         }
-        sensorClicks.add(item)
+        val sensorClickElements = item.sensorId
+        sensorClicks = sensorClicks + listOf(sensorClickElements)
 
         val aggvalue = 15
         val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
         val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
 
-        viewModel.uploadSensorId(TextRecognitionRequest(item, aggvalue, Constants.startDateTime, Constants.endDateTime ))//TODO Api request with aggregation value and start/end date&time
+        viewModel.uploadSensorId(TextRecognitionRequest(item.sensorId, aggvalue, Constants.startDateTime, Constants.endDateTime ))//TODO Api request with aggregation value and start/end date&time
     }
 
     private fun setUpRecyclerView() {
@@ -182,7 +185,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 override fun onClick() {
                     val item = list[position]
                     val position =  position
-                    val temp = arrayListOf<String>()
+                    val temp = arrayListOf<SensorItem>()
                     list.forEachIndexed { index, s ->
                         if(index != position) {
                             temp.add(s)
@@ -191,7 +194,8 @@ class ChartActivity : AppCompatActivity(), ISensor {
                     list = temp
                     adapter.list = list
                     binding.chartViewLandscape.aa_removeElementFromChartSeries(position + 1)
-                    toast("Deleted Sensor $item")
+                    adapter.notifyDataSetChanged()
+                    toast("Deleted Sensor ${item.sensorId}")
                 }
             })
     }
@@ -251,13 +255,12 @@ class ChartActivity : AppCompatActivity(), ISensor {
         binding.tvStartDateTimeRange.text = "Start Date Time"
         filterStartDateTime = null
         filterEndDateTime = null
-        adapter.sensorClicks = arrayListOf()
         adapter.notifyDataSetChanged()
         clearGraph()
     }
     private fun clearGraph() {
-        sensorClicks.clear()
-        chartModels.clear()
+        //sensorClicks.clear()
+        chartModels = listOf()
         drawEmptyCharts()
     }
 
@@ -289,11 +292,11 @@ class ChartActivity : AppCompatActivity(), ISensor {
     }
 
     private fun drawEmptyCharts() {
-        chartModels.add(
-            AASeriesElement()
-                .data(arrayOf())
-                .allowPointSelect(true)
-                .dashStyle(AAChartLineDashStyleType.Solid))
+        val element = AASeriesElement()
+            .data(arrayOf())
+            .allowPointSelect(true)
+            .dashStyle(AAChartLineDashStyleType.Solid)
+        chartModels =  chartModels + listOf(element)
         aaChartModel
             .chartType(AAChartType.Line)
             .title("Sensor Temperature")
@@ -338,12 +341,12 @@ class ChartActivity : AppCompatActivity(), ISensor {
                     item.min?.let { valuesMin.add(it) }
                     item.max?.let { valuesMax.add(it) }
                 }
-                chartModels.add(
-                    AASeriesElement()
-                        .name(sensors.toString())
-                        .data(values.toArray())
-                        .allowPointSelect(true)
-                        .dashStyle(AAChartLineDashStyleType.Solid))
+                val element = AASeriesElement()
+                    .name(sensors.toString())
+                    .data(values.toArray())
+                    .allowPointSelect(true)
+                    .dashStyle(AAChartLineDashStyleType.Solid)
+                chartModels = chartModels + listOf(element)
                 drawChart()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
