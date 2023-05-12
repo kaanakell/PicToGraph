@@ -35,6 +35,8 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private val adapter = SensorAdapter(this)
     private val aaChartModel : AAChartModel = AAChartModel()
     private val aaOptions :AAOptions = AAOptions()
+    private val chartModels : ArrayList<AASeriesElement> = arrayListOf()
+    private val sensorClicks : ArrayList<String> = arrayListOf()
     private val sensorHide : ArrayList<String> = arrayListOf()
     private var dates = arrayListOf<String>()
     private var filterStartDateTime: StartDateTime ?= null
@@ -119,14 +121,10 @@ class ChartActivity : AppCompatActivity(), ISensor {
     override fun onStart() {
         super.onStart()
         adapter.list = list
-        drawChart()
-        dates.toTypedArray()
     }
 
     companion object {
         var list: List<SensorItem> = listOf()
-        var chartModels : List<AASeriesElement> = listOf()
-        var sensorClicks : List<String> = listOf()
     }
 
     override fun onItemClick(item: SensorItem) {
@@ -145,8 +143,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
             }
             return
         }
-        val sensorClickElements = item.sensorId
-        sensorClicks = sensorClicks + listOf(sensorClickElements)
+        sensorClicks.add(item.sensorId)
 
         val aggvalue = 15
         val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
@@ -260,7 +257,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
     }
     private fun clearGraph() {
         //sensorClicks.clear()
-        chartModels = listOf()
+        //chartModels = arrayListOf()
         drawEmptyCharts()
     }
 
@@ -292,11 +289,11 @@ class ChartActivity : AppCompatActivity(), ISensor {
     }
 
     private fun drawEmptyCharts() {
-        val element = AASeriesElement()
-            .data(arrayOf())
-            .allowPointSelect(true)
-            .dashStyle(AAChartLineDashStyleType.Solid)
-        chartModels =  chartModels + listOf(element)
+        chartModels.add(
+            AASeriesElement()
+                .data(arrayOf())
+                .allowPointSelect(true)
+                .dashStyle(AAChartLineDashStyleType.Solid))
         aaChartModel
             .chartType(AAChartType.Line)
             .title("Sensor Temperature")
@@ -341,12 +338,12 @@ class ChartActivity : AppCompatActivity(), ISensor {
                     item.min?.let { valuesMin.add(it) }
                     item.max?.let { valuesMax.add(it) }
                 }
-                val element = AASeriesElement()
-                    .name(sensors.toString())
-                    .data(values.toArray())
-                    .allowPointSelect(true)
-                    .dashStyle(AAChartLineDashStyleType.Solid)
-                chartModels = chartModels + listOf(element)
+                chartModels.add(
+                    AASeriesElement()
+                        .name(sensors.toString())
+                        .data(values.toArray())
+                        .allowPointSelect(true)
+                        .dashStyle(AAChartLineDashStyleType.Solid))
                 drawChart()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
