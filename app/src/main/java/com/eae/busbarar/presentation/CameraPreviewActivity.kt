@@ -58,7 +58,7 @@ class CameraPreviewActivity : AppCompatActivity() {
 
         viewModel.fileNameResponse.observe(this){response ->
             response?.let {
-                ChartActivity.addSensorItem(SensorItem(it.DetectedSensor?:"",false))
+                ChartActivity.addSensorItem(SensorItem(it.DetectedSensor?:"",true))
                 startActivity(Intent(this, ChartActivity::class.java))
                 finish()
             } ?: run {

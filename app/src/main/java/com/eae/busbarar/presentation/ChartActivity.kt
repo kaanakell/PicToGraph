@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eae.busbarar.Constants
 import com.eae.busbarar.R
+import com.eae.busbarar.data.model.ChartData
 import com.eae.busbarar.data.model.EndDateTime
 import com.eae.busbarar.data.model.StartDateTime
 import com.eae.busbarar.data.model.TextRecognitionRequest
@@ -25,6 +26,7 @@ import com.github.aachartmodel.aainfographics.aatools.AAColor
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -35,9 +37,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private val adapter = SensorAdapter(this)
     private val aaChartModel : AAChartModel = AAChartModel()
     private val aaOptions :AAOptions = AAOptions()
-    private val chartModels : ArrayList<AASeriesElement> = arrayListOf()
-    private val sensorClicks : ArrayList<String> = arrayListOf()
-    private val sensorHide : ArrayList<String> = arrayListOf()
+    private var chartData : List<ChartData> = listOf()
     private var dates = arrayListOf<String>()
     private var filterStartDateTime: StartDateTime ?= null
     private var filterEndDateTime: EndDateTime ?= null
@@ -121,10 +121,15 @@ class ChartActivity : AppCompatActivity(), ISensor {
     override fun onStart() {
         super.onStart()
         adapter.list = list
+        lastAdded?.let {
+            onItemClick(it)
+            lastAdded = null
+        }
     }
 
     companion object {
         private var list: List<SensorItem> = listOf()
+        private var lastAdded: SensorItem ?= null
         fun addSensorItem(item: SensorItem) {
             var temp : List<SensorItem> = listOf()
             var contains = false
@@ -137,32 +142,36 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 temp = temp + listOf(item)
             }
             list = list + temp
+            lastAdded = item
+        }
+
+        fun removeSensorItem(item: SensorItem) {
+            var temp : List<SensorItem> = listOf()
+            for (i in list) {
+                if (item.sensorId != i.sensorId) {
+                    temp = temp + listOf(i)
+                }
+            }
+            list = temp
         }
     }
 
     override fun onItemClick(item: SensorItem) {
-        if(sensorClicks.contains(item.sensorId)) {
-            var position = 0
-            sensorClicks.forEachIndexed { index, s ->
-                if (item.sensorId == s)
-                    position = index
+        if (item.isSelected){
+            val aggvalue = 15
+            val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
+            val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
+            viewModel.uploadSensorId(TextRecognitionRequest(item.sensorId, aggvalue, Constants.startDateTime, Constants.endDateTime ))//TODO Api request with aggregation value and start/end date&time
+        }else {
+            var temp = listOf<ChartData>()
+            for (i in chartData) {
+                if(i.sensorId != item.sensorId) {
+                    temp = temp + listOf(i)
+                }
             }
-            if(sensorHide.contains(item.sensorId)) {
-                binding.chartViewLandscape.aa_showTheSeriesElementContent(position + 1)
-                sensorHide.remove(item.sensorId)
-            }else {
-                binding.chartViewLandscape.aa_hideTheSeriesElementContent(position + 1)
-                sensorHide.add(item.sensorId)
-            }
-            return
+            chartData = temp
+            drawChart()
         }
-        sensorClicks.add(item.sensorId)
-
-        val aggvalue = 15
-        val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
-        val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
-
-        viewModel.uploadSensorId(TextRecognitionRequest(item.sensorId, aggvalue, Constants.startDateTime, Constants.endDateTime ))//TODO Api request with aggregation value and start/end date&time
     }
 
     private fun setUpRecyclerView() {
@@ -194,18 +203,16 @@ class ChartActivity : AppCompatActivity(), ISensor {
             object : SwipeHelper.UnderlayButtonClickListener {
                 override fun onClick() {
                     val item = list[position]
-                    val position =  position
-                    val temp = arrayListOf<SensorItem>()
-                    list.forEachIndexed { index, s ->
-                        if(index != position) {
-                            temp.add(s)
+                    removeSensorItem(item)
+                    adapter.list = list
+                    var temp = listOf<ChartData>()
+                    for (i in chartData) {
+                        if (item.sensorId != i.sensorId) {
+                            temp = temp + listOf(i)
                         }
                     }
-                    list = temp
-                    adapter.list = list
-                    binding.chartViewLandscape.aa_removeElementFromChartSeries(position + 1)
-                    adapter.notifyDataSetChanged()
-                    toast("Deleted Sensor ${item.sensorId}")
+                    chartData = temp
+                    drawChart()
                 }
             })
     }
@@ -302,11 +309,10 @@ class ChartActivity : AppCompatActivity(), ISensor {
     }
 
     private fun drawEmptyCharts() {
-        chartModels.add(
-            AASeriesElement()
-                .data(arrayOf())
-                .allowPointSelect(true)
-                .dashStyle(AAChartLineDashStyleType.Solid))
+        val emptyTemp = listOf<AASeriesElement>(AASeriesElement()
+            .data(arrayOf())
+            .allowPointSelect(true)
+            .dashStyle(AAChartLineDashStyleType.Solid))
         aaChartModel
             .chartType(AAChartType.Line)
             .title("Sensor Temperature")
@@ -318,11 +324,10 @@ class ChartActivity : AppCompatActivity(), ISensor {
             .legendEnabled(false)
             .yAxisTitle("Values")
             .xAxisReversed(true)
-
             .stacking(AAChartStackingType.False)
             .dataLabelsEnabled(false)
             .series(
-                chartModels.toTypedArray()
+                emptyTemp.toTypedArray()
             )
             .categories(arrayOf())
 
@@ -352,12 +357,15 @@ class ChartActivity : AppCompatActivity(), ISensor {
                     item.max?.let { valuesMax.add(it) }
                     item.sensor?.let { sensors.add(it) }
                 }
-                chartModels.add(
-                    AASeriesElement()
-                        .name(sensors.component1().toString())
-                        .data(values.toArray())
-                        .allowPointSelect(true)
-                        .dashStyle(AAChartLineDashStyleType.Solid))
+                chartData = chartData + listOf(
+                    ChartData(
+                        sensors.component1().toString(),
+                        AASeriesElement()
+                            .name(sensors.component1().toString())
+                            .data(values.toArray())
+                            .allowPointSelect(true)
+                            .dashStyle(AAChartLineDashStyleType.Solid))
+                    )
                 drawChart()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
@@ -367,6 +375,10 @@ class ChartActivity : AppCompatActivity(), ISensor {
     }
 
     private fun drawChart() {
+        var temp : List<AASeriesElement> = listOf()
+        for (item in chartData) {
+            temp = temp + listOf(item.chartElement)
+        }
         aaChartModel
             .chartType(AAChartType.Line)
             .title("Sensor Temperature")
@@ -387,7 +399,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
             //.dataLabelsEnabled(true)
             .dataLabelsStyle(AAStyle())
             .series(
-                chartModels.toTypedArray()
+                temp.toTypedArray()
             )
             .categories(dates.toTypedArray())
 
