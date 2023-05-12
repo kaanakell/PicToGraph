@@ -124,7 +124,20 @@ class ChartActivity : AppCompatActivity(), ISensor {
     }
 
     companion object {
-        var list: List<SensorItem> = listOf()
+        private var list: List<SensorItem> = listOf()
+        fun addSensorItem(item: SensorItem) {
+            var temp : List<SensorItem> = listOf()
+            var contains = false
+            for (i2 in list) {
+                if (i2.sensorId == item.sensorId){
+                    contains = true
+                }
+            }
+            if (!contains){
+                temp = temp + listOf(item)
+            }
+            list = list + temp
+        }
     }
 
     override fun onItemClick(item: SensorItem) {
@@ -326,7 +339,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 val valuesMax = arrayListOf<Float>()
                 val valuesMin = arrayListOf<Float>()
                 dates = arrayListOf()
-                val sensors = arrayListOf<String>()
+                val sensors = arrayListOf<Int>()
                 for (item in safeResponse.listIterator()) {
                     item.datetime?.let {
                         dates.add(it.epochToFormattedString("dd/MM/yyyy HH:mm:ss"))
@@ -337,10 +350,11 @@ class ChartActivity : AppCompatActivity(), ISensor {
                     item.close?.let { valuesClose.add(it) }
                     item.min?.let { valuesMin.add(it) }
                     item.max?.let { valuesMax.add(it) }
+                    item.sensor?.let { sensors.add(it) }
                 }
                 chartModels.add(
                     AASeriesElement()
-                        .name(sensors.toString())
+                        .name(sensors.component1().toString())
                         .data(values.toArray())
                         .allowPointSelect(true)
                         .dashStyle(AAChartLineDashStyleType.Solid))

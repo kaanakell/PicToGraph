@@ -12,15 +12,7 @@ class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.V
 
     var list : List<SensorItem> = listOf()
         set(value) {
-            var temp : List<SensorItem> = listOf()
-            for(item in value) {
-                if (temp.contains(item)){
-
-                }else {
-                    temp = temp + listOf(item)
-                }
-            }
-            field = temp
+            field = value
             notifyDataSetChanged()
         }
 

@@ -23,7 +23,7 @@ class WebViewChartActivity : AppCompatActivity() {
         binding = ActivityWebviewChartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        candleStickWebViewIntoAndroidApp()
+        //candleStickWebViewIntoAndroidApp()
         hideSystemNavigationBars()
     }
 
@@ -35,7 +35,7 @@ class WebViewChartActivity : AppCompatActivity() {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    /*@SuppressLint("SetJavaScriptEnabled")
     private fun candleStickWebViewIntoAndroidApp() {
         val list = ChartActivity.list.toList()
         val finalUrl = StringBuilder("$URL?sensor_list=${list[0]}")
@@ -62,6 +62,6 @@ class WebViewChartActivity : AppCompatActivity() {
                 useWideViewPort = true
             }
         }
-    }
+    }*/
 
 }

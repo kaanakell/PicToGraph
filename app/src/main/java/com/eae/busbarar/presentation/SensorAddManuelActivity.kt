@@ -19,7 +19,7 @@ class SensorAddManuelActivity: AppCompatActivity() {
         binding = ActivitySensorAddManuelBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.submitButton.setOnClickListener {
-            ChartActivity.list = ChartActivity.list + listOf(SensorItem(binding.inputText.text.toString(), false))
+            ChartActivity.addSensorItem(SensorItem(binding.inputText.text.toString(), false))
             val intent = Intent(this, ChartActivity::class.java)
             startActivity(intent)
         }
