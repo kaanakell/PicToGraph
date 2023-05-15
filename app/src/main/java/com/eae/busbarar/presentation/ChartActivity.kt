@@ -213,6 +213,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                     }
                     chartData = temp
                     drawChart()
+                    toast("Deleted Sensor ${item.sensorId}")
                 }
             })
     }
