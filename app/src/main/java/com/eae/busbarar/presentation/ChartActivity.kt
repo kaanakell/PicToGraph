@@ -20,12 +20,15 @@ import com.eae.busbarar.data.model.StartDateTime
 import com.eae.busbarar.data.model.TextRecognitionRequest
 import com.eae.busbarar.databinding.ActivitySensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPosition
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAResetZoomButton
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.Calendar
 import kotlin.collections.ArrayList
 
 
@@ -156,12 +159,25 @@ class ChartActivity : AppCompatActivity(), ISensor {
         }
     }
 
+    private fun getCurrentDateTimeRounded(): Calendar {
+        val calendar = Calendar.getInstance()
+        val minute = calendar.get(Calendar.MINUTE)
+        //val roundedMinute = (minute / 4) * 4
+        val second = calendar.get(Calendar.SECOND)
+        //val roundedSecond = (second / 30) * 30
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        return calendar
+    }
+
     override fun onItemClick(item: SensorItem) {
         if (item.isSelected){
-            val aggvalue = 15
+            val aggvalue = 4
             val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
-            val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
-            viewModel.uploadSensorId(TextRecognitionRequest(item.sensorId, aggvalue, Constants.startDateTime, Constants.endDateTime ))//TODO Api request with aggregation value and start/end date&time
+            val currentDateTimeRounded = getCurrentDateTimeRounded()
+            val end = "${currentDateTimeRounded.get(Calendar.YEAR)}-0${currentDateTimeRounded.get(Calendar.MONTH) + 1}-${currentDateTimeRounded.get(Calendar.DAY_OF_MONTH)} ${currentDateTimeRounded.get(Calendar.HOUR_OF_DAY)}:${currentDateTimeRounded.get(Calendar.MINUTE)}:${currentDateTimeRounded.get(Calendar.SECOND)}"
+            viewModel.uploadSensorId(TextRecognitionRequest(item.sensorId, aggvalue, Constants.startDateTime, end ))//TODO Api request with aggregation value and start/end date&time
         }else {
             var temp = listOf<ChartData>()
             for (i in chartData) {
@@ -391,11 +407,11 @@ class ChartActivity : AppCompatActivity(), ISensor {
             .legendEnabled(false)
             .yAxisTitle("Values")
             .zoomType(AAChartZoomType.XY)
-            .xAxisTickInterval(2)
-            .xAxisGridLineWidth(10f)
+            .xAxisTickInterval(3)
+            .xAxisReversed(false)
             .scrollablePlotArea(
                 AAScrollablePlotArea()
-                    .minWidth(3000)
+                    .minWidth(650)
                     .scrollPositionX(1f))
             //.dataLabelsEnabled(true)
             .dataLabelsStyle(AAStyle())
