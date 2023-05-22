@@ -55,6 +55,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:background="@drawable/ic_camera_frame"
+            app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/preview_view"/>
+
         <ImageButton
             android:id="@+id/closeCamera"
             android:layout_width="50dp"
