@@ -1,18 +1,19 @@
 package com.eae.busbarar.presentation
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.eae.busbarar.Constants
 import com.eae.busbarar.R
 import com.eae.busbarar.data.model.ChartData
 import com.eae.busbarar.data.model.EndDateTime
@@ -20,8 +21,6 @@ import com.eae.busbarar.data.model.StartDateTime
 import com.eae.busbarar.data.model.TextRecognitionRequest
 import com.eae.busbarar.databinding.ActivitySensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPosition
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAResetZoomButton
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
@@ -29,7 +28,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Calendar
-import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -130,22 +128,30 @@ class ChartActivity : AppCompatActivity(), ISensor {
         }
     }
 
+    private fun toast(text: String) {
+        toast?.cancel()
+        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
+        toast?.show()
+    }
+
     companion object {
         private var list: List<SensorItem> = listOf()
         private var lastAdded: SensorItem ?= null
         fun addSensorItem(item: SensorItem) {
             var temp : List<SensorItem> = listOf()
             var contains = false
-            for (i2 in list) {
-                if (i2.sensorId == item.sensorId){
-                    contains = true
+            if (item.sensorId.isNotBlank()){
+                for (i2 in list) {
+                    if (i2.sensorId == item.sensorId){
+                        contains = true
+                    }
                 }
+                if (!contains){
+                    temp = temp + listOf(item)
+                }
+                list = list + temp
+                lastAdded = item
             }
-            if (!contains){
-                temp = temp + listOf(item)
-            }
-            list = list + temp
-            lastAdded = item
         }
 
         fun removeSensorItem(item: SensorItem) {
@@ -159,29 +165,40 @@ class ChartActivity : AppCompatActivity(), ISensor {
         }
     }
 
-    private fun getCurrentDateTimeRounded(): Calendar {
-        val calendar = Calendar.getInstance()
-        val minute = calendar.get(Calendar.MINUTE)
-        //val roundedMinute = (minute / 4) * 4
-        val second = calendar.get(Calendar.SECOND)
-        //val roundedSecond = (second / 30) * 30
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        return calendar
+    private fun formatMonthWithLeadingZeros(month: Int): String {
+        return String.format("%02d", month)
+    }
+
+    private fun getCurrentDateTime(): Calendar {
+        return Calendar.getInstance()
     }
 
     override fun onItemClick(item: SensorItem) {
-        if (item.isSelected){
+        if (item.isSelected) {
             val aggvalue = 4
-            val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
-            val currentDateTimeRounded = getCurrentDateTimeRounded()
-            val end = "${currentDateTimeRounded.get(Calendar.YEAR)}-0${currentDateTimeRounded.get(Calendar.MONTH) + 1}-${currentDateTimeRounded.get(Calendar.DAY_OF_MONTH)} ${currentDateTimeRounded.get(Calendar.HOUR_OF_DAY)}:${currentDateTimeRounded.get(Calendar.MINUTE)}:${currentDateTimeRounded.get(Calendar.SECOND)}"
-            viewModel.uploadSensorId(TextRecognitionRequest(item.sensorId, aggvalue, Constants.startDateTime, end ))//TODO Api request with aggregation value and start/end date&time
-        }else {
+            val currentDateTime = getCurrentDateTime()
+            val endFormatted = String.format(
+                "%02d:%02d:%02d",
+                currentDateTime.get(Calendar.HOUR_OF_DAY),
+                currentDateTime.get(Calendar.MINUTE),
+                currentDateTime.get(Calendar.SECOND)
+            )
+            val startDate = currentDateTime.clone() as Calendar
+            startDate.add(Calendar.DAY_OF_MONTH, -7)
+            val start = "${startDate.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.DAY_OF_MONTH))} ${currentDateTime.get(Calendar.HOUR_OF_DAY)}:${currentDateTime.get(Calendar.MINUTE)}:${currentDateTime.get(Calendar.SECOND)}"
+            val end = "${currentDateTime.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.DAY_OF_MONTH))} $endFormatted"
+            viewModel.uploadSensorId(
+                TextRecognitionRequest(
+                    item.sensorId,
+                    aggvalue,
+                    start,
+                    end
+                )
+            )
+        } else {
             var temp = listOf<ChartData>()
             for (i in chartData) {
-                if(i.sensorId != item.sensorId) {
+                if (i.sensorId != item.sensorId) {
                     temp = temp + listOf(i)
                 }
             }
@@ -202,12 +219,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
             }
         })
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
-    }
-
-    private fun toast(text: String) {
-        toast?.cancel()
-        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
-        toast?.show()
     }
 
     private fun deleteButton(position: Int) : SwipeHelper.UnderlayButton {
