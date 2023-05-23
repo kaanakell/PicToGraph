@@ -1,13 +1,13 @@
 package com.eae.busbarar.presentation
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -37,6 +37,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private val viewModel : ChartActivityViewModel by viewModels()
     private val adapter = SensorAdapter(this)
     private val aaChartModel : AAChartModel = AAChartModel()
+    private var aaChartView: AAChartView? = null
     private val aaOptions :AAOptions = AAOptions()
     private var chartData : List<ChartData> = listOf()
     private var dates = arrayListOf<String>()
@@ -46,7 +47,19 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private var initialTopMargin: Int = 0
     private var isFullscreen = false
     private var toast: Toast? = null
+    private var updateTimes: Int = 0
+    private val handler = Handler(Looper.getMainLooper())
+    private val refreshRunnable = object : Runnable {
+        override fun run() {
+            // Call the method to refresh the UI element
+            for(item in chartData) {
+                refreshData(item)
+            }
 
+            // Schedule the next refresh after 4 minutes
+            handler.postDelayed(this,  30 * 1000) // 4 minutes in milliseconds
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySensorBinding.inflate(layoutInflater)
@@ -108,16 +121,31 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 true
             }
         }
+
         setUpRecyclerView()
         lineChartForDataObservation()
         hideSystemNavigationBars()
         drawEmptyCharts()
+        startPeriodicRefresh()
+
     }
 
     override fun onBackPressed() {
         startActivity(Intent(this, OpenCameraActivity::class.java))
         finish()
     }
+
+    // Call this method to start the periodic refresh
+    private fun startPeriodicRefresh() {
+        // Schedule the first refresh immediately
+        handler.postDelayed(refreshRunnable, 5000)
+    }
+
+    // Call this method to stop the periodic refresh
+    /*private fun stopPeriodicRefresh() {
+        // Remove any pending refresh callbacks
+        handler.removeCallbacks(refreshRunnable)
+    }*/
 
     override fun onStart() {
         super.onStart()
@@ -173,6 +201,32 @@ class ChartActivity : AppCompatActivity(), ISensor {
         return Calendar.getInstance()
     }
 
+    private fun refreshData(item: ChartData) {
+        if (item.isSelected) {
+            val aggvalue = 4
+            val currentDateTime = getCurrentDateTime()
+            val endFormatted = String.format(
+                "%02d:%02d:%02d",
+                currentDateTime.get(Calendar.HOUR_OF_DAY),
+                currentDateTime.get(Calendar.MINUTE),
+                currentDateTime.get(Calendar.SECOND)
+            )
+            val startDate = currentDateTime.clone() as Calendar
+            startDate.add(Calendar.DAY_OF_MONTH, -7)
+            val start = "${startDate.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.DAY_OF_MONTH))} ${currentDateTime.get(Calendar.HOUR_OF_DAY)}:${currentDateTime.get(Calendar.MINUTE)}:${currentDateTime.get(Calendar.SECOND)}"
+            val end = "${currentDateTime.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.DAY_OF_MONTH))} $endFormatted"
+            chartData = emptyList()
+            viewModel.uploadSensorId(
+                TextRecognitionRequest(
+                    item.sensorId,
+                    aggvalue,
+                    start,
+                    end
+                )
+            )
+        }
+    }
+
     override fun onItemClick(item: SensorItem) {
         if (item.isSelected) {
             val aggvalue = 4
@@ -187,6 +241,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
             startDate.add(Calendar.DAY_OF_MONTH, -7)
             val start = "${startDate.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.DAY_OF_MONTH))} ${currentDateTime.get(Calendar.HOUR_OF_DAY)}:${currentDateTime.get(Calendar.MINUTE)}:${currentDateTime.get(Calendar.SECOND)}"
             val end = "${currentDateTime.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.DAY_OF_MONTH))} $endFormatted"
+
             viewModel.uploadSensorId(
                 TextRecognitionRequest(
                     item.sensorId,
@@ -392,7 +447,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                             .name(sensors.component1().toString())
                             .data(values.toArray())
                             .allowPointSelect(true)
-                            .dashStyle(AAChartLineDashStyleType.Solid))
+                            .dashStyle(AAChartLineDashStyleType.Solid), true)
                     )
                 drawChart()
             } ?: run {
