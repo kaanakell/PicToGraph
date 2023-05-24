@@ -48,18 +48,22 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private var isFullscreen = false
     private var toast: Toast? = null
     private var updateTimes: Int = 0
-    private val handler = Handler(Looper.getMainLooper())
+    /*private val handler = Handler(Looper.getMainLooper())
     private val refreshRunnable = object : Runnable {
         override fun run() {
-            // Call the method to refresh the UI element
-            for(item in chartData) {
-                refreshData(item)
+            // Start refreshing the items with a delay between each item
+            chartData.forEachIndexed { index, item ->
+                handler.postDelayed(
+                    { refreshData(item) },
+                    index * 3500L // Delay between each item (2 seconds in this example)
+                )
             }
 
-            // Schedule the next refresh after 4 minutes
-            handler.postDelayed(this,  30 * 1000) // 4 minutes in milliseconds
+            // Schedule the next refresh after refreshing all items
+            val totalDelay = chartData.size * 2000L // Total delay based on the number of items
+            handler.postDelayed(this, totalDelay + 60 * 1000) // 4 minutes after refreshing all items
         }
-    }
+    }*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySensorBinding.inflate(layoutInflater)
@@ -126,7 +130,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
         lineChartForDataObservation()
         hideSystemNavigationBars()
         drawEmptyCharts()
-        startPeriodicRefresh()
+        //startPeriodicRefresh()
 
     }
 
@@ -136,10 +140,10 @@ class ChartActivity : AppCompatActivity(), ISensor {
     }
 
     // Call this method to start the periodic refresh
-    private fun startPeriodicRefresh() {
+    /*private fun startPeriodicRefresh() {
         // Schedule the first refresh immediately
-        handler.postDelayed(refreshRunnable, 5000)
-    }
+        handler.postDelayed(refreshRunnable, 60 * 1000)
+    }*/
 
     // Call this method to stop the periodic refresh
     /*private fun stopPeriodicRefresh() {
@@ -201,9 +205,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
         return Calendar.getInstance()
     }
 
-    private fun refreshData(item: ChartData) {
+    /*private fun refreshData(item: ChartData) {
         if (item.isSelected) {
-            val aggvalue = 4
+            val aggvalue = 5
             val currentDateTime = getCurrentDateTime()
             val endFormatted = String.format(
                 "%02d:%02d:%02d",
@@ -215,7 +219,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
             startDate.add(Calendar.DAY_OF_MONTH, -7)
             val start = "${startDate.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.DAY_OF_MONTH))} ${currentDateTime.get(Calendar.HOUR_OF_DAY)}:${currentDateTime.get(Calendar.MINUTE)}:${currentDateTime.get(Calendar.SECOND)}"
             val end = "${currentDateTime.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.DAY_OF_MONTH))} $endFormatted"
-            chartData = emptyList()
             viewModel.uploadSensorId(
                 TextRecognitionRequest(
                     item.sensorId,
@@ -225,11 +228,11 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 )
             )
         }
-    }
+    }*/
 
     override fun onItemClick(item: SensorItem) {
         if (item.isSelected) {
-            val aggvalue = 4
+            val aggvalue = 5
             val currentDateTime = getCurrentDateTime()
             val endFormatted = String.format(
                 "%02d:%02d:%02d",
@@ -473,7 +476,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
             .legendEnabled(false)
             .yAxisTitle("Values")
             .zoomType(AAChartZoomType.XY)
-            .xAxisTickInterval(3)
+            .xAxisTickInterval(10)
             .xAxisReversed(false)
             .scrollablePlotArea(
                 AAScrollablePlotArea()
