@@ -21,6 +21,11 @@ import com.eae.busbarar.data.model.StartDateTime
 import com.eae.busbarar.data.model.TextRecognitionRequest
 import com.eae.busbarar.databinding.ActivitySensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAChart
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AACrosshair
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AALabels
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPlotOptions
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
@@ -241,7 +246,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 currentDateTime.get(Calendar.SECOND)
             )
             val startDate = currentDateTime.clone() as Calendar
-            startDate.add(Calendar.DAY_OF_MONTH, -7)
+            startDate.add(Calendar.DAY_OF_MONTH, -5)
             val start = "${startDate.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.DAY_OF_MONTH))} ${currentDateTime.get(Calendar.HOUR_OF_DAY)}:${currentDateTime.get(Calendar.MINUTE)}:${currentDateTime.get(Calendar.SECOND)}"
             val end = "${currentDateTime.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.DAY_OF_MONTH))} $endFormatted"
 
@@ -369,29 +374,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
 
     private fun chartOptions(aaOptions: AAOptions) {
 
-        aaOptions.xAxis?.apply {
-            gridLineColor(AAColor.Black)
-                .gridLineWidth(100f)
-                .minorGridLineColor(AAColor.Black)
-                .minorGridLineWidth(10f)
-                .minorTickInterval("auto")
-                .gridLineColor("Red")
-        }
 
-        aaOptions.yAxis?.apply {
-            gridLineColor(AAColor.Black)
-                .gridLineWidth(100f)
-                .minorGridLineColor(AAColor.Black)
-                .minorGridLineWidth(100f)
-                .minorTickInterval("auto")
-        }
-
-        aaOptions.legend?.apply {
-            enabled(true)
-                .verticalAlign(AAChartVerticalAlignType.Top)
-                .layout(AAChartLayoutType.Vertical)
-                .align(AAChartAlignType.Right)
-        }
     }
 
     private fun drawEmptyCharts() {
@@ -401,14 +384,12 @@ class ChartActivity : AppCompatActivity(), ISensor {
             .dashStyle(AAChartLineDashStyleType.Solid))
         aaChartModel
             .chartType(AAChartType.Line)
-            .title("Sensor Temperature")
             .markerRadius(1.0f)
             .markerSymbol(AAChartSymbolType.Circle)
             .backgroundColor(AAColor.DarkGray)
             .axesTextColor(AAColor.Black)
             .touchEventEnabled(false)
             .legendEnabled(false)
-            .yAxisTitle("Values")
             .xAxisReversed(true)
             .stacking(AAChartStackingType.False)
             .dataLabelsEnabled(false)
@@ -433,7 +414,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 val sensors = arrayListOf<Int>()
                 for (item in safeResponse.listIterator()) {
                     item.datetime?.let {
-                        dates.add(it.epochToFormattedString("dd/MM/yyyy HH:mm:ss"))
+                        dates.add(it.epochToFormattedString("dd/MM/yy HH:mm"))
                     }
                     item.pred?.let { valuesPred.add(it) }
                     item.average?.let { values.add(it) }
@@ -465,31 +446,71 @@ class ChartActivity : AppCompatActivity(), ISensor {
         for (item in chartData) {
             temp = temp + listOf(item.chartElement)
         }
-        aaChartModel
+        val aaChartModel = AAChartModel()
             .chartType(AAChartType.Line)
-            .title("Sensor Temperature")
             .markerRadius(5.0f)
-            .markerSymbol(AAChartSymbolType.Circle)
-            .backgroundColor(AAColor.DarkGray)
-            .axesTextColor(AAColor.Black)
+            .markerSymbol(AAChartSymbolType.TriangleDown)
             .touchEventEnabled(true)
-            .legendEnabled(false)
-            .yAxisTitle("Values")
             .zoomType(AAChartZoomType.XY)
-            .xAxisTickInterval(10)
             .xAxisReversed(false)
             .scrollablePlotArea(
                 AAScrollablePlotArea()
                     .minWidth(650)
                     .scrollPositionX(1f))
-            //.dataLabelsEnabled(true)
-            .dataLabelsStyle(AAStyle())
             .series(
                 temp.toTypedArray()
             )
             .categories(dates.toTypedArray())
 
-        binding.chartViewLandscape.aa_drawChartWithChartModel(aaChartModel)
+        val aaOptions = aaChartModel.aa_toAAOptions()
+
+        aaOptions.plotOptions?.line
+            ?.dataLabels(AADataLabels()
+                .enabled(true)
+                .style(AAStyle()
+                    .color(AAColor.Black)
+                    .fontSize(14)
+                    .fontWeight(AAChartFontWeightType.Thin)))
+
+        val aaCrosshair = AACrosshair()
+            .dashStyle(AAChartLineDashStyleType.Solid)
+            .color(AAColor.White)
+            .width(2f)
+
+        val aaLabels = AALabels()
+            .useHTML(true)
+            .style(AAStyle()
+                .fontSize(10)
+                .fontWeight(AAChartFontWeightType.Bold)
+                .color(AAColor.Black))
+
+        aaOptions.legend?.apply {
+            enabled(true)
+                .verticalAlign(AAChartVerticalAlignType.Top)
+                .layout(AAChartLayoutType.Vertical)
+                .align(AAChartAlignType.Right)
+        }
+
+        aaOptions.chart?.apply {
+            backgroundColor("#C0C0C0")
+
+        }
+
+        aaOptions.yAxis?.apply {
+            gridLineWidth(2f)
+            gridLineColor("#808080")
+            crosshair(aaCrosshair)
+                .labels(aaLabels)
+        }
+        aaOptions.xAxis?.apply {
+            gridLineWidth(2f)
+            gridLineColor("#808080")
+            crosshair(aaCrosshair)
+            tickInterval(5)
+                .labels(aaLabels)
+        }
+
+        binding.chartViewLandscape.aa_drawChartWithChartOptions(aaOptions)
     }
 }
 
