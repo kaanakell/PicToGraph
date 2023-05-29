@@ -24,6 +24,7 @@
         <SeekBar
             android:id="@+id/zoom_seek_bar"
             android:layout_width="0dp"
+            android:visibility="gone"
             android:layout_height="@dimen/seek_bar_height"
             android:layout_marginStart="@dimen/seek_bar_margin"
             android:layout_marginEnd="@dimen/seek_bar_margin"
@@ -31,6 +32,15 @@
             app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:background="@drawable/ic_camera_frame"
+            app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/preview_view"/>
 
         <Button
             android:id="@+id/image_capture_button"
@@ -40,28 +50,31 @@
             android:layout_marginBottom="24dp"
             android:elevation="2dp"
             android:text="@string/capture"
+            android:backgroundTint="@color/main"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/closeCamera"
             android:layout_width="50dp"
             android:layout_height="0dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/main"
             android:background="@drawable/cross_close_icon"
             android:elevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/switchTextInputButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="24dp"
             android:background="@drawable/baseline_text_fields_24"
+            android:backgroundTint="@color/main"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

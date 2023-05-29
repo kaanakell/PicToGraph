@@ -14,7 +14,8 @@
         android:id="@+id/menuDrawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:openDrawer="start">
+        tools:openDrawer="start"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/activityConstraintLayout"
@@ -81,8 +82,8 @@
 
             <Button
                 android:id="@+id/openCameraButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
                 android:layout_below="@+id/activityTitleText"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="24dp"
@@ -94,8 +95,8 @@
 
             <Button
                 android:id="@+id/open_add_manuel_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
                 android:layout_below="@+id/openCameraButton"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="48dp"

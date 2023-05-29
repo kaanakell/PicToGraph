@@ -49,7 +49,7 @@
     <string name="clear_date_time">Clear Date/Time</string>
     <string name="candle_stick_chart">Candle Stick Chart</string>
     <string name="add_sensor">Add Sensor</string>
-    <string name="submit">Submıt</string>
+    <string name="submit">Submit</string>
     <string name="sensor_id">Sensor Id:</string>
     <string name="send">Send</string>
     <string name="back_to_camera">Back To Camera</string>
@@ -63,7 +63,7 @@
     <string name="alert_screen">Alert Screen</string>
     <string name="chart">Chart</string>
     <string name="busbar_system_check">Busbar System Check</string>
-    <string name="manuel_input">Manuel Input</string>
+    <string name="manual_input">Manual Input</string>
     <string name="camera">Camera</string>
     <string name="sensor_recognition">Sensor Recognition</string>
     <string name="menu">Menu</string>

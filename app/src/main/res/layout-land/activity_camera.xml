@@ -35,6 +35,7 @@
                 android:background="#794E4E4E"
                 android:gravity="center"
                 android:rotation="270"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -49,11 +50,21 @@
             android:elevation="2dp"
             android:gravity="center"
             android:text="@string/capture"
+            android:backgroundTint="@color/main"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:background="@drawable/ic_camera_frame"
+            app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/preview_view"/>
+
+        <ImageButton
             android:id="@+id/closeCamera"
             android:layout_width="50dp"
             android:layout_height="0dp"
@@ -61,18 +72,20 @@
             android:elevation="2dp"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="24dp"
+            android:backgroundTint="@color/main"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/switchTextInputButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/baseline_text_fields_24"
+            android:backgroundTint="@color/main"
             android:layout_marginEnd="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/preview_view"
-            app:layout_constraintTop_toBottomOf="@+id/closeCamera" />
+             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

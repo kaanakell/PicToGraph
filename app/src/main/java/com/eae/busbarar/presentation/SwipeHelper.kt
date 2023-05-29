@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 
 abstract class SwipeHelper(
     private val recyclerView: RecyclerView

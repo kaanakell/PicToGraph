@@ -2,6 +2,8 @@ package com.eae.busbarar.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,19 +14,25 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.eae.busbarar.Constants
 import com.eae.busbarar.R
+import com.eae.busbarar.data.model.ChartData
 import com.eae.busbarar.data.model.EndDateTime
 import com.eae.busbarar.data.model.StartDateTime
 import com.eae.busbarar.data.model.TextRecognitionRequest
 import com.eae.busbarar.databinding.ActivitySensorBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAChart
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AACrosshair
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AALabels
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPlotOptions
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.Calendar
 
 
 @AndroidEntryPoint
@@ -34,10 +42,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private val viewModel : ChartActivityViewModel by viewModels()
     private val adapter = SensorAdapter(this)
     private val aaChartModel : AAChartModel = AAChartModel()
+    private var aaChartView: AAChartView? = null
     private val aaOptions :AAOptions = AAOptions()
-    private val chartModels : ArrayList<AASeriesElement> = arrayListOf()
-    private val sensorClicks : ArrayList<String> = arrayListOf()
-    private val sensorHide : ArrayList<String> = arrayListOf()
+    private var chartData : List<ChartData> = listOf()
     private var dates = arrayListOf<String>()
     private var filterStartDateTime: StartDateTime ?= null
     private var filterEndDateTime: EndDateTime ?= null
@@ -45,7 +52,23 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private var initialTopMargin: Int = 0
     private var isFullscreen = false
     private var toast: Toast? = null
+    private var updateTimes: Int = 0
+    /*private val handler = Handler(Looper.getMainLooper())
+    private val refreshRunnable = object : Runnable {
+        override fun run() {
+            // Start refreshing the items with a delay between each item
+            chartData.forEachIndexed { index, item ->
+                handler.postDelayed(
+                    { refreshData(item) },
+                    index * 3500L // Delay between each item (2 seconds in this example)
+                )
+            }
 
+            // Schedule the next refresh after refreshing all items
+            val totalDelay = chartData.size * 2000L // Total delay based on the number of items
+            handler.postDelayed(this, totalDelay + 60 * 1000) // 4 minutes after refreshing all items
+        }
+    }*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySensorBinding.inflate(layoutInflater)
@@ -107,10 +130,13 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 true
             }
         }
+
         setUpRecyclerView()
         lineChartForDataObservation()
         hideSystemNavigationBars()
         drawEmptyCharts()
+        //startPeriodicRefresh()
+
     }
 
     override fun onBackPressed() {
@@ -118,38 +144,130 @@ class ChartActivity : AppCompatActivity(), ISensor {
         finish()
     }
 
+    // Call this method to start the periodic refresh
+    /*private fun startPeriodicRefresh() {
+        // Schedule the first refresh immediately
+        handler.postDelayed(refreshRunnable, 60 * 1000)
+    }*/
+
+    // Call this method to stop the periodic refresh
+    /*private fun stopPeriodicRefresh() {
+        // Remove any pending refresh callbacks
+        handler.removeCallbacks(refreshRunnable)
+    }*/
+
     override fun onStart() {
         super.onStart()
         adapter.list = list
+        lastAdded?.let {
+            onItemClick(it)
+            lastAdded = null
+        }
+    }
+
+    private fun toast(text: String) {
+        toast?.cancel()
+        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
+        toast?.show()
     }
 
     companion object {
-        var list: List<String> = listOf()
+        private var list: List<SensorItem> = listOf()
+        private var lastAdded: SensorItem ?= null
+        fun addSensorItem(item: SensorItem) {
+            var temp : List<SensorItem> = listOf()
+            var contains = false
+            if (item.sensorId.isNotBlank()){
+                for (i2 in list) {
+                    if (i2.sensorId == item.sensorId){
+                        contains = true
+                    }
+                }
+                if (!contains){
+                    temp = temp + listOf(item)
+                }
+                list = list + temp
+                lastAdded = item
+            }
+        }
+
+        fun removeSensorItem(item: SensorItem) {
+            var temp : List<SensorItem> = listOf()
+            for (i in list) {
+                if (item.sensorId != i.sensorId) {
+                    temp = temp + listOf(i)
+                }
+            }
+            list = temp
+        }
     }
 
-    override fun onItemClick(item: String) {
-        if(sensorClicks.contains(item)) {
-            var position = 0
-            sensorClicks.forEachIndexed { index, s ->
-                if (item == s)
-                    position = index
-            }
-            if(sensorHide.contains(item)) {
-                binding.chartViewLandscape.aa_showTheSeriesElementContent(position + 1)
-                sensorHide.remove(item)
-            }else {
-                binding.chartViewLandscape.aa_hideTheSeriesElementContent(position + 1)
-                sensorHide.add(item)
-            }
-            return
+    private fun formatMonthWithLeadingZeros(month: Int): String {
+        return String.format("%02d", month)
+    }
+
+    private fun getCurrentDateTime(): Calendar {
+        return Calendar.getInstance()
+    }
+
+    /*private fun refreshData(item: ChartData) {
+        if (item.isSelected) {
+            val aggvalue = 5
+            val currentDateTime = getCurrentDateTime()
+            val endFormatted = String.format(
+                "%02d:%02d:%02d",
+                currentDateTime.get(Calendar.HOUR_OF_DAY),
+                currentDateTime.get(Calendar.MINUTE),
+                currentDateTime.get(Calendar.SECOND)
+            )
+            val startDate = currentDateTime.clone() as Calendar
+            startDate.add(Calendar.DAY_OF_MONTH, -7)
+            val start = "${startDate.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.DAY_OF_MONTH))} ${currentDateTime.get(Calendar.HOUR_OF_DAY)}:${currentDateTime.get(Calendar.MINUTE)}:${currentDateTime.get(Calendar.SECOND)}"
+            val end = "${currentDateTime.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.DAY_OF_MONTH))} $endFormatted"
+            viewModel.uploadSensorId(
+                TextRecognitionRequest(
+                    item.sensorId,
+                    aggvalue,
+                    start,
+                    end
+                )
+            )
         }
-        sensorClicks.add(item)
+    }*/
 
-        val aggvalue = 15
-        val start = "${filterStartDateTime?.startTime} ${filterStartDateTime?.startDate}"
-        val end = "${filterEndDateTime?.endTime} ${filterEndDateTime?.endDate}"
+    override fun onItemClick(item: SensorItem) {
+        if (item.isSelected) {
+            val aggvalue = 5
+            val currentDateTime = getCurrentDateTime()
+            val endFormatted = String.format(
+                "%02d:%02d:%02d",
+                currentDateTime.get(Calendar.HOUR_OF_DAY),
+                currentDateTime.get(Calendar.MINUTE),
+                currentDateTime.get(Calendar.SECOND)
+            )
+            val startDate = currentDateTime.clone() as Calendar
+            startDate.add(Calendar.DAY_OF_MONTH, -5)
+            val start = "${startDate.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.DAY_OF_MONTH))} ${currentDateTime.get(Calendar.HOUR_OF_DAY)}:${currentDateTime.get(Calendar.MINUTE)}:${currentDateTime.get(Calendar.SECOND)}"
+            val end = "${currentDateTime.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.DAY_OF_MONTH))} $endFormatted"
 
-        viewModel.uploadSensorId(TextRecognitionRequest(item, aggvalue, Constants.startDateTime, Constants.endDateTime ))//TODO Api request with aggregation value and start/end date&time
+            viewModel.uploadSensorId(
+                TextRecognitionRequest(
+                    item.sensorId,
+                    aggvalue,
+                    start,
+                    end
+                )
+            )
+        } else {
+            var temp = listOf<ChartData>()
+            for (i in chartData) {
+                if (i.sensorId != item.sensorId) {
+                    temp = temp + listOf(i)
+                }
+            }
+            chartData = temp
+            drawChart()
+        }
     }
 
     private fun setUpRecyclerView() {
@@ -166,12 +284,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
-    private fun toast(text: String) {
-        toast?.cancel()
-        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
-        toast?.show()
-    }
-
     private fun deleteButton(position: Int) : SwipeHelper.UnderlayButton {
         return SwipeHelper.UnderlayButton(
             this,
@@ -181,16 +293,17 @@ class ChartActivity : AppCompatActivity(), ISensor {
             object : SwipeHelper.UnderlayButtonClickListener {
                 override fun onClick() {
                     val item = list[position]
-                    val position =  position
-                    val temp = arrayListOf<String>()
-                    list.forEachIndexed { index, s ->
-                        if(index != position) {
-                            temp.add(s)
+                    removeSensorItem(item)
+                    adapter.list = list
+                    var temp = listOf<ChartData>()
+                    for (i in chartData) {
+                        if (item.sensorId != i.sensorId) {
+                            temp = temp + listOf(i)
                         }
                     }
-                    list = temp
-                    adapter.list = list
-                    toast("Deleted Sensor $item")
+                    chartData = temp
+                    drawChart()
+                    toast("Deleted Sensor ${item.sensorId}")
                 }
             })
     }
@@ -250,65 +363,38 @@ class ChartActivity : AppCompatActivity(), ISensor {
         binding.tvStartDateTimeRange.text = "Start Date Time"
         filterStartDateTime = null
         filterEndDateTime = null
-        adapter.sensorClicks = arrayListOf()
         adapter.notifyDataSetChanged()
         clearGraph()
     }
     private fun clearGraph() {
-        sensorClicks.clear()
-        chartModels.clear()
+        //sensorClicks.clear()
+        //chartModels = arrayListOf()
         drawEmptyCharts()
     }
 
     private fun chartOptions(aaOptions: AAOptions) {
 
-        aaOptions.xAxis?.apply {
-            gridLineColor(AAColor.Black)
-                .gridLineWidth(100f)
-                .minorGridLineColor(AAColor.Black)
-                .minorGridLineWidth(10f)
-                .minorTickInterval("auto")
-                .gridLineColor("Red")
-        }
 
-        aaOptions.yAxis?.apply {
-            gridLineColor(AAColor.Black)
-                .gridLineWidth(100f)
-                .minorGridLineColor(AAColor.Black)
-                .minorGridLineWidth(100f)
-                .minorTickInterval("auto")
-        }
-
-        aaOptions.legend?.apply {
-            enabled(true)
-                .verticalAlign(AAChartVerticalAlignType.Top)
-                .layout(AAChartLayoutType.Vertical)
-                .align(AAChartAlignType.Right)
-        }
     }
 
     private fun drawEmptyCharts() {
-        chartModels.add(
-            AASeriesElement()
-                .data(arrayOf())
-                .allowPointSelect(true)
-                .dashStyle(AAChartLineDashStyleType.Solid))
+        val emptyTemp = listOf<AASeriesElement>(AASeriesElement()
+            .data(arrayOf())
+            .allowPointSelect(true)
+            .dashStyle(AAChartLineDashStyleType.Solid))
         aaChartModel
             .chartType(AAChartType.Line)
-            .title("Sensor Temperature")
             .markerRadius(1.0f)
             .markerSymbol(AAChartSymbolType.Circle)
             .backgroundColor(AAColor.DarkGray)
             .axesTextColor(AAColor.Black)
             .touchEventEnabled(false)
             .legendEnabled(false)
-            .yAxisTitle("Values")
             .xAxisReversed(true)
-
             .stacking(AAChartStackingType.False)
             .dataLabelsEnabled(false)
             .series(
-                chartModels.toTypedArray()
+                emptyTemp.toTypedArray()
             )
             .categories(arrayOf())
 
@@ -325,10 +411,10 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 val valuesMax = arrayListOf<Float>()
                 val valuesMin = arrayListOf<Float>()
                 dates = arrayListOf()
-                val sensors = arrayListOf<String>()
+                val sensors = arrayListOf<Int>()
                 for (item in safeResponse.listIterator()) {
                     item.datetime?.let {
-                        dates.add(it.epochToFormattedString("dd/MM/yyyy HH:mm:ss"))
+                        dates.add(it.epochToFormattedString("dd/MM/yy HH:mm"))
                     }
                     item.pred?.let { valuesPred.add(it) }
                     item.average?.let { values.add(it) }
@@ -336,13 +422,17 @@ class ChartActivity : AppCompatActivity(), ISensor {
                     item.close?.let { valuesClose.add(it) }
                     item.min?.let { valuesMin.add(it) }
                     item.max?.let { valuesMax.add(it) }
+                    item.sensor?.let { sensors.add(it) }
                 }
-                chartModels.add(
-                    AASeriesElement()
-                        .name(sensors.toString())
-                        .data(values.toArray())
-                        .allowPointSelect(true)
-                        .dashStyle(AAChartLineDashStyleType.Solid))
+                chartData = chartData + listOf(
+                    ChartData(
+                        sensors.component1().toString(),
+                        AASeriesElement()
+                            .name(sensors.component1().toString())
+                            .data(values.toArray())
+                            .allowPointSelect(true)
+                            .dashStyle(AAChartLineDashStyleType.Solid), true)
+                    )
                 drawChart()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
@@ -352,31 +442,75 @@ class ChartActivity : AppCompatActivity(), ISensor {
     }
 
     private fun drawChart() {
-        aaChartModel
+        var temp : List<AASeriesElement> = listOf()
+        for (item in chartData) {
+            temp = temp + listOf(item.chartElement)
+        }
+        val aaChartModel = AAChartModel()
             .chartType(AAChartType.Line)
-            .title("Sensor Temperature")
             .markerRadius(5.0f)
-            .markerSymbol(AAChartSymbolType.Circle)
-            .backgroundColor(AAColor.DarkGray)
-            .axesTextColor(AAColor.Black)
+            .markerSymbol(AAChartSymbolType.TriangleDown)
             .touchEventEnabled(true)
-            .legendEnabled(false)
-            .yAxisTitle("Values")
             .zoomType(AAChartZoomType.XY)
-            .xAxisTickInterval(2)
-            .xAxisGridLineWidth(10f)
+            .xAxisReversed(false)
             .scrollablePlotArea(
                 AAScrollablePlotArea()
-                    .minWidth(3000)
+                    .minWidth(650)
                     .scrollPositionX(1f))
-            //.dataLabelsEnabled(true)
-            .dataLabelsStyle(AAStyle())
             .series(
-                chartModels.toTypedArray()
+                temp.toTypedArray()
             )
             .categories(dates.toTypedArray())
 
-        binding.chartViewLandscape.aa_drawChartWithChartModel(aaChartModel)
+        val aaOptions = aaChartModel.aa_toAAOptions()
+
+        aaOptions.plotOptions?.line
+            ?.dataLabels(AADataLabels()
+                .enabled(true)
+                .style(AAStyle()
+                    .color(AAColor.Black)
+                    .fontSize(14)
+                    .fontWeight(AAChartFontWeightType.Thin)))
+
+        val aaCrosshair = AACrosshair()
+            .dashStyle(AAChartLineDashStyleType.Solid)
+            .color(AAColor.White)
+            .width(2f)
+
+        val aaLabels = AALabels()
+            .useHTML(true)
+            .style(AAStyle()
+                .fontSize(10)
+                .fontWeight(AAChartFontWeightType.Bold)
+                .color(AAColor.Black))
+
+        aaOptions.legend?.apply {
+            enabled(true)
+                .verticalAlign(AAChartVerticalAlignType.Top)
+                .layout(AAChartLayoutType.Vertical)
+                .align(AAChartAlignType.Right)
+        }
+
+        aaOptions.chart?.apply {
+            backgroundColor("#C0C0C0")
+
+        }
+
+        aaOptions.yAxis?.apply {
+            gridLineWidth(2f)
+            gridLineColor("#808080")
+            crosshair(aaCrosshair)
+                .labels(aaLabels)
+        }
+        aaOptions.xAxis?.apply {
+            gridLineWidth(2f)
+            gridLineColor("#808080")
+            crosshair(aaCrosshair)
+            tickInterval(5)
+                .labels(aaLabels)
+        }
+
+        binding.chartViewLandscape.aa_drawChartWithChartOptions(aaOptions)
     }
 }
 

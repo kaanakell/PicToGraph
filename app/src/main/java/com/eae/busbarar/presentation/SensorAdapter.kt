@@ -10,36 +10,22 @@ import com.eae.busbarar.databinding.ListItemSensorBinding
 
 class SensorAdapter(val listener:ISensor) : RecyclerView.Adapter<SensorAdapter.ViewHolder>() {
 
-    var sensorClicks : ArrayList<String> = arrayListOf()
-
-    var list : List<String> = listOf()
+    var list : List<SensorItem> = listOf()
         set(value) {
-            var temp : List<String> = listOf()
-            for(item in value) {
-                if (temp.contains(item)){
-
-                }else {
-                    temp = temp + listOf(item)
-                }
-            }
-            field = temp
+            field = value
             notifyDataSetChanged()
         }
 
     inner class ViewHolder(private val binding: ListItemSensorBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             val item = list[position]
-            binding.textView.text = item
+            binding.textView.text = item.sensorId
             binding.root.setOnClickListener {
-                if (sensorClicks.contains(item)){
-                    sensorClicks.remove(item)
-                }else{
-                    sensorClicks.add(item)
-                }
+                item.isSelected = !item.isSelected
                 listener.onItemClick(item)
-                notifyItemChanged(position)
+                notifyDataSetChanged()
             }
-            if (sensorClicks.contains(item)){
+            if (item.isSelected){
                 binding.textView.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.black))
             }else {
                 binding.textView.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.list_grey))
