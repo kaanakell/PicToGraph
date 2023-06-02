@@ -10,7 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:backgroundTintMode="screen">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/preview_view"
@@ -22,6 +23,26 @@
             app:layout_constraintTop_toTopOf="parent">
 
         </androidx.camera.view.PreviewView>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/transparentbackground"
+            android:backgroundTint="#A4686868"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/camera_frame"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:background="@drawable/ic_camera_frame"
+            app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/preview_view" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -55,14 +76,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:background="@drawable/ic_camera_frame"
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/preview_view"/>
+            app:layout_constraintTop_toTopOf="@id/preview_view">
+
+            <SurfaceView
+                android:id="@+id/surfaceView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
 
         <ImageButton
             android:id="@+id/closeCamera"

@@ -34,7 +34,6 @@ class CameraActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCameraBinding
     private var imageCapture: ImageCapture? = null
-    private var flashMode = ImageCapture.FLASH_MODE_OFF
     private var cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var counter = 0
 
@@ -143,9 +142,6 @@ class CameraActivity : AppCompatActivity() {
 
                 @SuppressLint("RestrictedApi")
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val inputStream = contentResolver.openInputStream(Uri.fromFile(photoFile))
-                    val exif = inputStream?.let { Exif.createFromInputStream(it) }
-                    val rotation = exif?.rotation
                     val savedUri = Uri.fromFile(photoFile)
                     savedUri.path?.let { safePath ->
                         CameraPreviewActivity.path = safePath
@@ -166,7 +162,6 @@ class CameraActivity : AppCompatActivity() {
                     it.setSurfaceProvider(binding.previewView.surfaceProvider)
                 }
             imageCapture = ImageCapture.Builder()
-                .setFlashMode(flashMode)
                 .build()
             try {
                 cameraProvider.unbindAll()
