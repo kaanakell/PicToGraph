@@ -22,25 +22,15 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/transparentbackground"
-            android:backgroundTint="#A4686868"
+        <com.eae.busbarar.presentation.CircleView
+            android:id="@+id/border_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0.6"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/camera_frame"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:background="@drawable/ic_camera_frame"
-            app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/preview_view" />
 
         <SeekBar
             android:id="@+id/zoom_seek_bar"
@@ -53,22 +43,6 @@
             app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <FrameLayout
-            android:id="@+id/frameLayout"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/preview_view">
-
-            <SurfaceView
-                android:id="@+id/surfaceView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </FrameLayout>
 
 
         <Button

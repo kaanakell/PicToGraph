@@ -1,6 +1,8 @@
 package com.eae.busbarar.presentation
 
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -21,6 +23,8 @@ class CameraPreviewActivity : AppCompatActivity() {
     private val viewModel: CameraPreviewViewModel by viewModels()
     private val chartViewModel: ChartActivityViewModel by viewModels()
     private lateinit var binding: ActivityPreviewBinding
+    private lateinit var imagePath: String // Declare a variable to store the image path
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,15 +81,17 @@ class CameraPreviewActivity : AppCompatActivity() {
     }
 
     private fun initializeView() {
-        Glide.with(this).load(path).into(binding.imageView)
+        val photoUri = intent.getParcelableExtra<Uri>("photoUri")
+        imagePath = photoUri?.path ?: ""
+        Glide.with(this@CameraPreviewActivity).load(photoUri).into(binding.imageView)
 
         binding.buttonBack.setOnClickListener {
             finish()
         }
         binding.buttonUpload.setOnClickListener {
             binding.layoutLoading.visibility = View.VISIBLE
-            Log.e("demo", "$path")
-            viewModel.uploadImage(File(path ?: ""))
+            Log.e("demo", imagePath)
+            viewModel.uploadImage(File(imagePath))
         }
     }
 
