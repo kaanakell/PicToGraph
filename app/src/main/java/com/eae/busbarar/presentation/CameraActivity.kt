@@ -147,11 +147,12 @@ class CameraActivity : AppCompatActivity() {
 
     private fun photoCapture() {
         val imageCapture = imageCapture ?: return
+        val mediaDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val photoFile = File(
-            outputDirectory,
+            mediaDir,
             SimpleDateFormat(
                 FILENAME_FORMAT, Locale.US
-            ).format(System.currentTimeMillis()) + ".jpg"
+            ).format(System.currentTimeMillis()) + ".jpeg"
         )
 
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
@@ -234,11 +235,12 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun saveCroppedBitmapToFile(bitmap: Bitmap?) {
+        val mediaDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val croppedPhotoFile = File(
-            outputDirectory,
+            mediaDir,
             SimpleDateFormat(
                 FILENAME_FORMAT, Locale.US
-            ).format(System.currentTimeMillis()) + "_cropped.jpg"
+            ).format(System.currentTimeMillis()) + "cropped.jpeg"
         )
 
         val outputStream = FileOutputStream(croppedPhotoFile)
@@ -305,15 +307,10 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun getOutputDirectory(): File {
-        val mediaDir = externalMediaDirs.firstOrNull().let {
-            File(
-                it,
-                "Camerax"
-                // resources.getString(R.string.app_name)
-            ).apply { mkdirs() }
+        val mediaDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.let {
+            File(it, "Camerax").apply { mkdirs() }
         }
-        return if (mediaDir != null && mediaDir.exists())
-            mediaDir else filesDir
+        return mediaDir ?: filesDir
     }
 
     private fun getRotation(photoFile: File): Float {
