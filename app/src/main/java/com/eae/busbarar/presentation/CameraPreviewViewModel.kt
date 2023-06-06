@@ -38,7 +38,4 @@ class CameraPreviewViewModel @Inject constructor(
             _fileNameResponse.postValue(repository.uploadFileName(fileName))
         }
     }
-
-
-
 }

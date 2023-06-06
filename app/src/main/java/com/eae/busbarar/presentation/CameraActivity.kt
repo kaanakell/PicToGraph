@@ -1,6 +1,6 @@
 package com.eae.busbarar.presentation
 
-import android.annotation.SuppressLint
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -14,7 +14,6 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import android.view.Surface
 import android.view.Surface.ROTATION_0
 import android.view.View
 import android.view.WindowManager
@@ -23,21 +22,16 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
-import androidx.camera.core.impl.utils.Exif
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
-import com.bumptech.glide.Glide
 import com.eae.busbarar.Constants
 import com.eae.busbarar.R
 import com.eae.busbarar.databinding.ActivityCameraBinding
 import com.google.common.util.concurrent.ListenableFuture
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -61,7 +55,6 @@ class CameraActivity : AppCompatActivity() {
     private var imageAnalysis: ImageAnalysis? = null
     private var preview: Preview? = null
     private lateinit var imgCaptureExecutor: ExecutorService
-    private lateinit var outputDirectory: File
     private var counter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +84,6 @@ class CameraActivity : AppCompatActivity() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProvider = cameraProviderFuture.get()
         cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-        outputDirectory = getOutputDirectory()
         imgCaptureExecutor = Executors.newSingleThreadExecutor()
 
         initializeCamera()
@@ -228,33 +220,36 @@ class CameraActivity : AppCompatActivity() {
                                 null
                             }
 
-                        saveCroppedBitmapToFile(capturedImageCroppedBitmap)
+                        if (capturedImageCroppedBitmap != null) {
+                            saveToInternalStorage(capturedImageCroppedBitmap)
+                        }
                     }
                 }
             })
     }
 
-    private fun saveCroppedBitmapToFile(bitmap: Bitmap?) {
-        val mediaDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val croppedPhotoFile = File(
-            mediaDir,
-            SimpleDateFormat(
-                FILENAME_FORMAT, Locale.US
-            ).format(System.currentTimeMillis()) + "cropped.jpeg"
-        )
-
-        val outputStream = FileOutputStream(croppedPhotoFile)
-        bitmap?.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
-        outputStream.flush()
-        outputStream.close()
-
-        val croppedPhotoUri = FileProvider.getUriForFile(
-            this,
-            "com.eae.busbarar.fileprovider",
-            croppedPhotoFile
-        )
-
-        startPreviewActivity(croppedPhotoUri)
+    private fun saveToInternalStorage(bitmapImage: Bitmap) {
+        val cw = ContextWrapper(applicationContext)
+        // path to /data/data/yourapp/app_data/imageDir
+        val directory = cw.getDir("imageDir", MODE_PRIVATE)
+        // Create imageDir
+        val mypath = File(directory, System.currentTimeMillis().toString() + ".jpg")
+        Log.e(TAG, mypath.toString())
+        var fos: FileOutputStream? = null
+        try {
+            fos = FileOutputStream(mypath)
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos)
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                fos!!.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        startPreviewActivity(mypath.toUri())
     }
 
     private fun startPreviewActivity(photoUri: Uri) {
@@ -304,13 +299,6 @@ class CameraActivity : AppCompatActivity() {
                 Log.d(TAG, "Use case binding failed")
             }
         }, ContextCompat.getMainExecutor(this))
-    }
-
-    private fun getOutputDirectory(): File {
-        val mediaDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.let {
-            File(it, "Camerax").apply { mkdirs() }
-        }
-        return mediaDir ?: filesDir
     }
 
     private fun getRotation(photoFile: File): Float {
