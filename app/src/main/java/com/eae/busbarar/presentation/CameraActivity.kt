@@ -139,15 +139,13 @@ class CameraActivity : AppCompatActivity() {
 
     private fun photoCapture() {
         val imageCapture = imageCapture ?: return
-        val mediaDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val photoFile = File(
-            mediaDir,
-            SimpleDateFormat(
-                FILENAME_FORMAT, Locale.US
-            ).format(System.currentTimeMillis()) + ".jpeg"
-        )
+        val cw = ContextWrapper(applicationContext)
+        // path to /data/data/yourapp/app_data/imageDir
+        val directory = cw.getDir("imageDir", MODE_PRIVATE)
+        // Create imageDir
+        val mypath = File(directory, System.currentTimeMillis().toString() + ".jpg")
 
-        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(mypath).build()
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(this),
@@ -158,7 +156,7 @@ class CameraActivity : AppCompatActivity() {
 
                 @RequiresApi(Build.VERSION_CODES.R)
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val savedUri = Uri.fromFile(photoFile)
+                    val savedUri = Uri.fromFile(mypath)
 
                     val inputData = contentResolver.openInputStream(savedUri)?.readBytes()
                     val capturedImageBitmap =
@@ -167,7 +165,7 @@ class CameraActivity : AppCompatActivity() {
                     val capturedImageCroppedBitmap: Bitmap?
                     val display = (getSystemService(WINDOW_SERVICE) as WindowManager).defaultDisplay
 
-                    val imageRotation = getRotation(photoFile)
+                    val imageRotation = getRotation(mypath)
 
                     if (display.rotation == ROTATION_0) {
                         val matrix = Matrix()
@@ -223,6 +221,7 @@ class CameraActivity : AppCompatActivity() {
                         if (capturedImageCroppedBitmap != null) {
                             saveToInternalStorage(capturedImageCroppedBitmap)
                         }
+                        mypath.delete()
                     }
                 }
             })
@@ -233,8 +232,8 @@ class CameraActivity : AppCompatActivity() {
         // path to /data/data/yourapp/app_data/imageDir
         val directory = cw.getDir("imageDir", MODE_PRIVATE)
         // Create imageDir
-        val mypath = File(directory, System.currentTimeMillis().toString() + ".jpg")
-        Log.e(TAG, mypath.toString())
+        val mypath = File(directory, System.currentTimeMillis().toString() + "cropped.jpg")
+        Log.e("mylog", mypath.toString())
         var fos: FileOutputStream? = null
         try {
             fos = FileOutputStream(mypath)
