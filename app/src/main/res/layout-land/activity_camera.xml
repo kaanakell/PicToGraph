@@ -22,7 +22,7 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <com.eae.busbarar.presentation.CircleView
+        <com.eae.busbarar.presentation.CircleViewLandscape
             android:id="@+id/border_view"
             android:layout_width="0dp"
             android:layout_height="0dp"

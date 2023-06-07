@@ -15,6 +15,8 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.Surface.ROTATION_0
+import android.view.Surface.ROTATION_270
+import android.view.Surface.ROTATION_90
 import android.view.View
 import android.view.WindowManager
 import android.widget.SeekBar
@@ -222,6 +224,62 @@ class CameraActivity : AppCompatActivity() {
                             saveToInternalStorage(capturedImageCroppedBitmap)
                         }
                         mypath.delete()
+
+                    } else if (display.rotation == ROTATION_90 || display.rotation == ROTATION_270) {
+                        val matrix = Matrix()
+                        matrix.postRotate(imageRotation)
+
+                        val capturedImageRotatedBitmap = Bitmap.createBitmap(
+                            capturedImageBitmap,
+                            0,
+                            0,
+                            capturedImageBitmap.width,
+                            capturedImageBitmap.height,
+                            matrix,
+                            true
+                        )
+
+                        //calculate aspect ratio
+                        val width: Int = capturedImageRotatedBitmap.width
+                        val height: Int = capturedImageRotatedBitmap.height
+
+                        val ratioConstraint: Int = width / 70
+
+                        val widthRatio = 16 * ratioConstraint
+                        val heightRatio = 9 * ratioConstraint
+
+                        val leftX1: Int = width / 2 - widthRatio
+                        val rightX2: Int = width / 2 + widthRatio
+                        val topY1: Int = height / 2 - heightRatio
+                        val bottomY2: Int = height / 2 + heightRatio
+
+                        val cropWidth = (rightX2 - leftX1)
+                        val cropHeight = (bottomY2 - topY1)
+
+                        //calculate position and size for cropping
+                        val cropStartX = leftX1
+                        val cropStartY = topY1
+                        val cropWidthX = cropWidth
+                        val cropHeightY = cropHeight
+
+                        //check limits and make crop
+                        capturedImageCroppedBitmap =
+                            if (cropStartX + cropWidthX <= capturedImageRotatedBitmap.width && cropStartY + cropHeightY <= capturedImageRotatedBitmap.height) {
+                                Bitmap.createBitmap(
+                                    capturedImageRotatedBitmap,
+                                    cropStartX,
+                                    cropStartY,
+                                    cropWidthX,
+                                    cropHeightY
+                                )
+                            } else {
+                                null
+                            }
+
+                        if (capturedImageCroppedBitmap != null) {
+                            saveToInternalStorage(capturedImageCroppedBitmap)
+                        }
+                        mypath.delete()
                     }
                 }
             })
@@ -377,7 +435,6 @@ class CameraActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "CameraXDemo"
-        const val FILENAME_FORMAT = "yyyyMMddHHmmss"
         private const val RATIO_4_3_VALUE = 4.0 / 3.0 // aspect ratio 4x3
         private const val RATIO_16_9_VALUE = 16.0 / 9.0 // aspect ratio 16x9
     }
