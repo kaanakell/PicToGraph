@@ -19,73 +19,65 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
-        </androidx.camera.view.PreviewView>
+        <com.eae.busbarar.presentation.CircleViewLandscape
+            android:id="@+id/border_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0.6"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <SeekBar
+            android:id="@+id/zoom_seek_bar"
+            android:layout_width="0dp"
+            android:visibility="gone"
+            android:layout_height="@dimen/seek_bar_height"
+            android:layout_marginStart="@dimen/seek_bar_margin"
+            android:layout_marginEnd="@dimen/seek_bar_margin"
+            android:layout_marginBottom="@dimen/seek_bar_margin"
+            app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <SeekBar
-                android:id="@+id/zoom_seek_bar"
-                android:layout_width="280dp"
-                android:layout_height="100dp"
-                android:layout_marginEnd="700dp"
-                android:background="#794E4E4E"
-                android:gravity="center"
-                android:rotation="270"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/image_capture_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="2dp"
-            android:gravity="center"
-            android:text="@string/capture"
             android:backgroundTint="@color/main"
+            android:elevation="2dp"
+            android:text="@string/capture"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <ImageView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:background="@drawable/ic_camera_frame"
-            app:layout_constraintBottom_toTopOf="@+id/image_capture_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/preview_view"/>
+            app:layout_constraintEnd_toStartOf="@+id/closeCamera"
+            app:layout_constraintStart_toEndOf="@+id/switchTextInputButton" />
 
         <ImageButton
             android:id="@+id/closeCamera"
             android:layout_width="50dp"
             android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/main"
             android:background="@drawable/cross_close_icon"
             android:elevation="2dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="@color/main"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <ImageButton
             android:id="@+id/switchTextInputButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="24dp"
             android:background="@drawable/baseline_text_fields_24"
             android:backgroundTint="@color/main"
-            android:layout_marginEnd="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/preview_view"
-             />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

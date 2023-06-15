@@ -174,31 +174,19 @@ class ChartActivity : AppCompatActivity(), ISensor {
     companion object {
         private var list: List<SensorItem> = listOf()
         private var lastAdded: SensorItem ?= null
+        private var addedSensorIds: HashSet<String> = hashSetOf() // Store the added sensor ids
+
         fun addSensorItem(item: SensorItem) {
-            var temp : List<SensorItem> = listOf()
-            var contains = false
-            if (item.sensorId.isNotBlank()){
-                for (i2 in list) {
-                    if (i2.sensorId == item.sensorId){
-                        contains = true
-                    }
-                }
-                if (!contains){
-                    temp = temp + listOf(item)
-                }
-                list = list + temp
+            if (item.sensorId.isNotBlank() && !addedSensorIds.contains(item.sensorId)) {
+                list += item
+                addedSensorIds.add(item.sensorId)
                 lastAdded = item
             }
         }
 
         fun removeSensorItem(item: SensorItem) {
-            var temp : List<SensorItem> = listOf()
-            for (i in list) {
-                if (item.sensorId != i.sensorId) {
-                    temp = temp + listOf(i)
-                }
-            }
-            list = temp
+            list -= item
+            addedSensorIds.remove(item.sensorId)
         }
     }
 
@@ -370,11 +358,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
         //sensorClicks.clear()
         //chartModels = arrayListOf()
         drawEmptyCharts()
-    }
-
-    private fun chartOptions(aaOptions: AAOptions) {
-
-
     }
 
     private fun drawEmptyCharts() {

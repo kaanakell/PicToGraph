@@ -17,4 +17,6 @@
     <color name="list_select">#B7656565</color>
     <color name="list_grey">#5A5A5A</color>
     <color name="red">#FF0000</color>
+    <color name="transparentGrey">#B2686868</color>
+    <color name="camera_rect_bg_color">#A6A6A6</color>
 </resources>
