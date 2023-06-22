@@ -78,14 +78,13 @@ class LiveDataActivity: AppCompatActivity() {
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
-
+    @SuppressLint("SetJavaScriptEnabled")
     private fun liveDataWebViewIntoAndroidApp() {
         binding.liveDataWebView.apply {
             WebView.setWebContentsDebuggingEnabled(true)
             webViewClient = object : WebViewClient() {
-                // Handle API until level 21
+               /* // Handle API until level 21
                 @Deprecated("Deprecated in Java")
-                @Suppress("DEPRECATION")
                 override fun shouldInterceptRequest(
                     view: WebView?,
                     url: String?
@@ -118,7 +117,7 @@ class LiveDataActivity: AppCompatActivity() {
                     } catch (e: Exception) {
                         null
                     }
-                }
+                }*/
             }
 
             val selectedSensorIds = ChartActivity.list.filter { it.isSelected }.map { it.sensorId }
@@ -128,23 +127,20 @@ class LiveDataActivity: AppCompatActivity() {
             }
 
             Log.e("URL", finalUrl.toString())
-
+            loadUrl(finalUrl.toString())
             setBackgroundColor(Color.TRANSPARENT)
             settings.apply {
-                loadUrl(finalUrl.toString())
                 javaScriptEnabled = true
                 cacheMode = WebSettings.LOAD_DEFAULT
+                clearCache(true)
                 setSupportZoom(true)
-                builtInZoomControls = true
-                displayZoomControls = true
-                textZoom = 100
                 setSupportMultipleWindows(true)
-                blockNetworkImage = false
                 loadsImagesAutomatically = true
                 allowContentAccess = true
                 domStorageEnabled = true
                 loadWithOverviewMode = true
                 useWideViewPort = true
+                settings.userAgentString = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
             }
         }
     }

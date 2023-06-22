@@ -83,10 +83,9 @@ class AlertScreenActivity: AppCompatActivity() {
         binding.alertScreenWebView.apply {
             WebView.setWebContentsDebuggingEnabled(true)
             webViewClient = object : WebViewClient() {
-
+/*
                 // Handle API until level 21
                 @Deprecated("Deprecated in Java")
-                @Suppress("DEPRECATION")
                 override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
                     return getNewResponse(url)
                 }
@@ -113,13 +112,14 @@ class AlertScreenActivity: AppCompatActivity() {
                     } catch (e: Exception) {
                         null
                     }
-                }
+                }*/
             }
             loadUrl(URL)
             setBackgroundColor(Color.TRANSPARENT)
             settings.apply {
                 javaScriptEnabled = true
-                cacheMode = WebSettings.LOAD_DEFAULT
+                cacheMode = WebSettings.LOAD_NO_CACHE
+                clearCache(true)
                 setSupportZoom(true)
                 builtInZoomControls = true
                 displayZoomControls = true
@@ -131,6 +131,7 @@ class AlertScreenActivity: AppCompatActivity() {
                 domStorageEnabled = true
                 loadWithOverviewMode = true
                 useWideViewPort = true
+                settings.userAgentString = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
             }
         }
     }
