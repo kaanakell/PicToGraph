@@ -62,6 +62,11 @@
                     android:icon="@drawable/baseline_warning_24"
                     android:title="@string/alert_screen"
                     app:showAsAction="never" />
+                <item
+                    android:id="@+id/sixthItem"
+                    android:icon="@drawable/baseline_sensors_24"
+                    android:title="@string/live_data"
+                    app:showAsAction="never" />
 
             </menu>
 

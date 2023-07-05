@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.webkit.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,18 +14,19 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.eae.busbarar.BuildConfig
 import com.eae.busbarar.Constants
 import com.eae.busbarar.R
-import com.eae.busbarar.databinding.ActivityAlertscreenBinding
+import com.eae.busbarar.databinding.ActivityLivedataBinding
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-class AlertScreenActivity: AppCompatActivity() {
 
-    private lateinit var binding: ActivityAlertscreenBinding
-    private val URL = Constants.BASE_URL_ALERT_SCREEN
+class LiveDataActivity: AppCompatActivity() {
+
+    private lateinit var binding: ActivityLivedataBinding
+    private val URL = Constants.BASE_URL_LIVE_DATA
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAlertscreenBinding.inflate(layoutInflater)
+        binding = ActivityLivedataBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.apply {
@@ -36,27 +38,27 @@ class AlertScreenActivity: AppCompatActivity() {
             navigationView.setNavigationItemSelectedListener {
                 when(it.itemId) {
                     R.id.firstItem -> {
-                        startActivity(Intent(this@AlertScreenActivity, OpenCameraActivity::class.java))
-                        Toast.makeText(this@AlertScreenActivity, "Menu Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@LiveDataActivity, OpenCameraActivity::class.java))
+                        Toast.makeText(this@LiveDataActivity, "Menu Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.secondItem -> {
-                        startActivity(Intent(this@AlertScreenActivity, CameraActivity::class.java))
-                        Toast.makeText(this@AlertScreenActivity, "Camera Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@LiveDataActivity, CameraActivity::class.java))
+                        Toast.makeText(this@LiveDataActivity, "Camera Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.thirdItem -> {
-                        startActivity(Intent(this@AlertScreenActivity, SensorAddManuelActivity::class.java))
-                        Toast.makeText(this@AlertScreenActivity, "Activity Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@LiveDataActivity, SensorAddManuelActivity::class.java))
+                        Toast.makeText(this@LiveDataActivity, "Activity Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.forthItem -> {
-                        startActivity(Intent(this@AlertScreenActivity, ChartActivity::class.java))
-                        Toast.makeText(this@AlertScreenActivity, "Chart Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@LiveDataActivity, ChartActivity::class.java))
+                        Toast.makeText(this@LiveDataActivity, "Chart Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.fifthItem -> {
-                        Toast.makeText(this@AlertScreenActivity, "Already Here", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@LiveDataActivity, AlertScreenActivity::class.java))
+                        Toast.makeText(this@LiveDataActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.sixthItem -> {
-                        startActivity(Intent(this@AlertScreenActivity, LiveDataActivity::class.java))
-                        Toast.makeText(this@AlertScreenActivity, "Live Data Opened", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@LiveDataActivity, "Already Here", Toast.LENGTH_SHORT).show()
                     }
                 }
                 it.isChecked = true
@@ -66,7 +68,7 @@ class AlertScreenActivity: AppCompatActivity() {
         }
 
         hideSystemNavigationBars()
-        alertScreenWebViewIntoAndroidApp()
+        liveDataWebViewIntoAndroidApp()
     }
 
     private fun hideSystemNavigationBars() {
@@ -76,22 +78,25 @@ class AlertScreenActivity: AppCompatActivity() {
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
-
     @SuppressLint("SetJavaScriptEnabled")
-    private fun alertScreenWebViewIntoAndroidApp() {
-
-        binding.alertScreenWebView.apply {
+    private fun liveDataWebViewIntoAndroidApp() {
+        binding.liveDataWebView.apply {
             WebView.setWebContentsDebuggingEnabled(true)
             webViewClient = object : WebViewClient() {
-/*
-                // Handle API until level 21
+               /* // Handle API until level 21
                 @Deprecated("Deprecated in Java")
-                override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
+                override fun shouldInterceptRequest(
+                    view: WebView?,
+                    url: String?
+                ): WebResourceResponse? {
                     return getNewResponse(url)
                 }
 
                 // Handle API 21+
-                override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+                override fun shouldInterceptRequest(
+                    view: WebView?,
+                    request: WebResourceRequest?
+                ): WebResourceResponse? {
                     val url = request?.url.toString()
                     return getNewResponse(url)
                 }
@@ -114,18 +119,22 @@ class AlertScreenActivity: AppCompatActivity() {
                     }
                 }*/
             }
-            loadUrl(URL)
+
+            val selectedSensorIds = ChartActivity.list.filter { it.isSelected }.map { it.sensorId }
+            val finalUrl = StringBuilder("$URL?sensor_list=${selectedSensorIds[0]}")
+            selectedSensorIds.drop(1).forEach {
+                finalUrl.append("&sensor_list=$it")
+            }
+
+            Log.e("URL", finalUrl.toString())
+            loadUrl(finalUrl.toString())
             setBackgroundColor(Color.TRANSPARENT)
             settings.apply {
                 javaScriptEnabled = true
-                cacheMode = WebSettings.LOAD_NO_CACHE
+                cacheMode = WebSettings.LOAD_DEFAULT
                 clearCache(true)
                 setSupportZoom(true)
-                builtInZoomControls = true
-                displayZoomControls = true
-                textZoom = 100
                 setSupportMultipleWindows(true)
-                blockNetworkImage = false
                 loadsImagesAutomatically = true
                 allowContentAccess = true
                 domStorageEnabled = true

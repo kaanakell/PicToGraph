@@ -233,7 +233,17 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:background="@drawable/fullscreen_24"
+                    android:layout_marginEnd="24dp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/liveDataChart"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/baseline_sensors_24"
+                    android:layout_marginEnd="24dp"
+                    app:layout_constraintBottom_toTopOf="@+id/chartFullscreen"
                     app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

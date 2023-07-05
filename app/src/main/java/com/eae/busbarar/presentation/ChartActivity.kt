@@ -52,23 +52,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private var initialTopMargin: Int = 0
     private var isFullscreen = false
     private var toast: Toast? = null
-    private var updateTimes: Int = 0
-    /*private val handler = Handler(Looper.getMainLooper())
-    private val refreshRunnable = object : Runnable {
-        override fun run() {
-            // Start refreshing the items with a delay between each item
-            chartData.forEachIndexed { index, item ->
-                handler.postDelayed(
-                    { refreshData(item) },
-                    index * 3500L // Delay between each item (2 seconds in this example)
-                )
-            }
-
-            // Schedule the next refresh after refreshing all items
-            val totalDelay = chartData.size * 2000L // Total delay based on the number of items
-            handler.postDelayed(this, totalDelay + 60 * 1000) // 4 minutes after refreshing all items
-        }
-    }*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySensorBinding.inflate(layoutInflater)
@@ -87,8 +70,8 @@ class ChartActivity : AppCompatActivity(), ISensor {
         binding.btnClearDateTime.setOnClickListener {
             clearDateTime()
         }
-        binding.btnWebView.setOnClickListener {
-            openCandleStickChart()
+        binding.liveDataChart.setOnClickListener {
+            openLiveDataChart()
         }
         binding.chartFullscreen.setOnClickListener {
             if (isFullscreen) {
@@ -124,6 +107,10 @@ class ChartActivity : AppCompatActivity(), ISensor {
                         startActivity(Intent(this@ChartActivity, AlertScreenActivity::class.java))
                         Toast.makeText(this@ChartActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
                     }
+                    R.id.sixthItem -> {
+                        startActivity(Intent(this@ChartActivity, LiveDataActivity::class.java))
+                        Toast.makeText(this@ChartActivity, "Live Data Opened", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 it.isChecked = true
                 menuDrawerLayout.close()
@@ -144,18 +131,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
         finish()
     }
 
-    // Call this method to start the periodic refresh
-    /*private fun startPeriodicRefresh() {
-        // Schedule the first refresh immediately
-        handler.postDelayed(refreshRunnable, 60 * 1000)
-    }*/
-
-    // Call this method to stop the periodic refresh
-    /*private fun stopPeriodicRefresh() {
-        // Remove any pending refresh callbacks
-        handler.removeCallbacks(refreshRunnable)
-    }*/
-
     override fun onStart() {
         super.onStart()
         adapter.list = list
@@ -172,9 +147,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
     }
 
     companion object {
-        private var list: List<SensorItem> = listOf()
+        var list: List<SensorItem> = listOf()
         private var lastAdded: SensorItem ?= null
-        private var addedSensorIds: HashSet<String> = hashSetOf() // Store the added sensor ids
+        var addedSensorIds: HashSet<String> = hashSetOf() // Store the added sensor ids
 
         fun addSensorItem(item: SensorItem) {
             if (item.sensorId.isNotBlank() && !addedSensorIds.contains(item.sensorId)) {
@@ -198,32 +173,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
         return Calendar.getInstance()
     }
 
-    /*private fun refreshData(item: ChartData) {
-        if (item.isSelected) {
-            val aggvalue = 5
-            val currentDateTime = getCurrentDateTime()
-            val endFormatted = String.format(
-                "%02d:%02d:%02d",
-                currentDateTime.get(Calendar.HOUR_OF_DAY),
-                currentDateTime.get(Calendar.MINUTE),
-                currentDateTime.get(Calendar.SECOND)
-            )
-            val startDate = currentDateTime.clone() as Calendar
-            startDate.add(Calendar.DAY_OF_MONTH, -7)
-            val start = "${startDate.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(startDate.get(Calendar.DAY_OF_MONTH))} ${currentDateTime.get(Calendar.HOUR_OF_DAY)}:${currentDateTime.get(Calendar.MINUTE)}:${currentDateTime.get(Calendar.SECOND)}"
-            val end = "${currentDateTime.get(Calendar.YEAR)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.MONTH) + 1)}-${formatMonthWithLeadingZeros(currentDateTime.get(Calendar.DAY_OF_MONTH))} $endFormatted"
-            viewModel.uploadSensorId(
-                TextRecognitionRequest(
-                    item.sensorId,
-                    aggvalue,
-                    start,
-                    end
-                )
-            )
-        }
-    }*/
-
     override fun onItemClick(item: SensorItem) {
+        item.isSelected = item.isSelected
+
         if (item.isSelected) {
             val aggvalue = 5
             val currentDateTime = getCurrentDateTime()
@@ -315,8 +267,8 @@ class ChartActivity : AppCompatActivity(), ISensor {
         isFullscreen = false
     }
 
-    private fun openCandleStickChart() {
-        startActivity(Intent(this, WebViewChartActivity::class.java))
+    private fun openLiveDataChart() {
+        startActivity(Intent(this, LiveDataActivity::class.java))
     }
 
     private fun hideSystemNavigationBars() {

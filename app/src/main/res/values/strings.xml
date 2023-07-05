@@ -71,6 +71,7 @@
     <string name="delete_button_text">delete</string>
     <string name="add">+ Add</string>
     <string name="delete">delete</string>
+    <string name="live_data">Live Data</string>
 
 </resources>
 
