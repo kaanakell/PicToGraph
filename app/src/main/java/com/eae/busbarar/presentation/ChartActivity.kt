@@ -252,7 +252,6 @@ class ChartActivity : AppCompatActivity(), ISensor {
         val layoutParams = binding.chartViewHolder.layoutParams as ConstraintLayout.LayoutParams
         initialStartMargin = layoutParams.leftMargin
         initialTopMargin = layoutParams.topMargin
-
         layoutParams.leftMargin = 0
         layoutParams.topMargin = 0
         binding.chartViewHolder.layoutParams = layoutParams
@@ -366,8 +365,15 @@ class ChartActivity : AppCompatActivity(), ISensor {
                             .name(sensors.component1().toString())
                             .data(values.toArray())
                             .allowPointSelect(true)
-                            .dashStyle(AAChartLineDashStyleType.Solid), true)
+                            .dashStyle(AAChartLineDashStyleType.Solid),
+                        AASeriesElement() //Predictions series
+                            .name("Prediction " + sensors.component1().toString())
+                            .data(valuesPred.toArray())
+                            .allowPointSelect(true)
+                            .dashStyle(AAChartLineDashStyleType.DashDot),
+                        true
                     )
+                )
                 drawChart()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
@@ -379,7 +385,8 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private fun drawChart() {
         var temp : List<AASeriesElement> = listOf()
         for (item in chartData) {
-            temp = temp + listOf(item.chartElement)
+            temp = temp + listOf(item.chartElement) // Include average data
+            temp = temp + listOf(item.predictionsElement) // Include prediction data
         }
         val aaChartModel = AAChartModel()
             .chartType(AAChartType.Line)
@@ -398,6 +405,8 @@ class ChartActivity : AppCompatActivity(), ISensor {
             .categories(dates.toTypedArray())
 
         val aaOptions = aaChartModel.aa_toAAOptions()
+
+        aaOptions.series(temp.toTypedArray())
 
         aaOptions.plotOptions?.line
             ?.dataLabels(AADataLabels()
@@ -441,10 +450,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
             gridLineWidth(2f)
             gridLineColor("#808080")
             crosshair(aaCrosshair)
-            tickInterval(5)
+            tickInterval(1)
                 .labels(aaLabels)
         }
-
         binding.chartViewLandscape.aa_drawChartWithChartOptions(aaOptions)
     }
 }
