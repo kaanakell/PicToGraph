@@ -52,6 +52,8 @@ class ChartActivity : AppCompatActivity(), ISensor {
     private var initialTopMargin: Int = 0
     private var isFullscreen = false
     private var toast: Toast? = null
+    private var predictionsVisible = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySensorBinding.inflate(layoutInflater)
@@ -79,6 +81,10 @@ class ChartActivity : AppCompatActivity(), ISensor {
             } else {
                 chartViewFullscreen()
             }
+        }
+        binding.sensorPredictions?.setOnClickListener {
+            predictionsVisible = !predictionsVisible
+            drawChart() // Redraw the chart to reflect the new visibility state
         }
         binding.apply {
 
@@ -367,7 +373,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                             .allowPointSelect(true)
                             .dashStyle(AAChartLineDashStyleType.Solid),
                         AASeriesElement() //Predictions series
-                            .name("Prediction " + sensors.component1().toString())
+                            .name("*" + sensors.component1().toString())
                             .data(valuesPred.toArray())
                             .allowPointSelect(true)
                             .dashStyle(AAChartLineDashStyleType.DashDot),
@@ -386,7 +392,9 @@ class ChartActivity : AppCompatActivity(), ISensor {
         var temp : List<AASeriesElement> = listOf()
         for (item in chartData) {
             temp = temp + listOf(item.chartElement) // Include average data
-            temp = temp + listOf(item.predictionsElement) // Include prediction data
+            if (predictionsVisible) {
+                temp = temp + listOf(item.predictionsElement)
+            } // Include prediction data
         }
         val aaChartModel = AAChartModel()
             .chartType(AAChartType.Line)
