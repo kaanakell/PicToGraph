@@ -17,7 +17,7 @@ import com.kaan.pictograph.data.model.ChartData
 import com.kaan.pictograph.data.model.EndDateTime
 import com.kaan.pictograph.data.model.StartDateTime
 import com.kaan.pictograph.data.model.TextRecognitionRequest
-import com.kaan.pictograph.databinding.ActivitySensorBinding
+import com.kaan.pictograph.databinding.ActivityItemBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AACrosshair
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
@@ -32,9 +32,9 @@ import java.util.Calendar
 
 
 @AndroidEntryPoint
-class ChartActivity : AppCompatActivity(), ISensor {
+class ItemActivity : AppCompatActivity(), ISensor {
 
-    private lateinit var binding : ActivitySensorBinding
+    private lateinit var binding : ActivityItemBinding
     private val viewModel : ChartActivityViewModel by viewModels()
     private val adapter = ItemAdapter(this)
     private val aaChartModel : AAChartModel = AAChartModel()
@@ -52,7 +52,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySensorBinding.inflate(layoutInflater)
+        binding = ActivityItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.backToCamera.setOnClickListener {
             startActivity(Intent(this, OpenCameraActivity::class.java))
@@ -91,28 +91,28 @@ class ChartActivity : AppCompatActivity(), ISensor {
             navigationView.setNavigationItemSelectedListener {
                 when(it.itemId) {
                     R.id.firstItem -> {
-                        startActivity(Intent(this@ChartActivity, OpenCameraActivity::class.java))
-                        Toast.makeText(this@ChartActivity, "Menu Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@ItemActivity, OpenCameraActivity::class.java))
+                        Toast.makeText(this@ItemActivity, "Menu Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.secondItem -> {
-                        startActivity(Intent(this@ChartActivity, CameraActivity::class.java))
-                        Toast.makeText(this@ChartActivity, "Camera Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@ItemActivity, CameraActivity::class.java))
+                        Toast.makeText(this@ItemActivity, "Camera Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.thirdItem -> {
-                        startActivity(Intent(this@ChartActivity, SensorAddManuelActivity::class.java))
-                        Toast.makeText(this@ChartActivity, "Activity Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@ItemActivity, ItemAddManualActivity::class.java))
+                        Toast.makeText(this@ItemActivity, "Activity Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.forthItem -> {
-                        Toast.makeText(this@ChartActivity, "Already Here", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ItemActivity, "Already Here", Toast.LENGTH_SHORT).show()
                     }
                     R.id.fifthItem -> {
-                        startActivity(Intent(this@ChartActivity, AlertScreenActivity::class.java))
-                        Toast.makeText(this@ChartActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@ItemActivity, WebViewScreenActivity::class.java))
+                        Toast.makeText(this@ItemActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
                     }
-                    R.id.sixthItem -> {
+                    /*R.id.sixthItem -> {
                         startActivity(Intent(this@ChartActivity, LiveDataActivity::class.java))
                         Toast.makeText(this@ChartActivity, "Live Data Opened", Toast.LENGTH_SHORT).show()
-                    }
+                    }*/
                 }
                 it.isChecked = true
                 menuDrawerLayout.close()
@@ -381,7 +381,7 @@ class ChartActivity : AppCompatActivity(), ISensor {
                 drawChart()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()
-                startActivity(Intent(this, ChartActivity::class.java))
+                startActivity(Intent(this, ItemActivity::class.java))
             }
         }
     }

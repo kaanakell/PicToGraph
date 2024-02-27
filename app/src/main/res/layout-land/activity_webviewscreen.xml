@@ -38,7 +38,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:elevation="4dp"
-                        app:title="@string/alert_screen"
+                        app:title="@string/web_view_screen"
                         app:navigationIcon="@drawable/ic_baseline_menu_24"
                         app:navigationIconTint="@color/white"
                         app:titleCentered="true"

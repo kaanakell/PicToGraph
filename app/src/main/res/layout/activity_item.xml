@@ -42,7 +42,7 @@
                         android:elevation="0dp"
                         app:navigationIcon="@drawable/ic_baseline_menu_24"
                         app:navigationIconTint="@color/white"
-                        app:title="@string/sensor_charts"
+                        app:title="@string/item_charts"
                         app:titleCentered="true"
                         app:titleTextColor="@color/white" />
 

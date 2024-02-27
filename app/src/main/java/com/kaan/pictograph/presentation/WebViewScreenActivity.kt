@@ -12,16 +12,16 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.kaan.pictograph.Constants
 import com.kaan.pictograph.R
-import com.kaan.pictograph.databinding.ActivityAlertscreenBinding
+import com.kaan.pictograph.databinding.ActivityWebviewscreenBinding
 
-class AlertScreenActivity: AppCompatActivity() {
+class WebViewScreenActivity: AppCompatActivity() {
 
-    private lateinit var binding: ActivityAlertscreenBinding
+    private lateinit var binding: ActivityWebviewscreenBinding
     private val URL = Constants.BASE_URL_ALERT_SCREEN
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAlertscreenBinding.inflate(layoutInflater)
+        binding = ActivityWebviewscreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.apply {
@@ -33,28 +33,28 @@ class AlertScreenActivity: AppCompatActivity() {
             navigationView.setNavigationItemSelectedListener {
                 when(it.itemId) {
                     R.id.firstItem -> {
-                        startActivity(Intent(this@AlertScreenActivity, OpenCameraActivity::class.java))
-                        Toast.makeText(this@AlertScreenActivity, "Menu Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@WebViewScreenActivity, OpenCameraActivity::class.java))
+                        Toast.makeText(this@WebViewScreenActivity, "Menu Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.secondItem -> {
-                        startActivity(Intent(this@AlertScreenActivity, CameraActivity::class.java))
-                        Toast.makeText(this@AlertScreenActivity, "Camera Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@WebViewScreenActivity, CameraActivity::class.java))
+                        Toast.makeText(this@WebViewScreenActivity, "Camera Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.thirdItem -> {
-                        startActivity(Intent(this@AlertScreenActivity, SensorAddManuelActivity::class.java))
-                        Toast.makeText(this@AlertScreenActivity, "Activity Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@WebViewScreenActivity, ItemAddManualActivity::class.java))
+                        Toast.makeText(this@WebViewScreenActivity, "Activity Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.forthItem -> {
-                        startActivity(Intent(this@AlertScreenActivity, ChartActivity::class.java))
-                        Toast.makeText(this@AlertScreenActivity, "Chart Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@WebViewScreenActivity, ItemActivity::class.java))
+                        Toast.makeText(this@WebViewScreenActivity, "Chart Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.fifthItem -> {
-                        Toast.makeText(this@AlertScreenActivity, "Already Here", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@WebViewScreenActivity, "Already Here", Toast.LENGTH_SHORT).show()
                     }
-                    R.id.sixthItem -> {
+                    /*R.id.sixthItem -> {
                         startActivity(Intent(this@AlertScreenActivity, LiveDataActivity::class.java))
                         Toast.makeText(this@AlertScreenActivity, "Live Data Opened", Toast.LENGTH_SHORT).show()
-                    }
+                    }*/
                 }
                 it.isChecked = true
                 menuDrawerLayout.close()

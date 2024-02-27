@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
 
     </data>
 
@@ -14,21 +11,18 @@
         android:id="@+id/menuDrawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:openDrawer="start"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/activityConstraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/background">
+            android:layout_height="match_parent">
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/activityCoordinatorLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true">
-
 
                 <com.google.android.material.appbar.AppBarLayout
                     android:id="@+id/appBarLayout"
@@ -43,8 +37,8 @@
                         style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:elevation="0dp"
-                        app:title="@string/menu"
+                        android:elevation="4dp"
+                        app:title="@string/web_view_screen"
                         app:navigationIcon="@drawable/ic_baseline_menu_24"
                         app:navigationIconTint="@color/white"
                         app:titleCentered="true"
@@ -54,58 +48,26 @@
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
             <ImageView
                 android:id="@+id/appLogo"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
                 android:elevation="0dp"
                 android:src="@drawable/applogo"
-                android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/activityTitleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
-                android:gravity="center"
-                android:text="@string/eae_ar_systems_title"
-                android:textColor="@color/white"
-                android:textSize="35sp"
-                android:textStyle="bold"
+            <WebView
+                android:id="@+id/alertScreenWebView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="40dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appLogo" />
-
-            <Button
-                android:id="@+id/openCameraButton"
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/activityTitleText"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="24dp"
-                android:backgroundTint="#600303"
-                android:text="@string/open_camera_title"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/open_add_manuel_button" />
-
-            <Button
-                android:id="@+id/open_add_manuel_button"
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/openCameraButton"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="48dp"
-                android:backgroundTint="#600303"
-                android:text="@string/add_manual_btn_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activityTitleText" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

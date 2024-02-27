@@ -61,8 +61,8 @@ class CameraPreviewActivity : AppCompatActivity() {
 
         viewModel.fileNameResponse.observe(this){response ->
             response?.let {
-                ChartActivity.addSensorItem(Item(it.DetectedSensor?:"",true))
-                startActivity(Intent(this, ChartActivity::class.java))
+                ItemActivity.addSensorItem(Item(it.DetectedSensor?:"",true))
+                startActivity(Intent(this, ItemActivity::class.java))
                 finish()
             } ?: run {
                 Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show()

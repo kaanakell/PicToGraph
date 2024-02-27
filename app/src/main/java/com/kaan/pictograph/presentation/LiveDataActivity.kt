@@ -43,20 +43,20 @@ class LiveDataActivity: AppCompatActivity() {
                         Toast.makeText(this@LiveDataActivity, "Camera Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.thirdItem -> {
-                        startActivity(Intent(this@LiveDataActivity, SensorAddManuelActivity::class.java))
+                        startActivity(Intent(this@LiveDataActivity, ItemAddManualActivity::class.java))
                         Toast.makeText(this@LiveDataActivity, "Activity Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.forthItem -> {
-                        startActivity(Intent(this@LiveDataActivity, ChartActivity::class.java))
+                        startActivity(Intent(this@LiveDataActivity, ItemActivity::class.java))
                         Toast.makeText(this@LiveDataActivity, "Chart Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.fifthItem -> {
-                        startActivity(Intent(this@LiveDataActivity, AlertScreenActivity::class.java))
+                        startActivity(Intent(this@LiveDataActivity, WebViewScreenActivity::class.java))
                         Toast.makeText(this@LiveDataActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
                     }
-                    R.id.sixthItem -> {
+                    /*R.id.sixthItem -> {
                         Toast.makeText(this@LiveDataActivity, "Already Here", Toast.LENGTH_SHORT).show()
-                    }
+                    }*/
                 }
                 it.isChecked = true
                 menuDrawerLayout.close()
@@ -117,7 +117,7 @@ class LiveDataActivity: AppCompatActivity() {
                 }*/
             }
 
-            val selectedSensorIds = ChartActivity.list.filter { it.isSelected }.map { it.id }
+            val selectedSensorIds = ItemActivity.list.filter { it.isSelected }.map { it.id }
             val finalUrl = StringBuilder("$URL?sensor_list=${selectedSensorIds[0]}")
             selectedSensorIds.drop(1).forEach {
                 finalUrl.append("&sensor_list=$it")

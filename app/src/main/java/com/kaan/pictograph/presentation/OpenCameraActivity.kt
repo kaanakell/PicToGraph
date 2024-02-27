@@ -10,24 +10,24 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.kaan.pictograph.R
 import com.kaan.pictograph.data.model.TokenRequest
-import com.kaan.pictograph.databinding.ActivityOpencameraBinding
+import com.kaan.pictograph.databinding.ActivityItemcontrolsystemBinding
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OpenCameraActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityOpencameraBinding
+    private lateinit var binding: ActivityItemcontrolsystemBinding
     private val viewModel: OpenCameraViewModel by viewModels()
     private var counter = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityOpencameraBinding.inflate(layoutInflater)
+        binding = ActivityItemcontrolsystemBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.openCameraButton.setOnClickListener {
             startActivity(Intent(this, CameraActivity::class.java))
         }
         binding.openAddManuelButton.setOnClickListener {
-            startActivity(Intent(this, SensorAddManuelActivity::class.java))
+            startActivity(Intent(this, ItemAddManualActivity::class.java))
         }
         binding.apply {
 
@@ -45,15 +45,15 @@ class OpenCameraActivity : AppCompatActivity() {
                         Toast.makeText(this@OpenCameraActivity, "Camera Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.thirdItem -> {
-                        startActivity(Intent(this@OpenCameraActivity, SensorAddManuelActivity::class.java))
+                        startActivity(Intent(this@OpenCameraActivity, ItemAddManualActivity::class.java))
                         Toast.makeText(this@OpenCameraActivity, "Activity Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.forthItem -> {
-                        startActivity(Intent(this@OpenCameraActivity, ChartActivity::class.java))
+                        startActivity(Intent(this@OpenCameraActivity, ItemActivity::class.java))
                         Toast.makeText(this@OpenCameraActivity, "Charts Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.fifthItem -> {
-                        startActivity(Intent(this@OpenCameraActivity, AlertScreenActivity::class.java))
+                        startActivity(Intent(this@OpenCameraActivity, WebViewScreenActivity::class.java))
                         Toast.makeText(this@OpenCameraActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
                     }
                 }

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kaan.pictograph.R
-import com.kaan.pictograph.databinding.ListItemSensorBinding
+import com.kaan.pictograph.databinding.ListItemBinding
 
 
 class ItemAdapter(val listener:ISensor) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
@@ -16,7 +16,7 @@ class ItemAdapter(val listener:ISensor) : RecyclerView.Adapter<ItemAdapter.ViewH
             notifyDataSetChanged()
         }
 
-    inner class ViewHolder(private val binding: ListItemSensorBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ListItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             val item = list[position]
             binding.textView.text = item.id
@@ -34,7 +34,7 @@ class ItemAdapter(val listener:ISensor) : RecyclerView.Adapter<ItemAdapter.ViewH
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ListItemSensorBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        return ViewHolder(ListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

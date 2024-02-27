@@ -9,7 +9,7 @@
         <item
             android:id="@+id/firstItem"
             android:icon="@drawable/baseline_home_24"
-            android:title="@string/menu"
+            android:title="@string/method_selection"
             app:showAsAction="never" />
 
     </group>
@@ -20,7 +20,7 @@
 
         <item
             android:id="@+id/subtitle"
-            android:title="@string/sensor_recognition">
+            android:title="@string/item_recognition">
 
             <menu>
 
@@ -48,7 +48,7 @@
 
         <item
             android:id="@+id/subtitleTwo"
-            android:title="@string/busbar_system_check">
+            android:title="@string/system_check">
 
             <menu>
 
@@ -60,13 +60,13 @@
                 <item
                     android:id="@+id/fifthItem"
                     android:icon="@drawable/baseline_warning_24"
-                    android:title="@string/alert_screen"
+                    android:title="@string/web_view_screen"
                     app:showAsAction="never" />
-                <item
+                <!--<item
                     android:id="@+id/sixthItem"
                     android:icon="@drawable/baseline_sensors_24"
                     android:title="@string/live_data"
-                    app:showAsAction="never" />
+                    app:showAsAction="never" />-->
 
             </menu>
 

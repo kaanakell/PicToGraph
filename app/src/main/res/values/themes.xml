@@ -5,13 +5,13 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#346968</item>
-        <item name="colorPrimaryVariant">#871015</item>
+        <item name="colorPrimary">#333A73</item>
+        <item name="colorPrimaryVariant">#50C4ED</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">#861515</item>
+        <item name="colorSecondary">@color/main</item>
+        <item name="colorSecondaryVariant">@color/main</item>
+        <item name="colorOnSecondary">#50C4ED</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

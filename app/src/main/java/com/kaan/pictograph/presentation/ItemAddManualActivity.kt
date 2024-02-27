@@ -8,24 +8,24 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.kaan.pictograph.R
-import com.kaan.pictograph.databinding.ActivitySensorAddManuelBinding
+import com.kaan.pictograph.databinding.ActivityItemAddManuelBinding
 
 
-class SensorAddManuelActivity: AppCompatActivity() {
-    private lateinit var binding : ActivitySensorAddManuelBinding
+class ItemAddManualActivity: AppCompatActivity() {
+    private lateinit var binding : ActivityItemAddManuelBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySensorAddManuelBinding.inflate(layoutInflater)
+        binding = ActivityItemAddManuelBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.submitButton.setOnClickListener {
-            ChartActivity.addSensorItem(Item(binding.inputText.text.toString(), true))
-            val intent = Intent(this, ChartActivity::class.java)
+            ItemActivity.addSensorItem(Item(binding.inputText.text.toString(), true))
+            val intent = Intent(this, ItemActivity::class.java)
             startActivity(intent)
         }
 
         binding.switchCameraButton.setOnClickListener {
-            startActivity(Intent(this@SensorAddManuelActivity, CameraActivity::class.java))
+            startActivity(Intent(this@ItemAddManualActivity, CameraActivity::class.java))
         }
 
         binding.apply {
@@ -37,23 +37,23 @@ class SensorAddManuelActivity: AppCompatActivity() {
             navigationView.setNavigationItemSelectedListener {
                 when(it.itemId) {
                     R.id.firstItem -> {
-                        startActivity(Intent(this@SensorAddManuelActivity, OpenCameraActivity::class.java))
-                        Toast.makeText(this@SensorAddManuelActivity, "Menu Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@ItemAddManualActivity, OpenCameraActivity::class.java))
+                        Toast.makeText(this@ItemAddManualActivity, "Menu Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.secondItem -> {
-                        startActivity(Intent(this@SensorAddManuelActivity, CameraActivity::class.java))
-                        Toast.makeText(this@SensorAddManuelActivity, "Camera Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@ItemAddManualActivity, CameraActivity::class.java))
+                        Toast.makeText(this@ItemAddManualActivity, "Camera Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.thirdItem -> {
-                        Toast.makeText(this@SensorAddManuelActivity, "Already Here", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ItemAddManualActivity, "Already Here", Toast.LENGTH_SHORT).show()
                     }
                     R.id.forthItem -> {
-                        startActivity(Intent(this@SensorAddManuelActivity, ChartActivity::class.java))
-                        Toast.makeText(this@SensorAddManuelActivity, "Chart Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@ItemAddManualActivity, ItemActivity::class.java))
+                        Toast.makeText(this@ItemAddManualActivity, "Chart Opened", Toast.LENGTH_SHORT).show()
                     }
                     R.id.fifthItem -> {
-                        startActivity(Intent(this@SensorAddManuelActivity, AlertScreenActivity::class.java))
-                        Toast.makeText(this@SensorAddManuelActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@ItemAddManualActivity, WebViewScreenActivity::class.java))
+                        Toast.makeText(this@ItemAddManualActivity, "Alert Screen Opened", Toast.LENGTH_SHORT).show()
                     }
                 }
                 it.isChecked = true
