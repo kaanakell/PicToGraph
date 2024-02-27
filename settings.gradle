@@ -15,5 +15,5 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "CameraEAE"
+rootProject.name = "PicToGraph"
 include ':app'
