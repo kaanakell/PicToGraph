@@ -1,5 +1,5 @@
 *.jpg filter=lfs diff=lfs merge=lfs -text
-*.cpp linguist-detectable=false
+*.cc linguist-detectable=false
 *.c linguist-detectable=false
-*.cmakefile linguist-detectable=false
+*.mak linguist-detectable=false
 *.m linguist-detectable=false
