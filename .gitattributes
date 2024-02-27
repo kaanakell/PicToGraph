@@ -1,5 +1,5 @@
 *.jpg filter=lfs diff=lfs merge=lfs -text
-*.cc linguist-detectable=false
+*.cxx linguist-detectable=false
 *.c linguist-detectable=false
 *.mak linguist-detectable=false
 *.m linguist-detectable=false
